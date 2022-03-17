@@ -1,4 +1,6 @@
 import React from "react";
+import { useContext, useState } from "react";
+import { GlobalStoreContext } from '../store'
 import TextField from '@mui/material/TextField';
 import logo from "../images/CryptoriumLogo.png";
 import ShoppingCartRoundedIcon from '@mui/icons-material/ShoppingCartRounded';
@@ -6,25 +8,25 @@ import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 
 
 export default function NavigationBar() {
-
-    let loggedIn = true;
+    const { store } = useContext(GlobalStoreContext);
+    let loggedIn = false;
     let navBarLoggedIn = "";
-    if(loggedIn) {
+    if(!loggedIn) {
         navBarLoggedIn = 
-        <a href="/login" onClick={handleLoginRegister} style={{ cursor: 'pointer', float: 'right', padding: '45px 0px 0px 0px', width: '25%', color: '#879ED9', fontSize: '25px'}}>
+        <a onClick={handleLoginRegister} style={{ cursor: 'pointer', float: 'right', margin: '45px 0px 0px 0px', width: '25%', color: '#879ED9', fontSize: '25px'}}>
             Login/Register
         </a>
     }
     else {
         navBarLoggedIn = 
-        <div style={{ float: 'right', paddingRight: '45px', paddingTop: '40px' }}>
+        <div style={{ float: 'right', margin: '40px 45px 0px 0px' }}>
             <ShoppingCartRoundedIcon style={{ fontSize: '45px', paddingRight: '30px' }}></ShoppingCartRoundedIcon>
             <AccountCircleRoundedIcon style={{ fontSize: '45px' }}></AccountCircleRoundedIcon>
         </div>   
     }
 
     function handleLoginRegister() {
-
+        store.setOpenLoginModal();
     }
 
 

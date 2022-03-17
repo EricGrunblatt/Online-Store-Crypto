@@ -219,6 +219,7 @@ export default function HomeScreen() {
                     </Select>
                 </FormControl>
             </Box>
+            <LoginModal />
             <RegisterModal />
         </Box>  
     )

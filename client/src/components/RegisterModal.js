@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { GlobalStoreContext } from '../store'
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+
 
 /*
     This modal is shown when the user asks to delete a list. Note 
@@ -30,18 +32,26 @@ const style = {
   };
 
 function RegisterModal() {
+    const { store } = useContext(GlobalStoreContext);
     const [cont, setCont] = useState(false);
-    const [open, setOpen] = useState(false);
-    let list = "";
+    let isOpen = false;
 
+    if(store.registerModal) {
+        isOpen = true;
+    }
     function handleContinue() {
         setCont(true);
     }
 
     function handleRegister() {
-        setOpen(false);
+        store.setCloseRegisterModal();
     }
 
+    function handleLogin() {
+        store.setOpenLoginModal();
+    }
+
+    let list = "";
     if(!cont) {
         list =
         <div>
@@ -68,20 +78,20 @@ function RegisterModal() {
                 <TextField placeholder="State*" style={{ display: 'flex', float: 'left', margin: '15px 15px 0px 0px', width: '242.5px' }}></TextField>
                 <TextField placeholder="Zip Code*" style={{ display: 'flex', float: 'right', margin: '15px 0px 0px 0px', width: '242.5px' }}></TextField>
             </div>
-            <Button onClick={handleRegister} style={{ margin: '15px 0px 0px 0px', color: 'white', background: 'black', width: '150px', height: '40px', fontSize: '8px', borderRadius: '10px' }}><h1>Register</h1></Button>
+            <Button onClick={handleRegister} style={{ cursor: 'pointer', margin: '15px 0px 0px 0px', color: 'white', background: 'black', width: '150px', height: '40px', fontSize: '8px', borderRadius: '10px' }}><h1>Register</h1></Button>
         </div>;
     }
 
     return (
         <div>
             <Modal
-                open={open}
+                open={isOpen}
                 aria-labelledby="delete-modal">
                 <Box 
                     className="modal-dialog"
                     sx={{ ...style, width: 500 }}
                 >
-                    <h1 className="login" style={{ margin: '10px 0px 0px 60px', float: 'left', display: 'inline-block' }}>
+                    <h1 onClick={handleLogin} className="login" style={{ cursor: 'pointer', margin: '10px 0px 0px 60px', float: 'left', display: 'inline-block' }}>
                         Login
                     </h1>
                     <hr style={{ margin: '30px 0px 0px 78px', display: 'inline-block', float: 'left', color: 'black', width: '50px', rotate: '90deg', background: '#AEAEAE', border: '#AEAEAE 2px solid', borderRadius: '2px'   }}></hr>
@@ -90,7 +100,6 @@ function RegisterModal() {
                     </h1>
                     <hr style={{ margin: '40px 0px 0px -140px', display: 'inline-block', float: 'left', width: '250px', background: '#AEAEAE', border: '#AEAEAE 2px solid', borderRadius: '2px 0px 0px 2px' }}></hr>
                     <hr style={{ margin: '-4px -0px 0px 0px', display: 'inline-block', float: 'right', width: '250px', background: '#0038FF', border: '#0038FF 2px solid', borderRadius: '0px 2px 2px 0px' }}></hr>
-
                     {list}
 
                     

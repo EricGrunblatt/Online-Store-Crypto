@@ -1,3 +1,5 @@
+import { useContext } from "react";
+import { GlobalStoreContext } from '../store'
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
@@ -14,7 +16,7 @@ import TextField from '@mui/material/TextField';
 */
 const style = {
     position: 'absolute',
-    top: '30%',
+    top: '41%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 300,
@@ -29,10 +31,21 @@ const style = {
   };
 
 function LoginModal() {
-    
+    const { store } = useContext(GlobalStoreContext);
 
-    let isOpen = true;
-    
+    let isOpen = false;
+    if(store.loginModal) {
+        isOpen = true;
+    }
+
+    function handleLogin() {
+        store.setCloseLoginModal();
+    }
+
+    function handleRegister() {
+        store.setOpenRegisterModal();
+    }   
+
     return (
         <div>
             <Modal
@@ -46,7 +59,7 @@ function LoginModal() {
                         Login
                     </h1>
                     <hr style={{ margin: '30px 0px 0px 78px', display: 'inline-block', float: 'left', color: 'black', width: '50px', rotate: '90deg', background: '#AEAEAE', border: '#AEAEAE 2px solid', borderRadius: '2px'   }}></hr>
-                    <h1 className="register" style={{ margin: '10px 60px 0px 0px', float: 'right', display: 'inline-block' }}>
+                    <h1 onClick={handleRegister} className="register" style={{ cursor: 'pointer', margin: '10px 60px 0px 0px', float: 'right', display: 'inline-block' }}>
                         Register
                     </h1>
                     <hr style={{ margin: '40px 0px 0px -140px', display: 'inline-block', float: 'left', width: '250px', background: '#0038FF', border: '#0038FF 2px solid', borderRadius: '2px 0px 0px 2px' }}></hr>
@@ -58,9 +71,7 @@ function LoginModal() {
                         <TextField placeholder='Password*' style={{ margin: '15px 0px 0px 0px', float: 'left', width: '500px' }}></TextField>
                     </div>
                     <h5 style={{ padding: '0px 0px 0px 0px', color: '#879ED9', fontSize: '20px' }}>Forgot Password?</h5>
-                    <Button style={{ color: 'white', background: 'black', width: '150px', height: '40px', fontSize: '8px', borderRadius: '10px' }}><h1>Login</h1></Button>
-
-                    
+                    <Button onClick={handleLogin} style={{ color: 'white', background: 'black', width: '150px', height: '40px', fontSize: '8px', borderRadius: '10px' }}><h1>Login</h1></Button>
                 </Box>
             </Modal>
         </div>

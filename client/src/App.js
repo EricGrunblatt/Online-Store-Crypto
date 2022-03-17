@@ -2,7 +2,7 @@ import './App.css';
 import { React } from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 //import { AuthContextProvider } from './auth';
-//import { GlobalStoreContextProvider } from './store'
+import { GlobalStoreContextProvider } from './store'
 import {
     NavigationBar,
     HomeScreen,
@@ -16,15 +16,14 @@ import {
 const App = () => {
     return (
         <BrowserRouter>
-            {/*<AuthContextProvider>
-                <GlobalStoreContextProvider>  */}            
+            {/*<AuthContextProvider>*/}
+                <GlobalStoreContextProvider>              
                     <NavigationBar />
                     <Switch>
                         <Route path="/" exact component={HomeScreen} />
-                    </Switch>
-                    {/*<Statusbar />
+                    </Switch>    
                 </GlobalStoreContextProvider>
-                </AuthContextProvider>*/}
+            {/*</AuthContextProvider>*/}
         </BrowserRouter>
     )
 }
