@@ -174,9 +174,9 @@ export default function HomeScreen() {
                 
             </div>
             <div className="homescreen-item-display" style={{ display: 'inline-block', backgroundColor: 'white' }}>
-                <div className="homescreen-filter-by" style={{ padding: '10px 0px 0px 10px', fontSize: '25px', width: '150px' }}>
+                <div className="homescreen-filter-by" style={{ padding: '10px 0px 0px 10px', fontSize: '25px', width: '16vw' }}>
                     <div> Filter By </div>
-                    <hr style={{ float: 'left', color: 'black', width: '150px' }} />
+                    <hr style={{ float: 'left', color: 'black', width: '16vw' }} />
 
                     <div style={{ display: 'inline-block', float: 'left', fontSize: '18px' }}>
                         Category <br />
@@ -185,27 +185,27 @@ export default function HomeScreen() {
                     {openCat}
                     
 
-                    <hr style={{ float: 'left', color: 'black', width: '150px' }} />
+                    <hr style={{ float: 'left', color: 'black', width: '16vw' }} />
                     <div style={{ display: 'inline-block', float: 'left', fontSize: '18px' }}>
                         Price
                     </div>
                     {priceButton}
                     {openPrice}
 
-                    <hr style={{ float: 'left', color: 'black', width: '150px' }} />
+                    <hr style={{ float: 'left', color: 'black', width: '16vw' }} />
                     <div style={{ display: 'inline-block', float: 'left', fontSize: '18px' }}>
                         Condition
                     </div>
                     {conButton}
                     {openCon}
 
-                    <hr style={{ float: 'left', color: 'black', width: '150px' }} />
+                    <hr style={{ float: 'left', color: 'black', width: '16vw' }} />
                 </div>
             </div>
-            <Box style={{ border: 'black 1px solid', borderRadius: '10px', width: '200px', height: '50px', display: 'inline-block', float: 'right', margin: '10px 10px 0px 0px' }}>
+            <Box style={{ border: 'black 1px solid', borderRadius: '10px', width: '200px', height: '50px', display: 'inline-block', float: 'right', margin: '15px 10px 0px 0px' }}>
                 <FormControl fullWidth>
                     <InputLabel style={{ color: 'black', margin: '-2px 0px 0px 0px' }} id="sort-by-menu">Sort By</InputLabel>
-                    <Select style={{ height: '50px' }} 
+                    <Select style={{ borderRadius: '10px', height: '50px' }} 
                         labelId="sort-by-menu"
                         value={sort}
                         label="Sort By"

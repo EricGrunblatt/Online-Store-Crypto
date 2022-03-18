@@ -38,7 +38,7 @@ export default function NavigationBar() {
     else {
         navBarLoggedIn = 
         <Box style={{ display: 'flex', float: 'right', margin: '60px 10px 0px 20px' }}>
-            <ShoppingCartRoundedIcon style={{ fontSize: '45px', paddingRight: '40px' }}></ShoppingCartRoundedIcon>
+            <ShoppingCartRoundedIcon onClick={() => { history.push("/cart") }} style={{ cursor: 'pointer', fontSize: '45px', paddingRight: '40px' }}></ShoppingCartRoundedIcon>
             <AccountCircleRoundedIcon onClick={handleProfileMenuOpen} 
             style={{ cursor: 'pointer', color: 'white', fontSize: '45px' }}></AccountCircleRoundedIcon>
         </Box>   
@@ -47,6 +47,30 @@ export default function NavigationBar() {
     /* OPENS LOGIN MODAL IF PRESSED */
     function handleLogin() {
         store.setOpenLoginModal();
+    }
+
+    function handleLogout() {
+        handleMenuClose();
+    }
+
+    function handleProfile() {
+        handleMenuClose();
+        history.push("/profile");
+    }
+
+    function handleWallet() {
+        handleMenuClose();
+        history.push("/wallet");
+    }
+
+    function handleOrders() {
+        handleMenuClose();
+        history.push("/orders");
+    }
+
+    function handleListings() {
+        handleMenuClose();
+        history.push("/listings");
     }
 
     /* MENU DISPLAY */
@@ -66,12 +90,12 @@ export default function NavigationBar() {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
-            <MenuItem onClick={() => { history.push("/profile")}}>Profile</MenuItem>
-            <MenuItem onClick={() => { history.push("/wallet")}}>Wallet</MenuItem>
-            <MenuItem onClick={() => { history.push("/orders")}}>Orders</MenuItem>
-            <MenuItem onClick={() => { history.push("/listings")}}>Listings</MenuItem>
+            <MenuItem onClick={ handleProfile }>Profile</MenuItem>
+            <MenuItem onClick={ handleWallet }>Wallet</MenuItem>
+            <MenuItem onClick={ handleOrders }>Orders</MenuItem>
+            <MenuItem onClick={ handleListings }>Listings</MenuItem>
             <hr style={{ width: '50px' }}></hr>
-            <MenuItem>Log Out</MenuItem>
+            <MenuItem onClick={ handleLogout }>Log Out</MenuItem>
         </Menu>        
 
 
@@ -80,7 +104,7 @@ export default function NavigationBar() {
             <AppBar position="static" style={{ height: '15%', background: 'black' }}>
                 <Toolbar>
                     <div sx={{ width: '25%' }} style={{ margin: '50px 0px 0px 0px', justifyContent: 'center', float: 'left' }}>
-                        <img src={logo} alt="" width="200" height="40" style={{ marginBottom: '5px', marginLeft: '1px'}}></img>
+                        <img onClick={() => { history.push("/") }} src={logo} alt="" width="200" height="40" style={{ cursor: 'pointer', marginBottom: '5px', marginLeft: '1px'}}></img>
                         <div id="navigation-slogan" style={{ marginLeft: '3px' }}>
                             Buy and Sell Items with <br></br>
                             Cryptocurrency
