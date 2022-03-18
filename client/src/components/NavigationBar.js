@@ -1,51 +1,104 @@
 import React from "react";
 import { useContext, useState } from "react";
 import { GlobalStoreContext } from '../store'
+import { useHistory} from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import logo from "../images/CryptoriumLogo.png";
 import ShoppingCartRoundedIcon from '@mui/icons-material/ShoppingCartRounded';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
+import { MenuItem, Menu, AppBar, Toolbar, Box } from '@mui/material'
 
 
 export default function NavigationBar() {
     const { store } = useContext(GlobalStoreContext);
-    let loggedIn = false;
+    const [anchorEl, setAnchorEl] = useState(null);
+    const history = useHistory();
+    let isMenuOpen = Boolean(anchorEl);
+    let loggedIn = true;
     let navBarLoggedIn = "";
+
+    /* OPENS MENU IF PRESSED */
+    const handleProfileMenuOpen = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    /* CLOSES MENU IF PRESSED */
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
+
+
+    /* cHECKS IF USER IS LOGGED IN TO DECIDE WHAT GOES ON BANNER */
     if(!loggedIn) {
         navBarLoggedIn = 
-        <a onClick={handleLoginRegister} style={{ cursor: 'pointer', float: 'right', margin: '45px 0px 0px 0px', width: '25%', color: '#879ED9', fontSize: '25px'}}>
+        <a href onClick={handleLogin} style={{ cursor: 'pointer', float: 'right', margin: '55px 0px 0px 40px', width: '25%', color: '#879ED9', fontSize: '25px'}}>
             Login/Register
         </a>
     }
     else {
         navBarLoggedIn = 
-        <div style={{ float: 'right', margin: '40px 45px 0px 0px' }}>
-            <ShoppingCartRoundedIcon style={{ fontSize: '45px', paddingRight: '30px' }}></ShoppingCartRoundedIcon>
-            <AccountCircleRoundedIcon style={{ fontSize: '45px' }}></AccountCircleRoundedIcon>
-        </div>   
+        <Box style={{ display: 'flex', float: 'right', margin: '60px 10px 0px 20px' }}>
+            <ShoppingCartRoundedIcon style={{ fontSize: '45px', paddingRight: '40px' }}></ShoppingCartRoundedIcon>
+            <AccountCircleRoundedIcon onClick={handleProfileMenuOpen} 
+            style={{ cursor: 'pointer', color: 'white', fontSize: '45px' }}></AccountCircleRoundedIcon>
+        </Box>   
     }
 
-    function handleLoginRegister() {
+    /* OPENS LOGIN MODAL IF PRESSED */
+    function handleLogin() {
         store.setOpenLoginModal();
     }
 
+    /* MENU DISPLAY */
+    const loggedInMenu = 
+        <Menu
+            anchorEl={anchorEl}
+            anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+            }}
+            id="account-menu"
+            keepMounted
+            transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+            }}
+            open={isMenuOpen}
+            onClose={handleMenuClose}
+        >
+            <MenuItem onClick={() => { history.push("/profile")}}>Profile</MenuItem>
+            <MenuItem onClick={() => { history.push("/wallet")}}>Wallet</MenuItem>
+            <MenuItem onClick={() => { history.push("/orders")}}>Orders</MenuItem>
+            <MenuItem onClick={() => { history.push("/listings")}}>Listings</MenuItem>
+            <hr style={{ width: '50px' }}></hr>
+            <MenuItem>Log Out</MenuItem>
+        </Menu>        
+
 
     return (
-        <div id="navigation-bar">
-            <div sx={{ width: '25%' }} style={{ padding: '20px 0px 0px 10px', justifyContent: 'center', float: 'left' }}>
-                <img src={logo} alt="" width="175" height="30" style={{ marginBottom: '5px', marginLeft: '1px'}}></img>
-                <div id="navigation-slogan" style={{ marginLeft: '2px' }}>
-                    Buy and Sell Items with <br></br>
-                    Cryptocurrency
-                </div>
-            </div>
-            <TextField className="search-bar" sx={{ left: '10px', justifyContent: 'center', top: '30%', height: '35%', width: '360px', bgcolor:'white' }}
-                    style={{ float: 'left', position: 'relative', borderRadius: '10px' }}
-                    placeholder="Search..."
-            >
-            </TextField>
-            {navBarLoggedIn}
-        </div>
+        <Box id="navigation-bar">
+            <AppBar position="static" style={{ height: '15%', background: 'black' }}>
+                <Toolbar>
+                    <div sx={{ width: '25%' }} style={{ margin: '50px 0px 0px 0px', justifyContent: 'center', float: 'left' }}>
+                        <img src={logo} alt="" width="200" height="40" style={{ marginBottom: '5px', marginLeft: '1px'}}></img>
+                        <div id="navigation-slogan" style={{ marginLeft: '3px' }}>
+                            Buy and Sell Items with <br></br>
+                            Cryptocurrency
+                        </div>
+                    </div>
+                    <TextField className="search-bar" sx={{ width: '70%', bgcolor:'white' }}
+                            style={{ margin: '60px 0px 0px 5px', float: 'right', borderRadius: '10px' }}
+                            placeholder="Search..."
+                    >
+                    </TextField>
+                    {navBarLoggedIn}
+                </Toolbar>
+            </AppBar>
+            {
+                loggedInMenu
+            }
+            
+        </Box>
         
     )
 }

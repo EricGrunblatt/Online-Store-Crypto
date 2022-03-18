@@ -219,6 +219,9 @@ export default function HomeScreen() {
                     </Select>
                 </FormControl>
             </Box>
+            <Box style={{ margin: '-130px 0% 20px 20%', background: 'white', top: '450px', width: '79%', minHeight: '450px', border: 'black 1px solid', borderRadius: '20px'}}>
+                    
+            </Box>
             <LoginModal />
             <RegisterModal />
         </Box>  
