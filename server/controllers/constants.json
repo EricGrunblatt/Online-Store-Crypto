@@ -8,7 +8,9 @@
 		"missingRequiredField": "MISSING REQUIRED FIELD",
 		"passwordTooShort": "PASSWORD TOO SHORT",
 		"userAlreadyExists": "USER ALREADY EXISTS",
-		"emailAlreadyExists": "EMAIL ALREADY EXISTS"
+		"emailAlreadyExists": "EMAIL ALREADY EXISTS",
+		"invalidEmail": "INVALID EMAIL",
+		"invalidUsername": "INVALID USERNAME"
 	}
 
 }

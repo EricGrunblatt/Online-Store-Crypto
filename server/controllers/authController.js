@@ -26,6 +26,12 @@ register = async (req, res) => {
 		else if (password.length < 8) {
 			json = { status: constants.status.ERROR, errorMessage: constants.user.passwordTooShort }
 		}
+		else if (!email.includes("@")) {
+			json = { status: constants.status.ERROR, errorMessage: constants.user.invalidEmail}
+		}
+		else if (username.includes("@")) {
+			json = { status: constants.status.ERROR, errorMessage: constants.user.invalidUsername}
+		}
 		// CHECK IF USER WITH IDENTIFIER ALREADY EXISTS
 		else if (await User.findOne({ email: email })) {
 			json = { status: constants.status.ERROR, errorMessage: constants.user.emailAlreadyExists }
