@@ -3,9 +3,11 @@ import { useState } from "react";
 import { TextField, Box, Select, MenuItem } from '@mui/material';
 import { FormControl, InputLabel, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import { useHistory } from "react-router-dom";
 
 export default function ListItem() {
     const [category, setCategory] = useState("");
+    const history = useHistory();
     let bgColor = "white";
     let fontColor = "black";
 
@@ -13,6 +15,10 @@ export default function ListItem() {
     const handleCategory = (event) => {
         setCategory(event.target.value);
     };
+
+    function handleListItem() {
+        history.push("/listings")
+    }
 
     return (
         <div className="list-item">
@@ -93,10 +99,31 @@ export default function ListItem() {
             <div className="description-textfield" style={{ margin: '10px 0px 0px 10%'}}>
                 <TextField style={{ width: '90%' }}></TextField>
             </div>
-
-
-            <div style={{ margin: '0px 0px 50px 0px' }}>
-
+            <div className="item-price" style={{ margin: '20px 0px 0px 10%' }}>
+                <div style={{ margin: '10px 2% 0px 0%', display: 'inline-block', fontFamily: 'Quicksand', fontWeight: 'bold', color: '#808080', fontSize: '25px' }}> Item Price: </div>
+                <TextField style={{ margin: '0px 0% 0px 0px', width: '22vw' }}></TextField>
+                <div style={{ margin: '0px 0% 0px 1%', display: 'inline-block', fontFamily: 'Quicksand', fontWeight: 'bold', color: '#808080', fontSize: '25px' }}> Algo </div>
+            </div>
+            <div className="shipping" style={{ margin: '20px 0px 0px 10%' }}>
+                <div style={{ margin: '10px 2% 20px 0%', fontFamily: 'Quicksand', fontWeight: 'bold', color: '#808080', fontSize: '25px' }}> Shipping: </div>
+                <div style={{ display: 'inline-block', margin: '15px 0% 30px 5%', fontFamily: 'Quicksand', color: '#AEAEAE', fontSize: '20px' }}>Box Size:</div>
+                <div style={{ display: 'flex', float: 'right', margin: '0px 10% 0px 0%' }}>
+                    <TextField className="width" placeholder="Width (in.)" style={{ margin: '0px 0.5vw 0px 0px', width: '20vw' }}>
+                    </TextField>
+                    <TextField className="length" placeholder="Length (in.)" style={{ margin: '0px 0.5vw 0px 0px', width: '20vw' }}></TextField>
+                    <TextField className="height" placeholder="Height (in.)" style={{ margin: '0px 0.5vw 0px 0px', width: '20vw' }}></TextField>
+                </div>
+                <div className="weight" style={{ margin: '15px 0vw 0px 5%', fontFamily: 'Quicksand', color: '#AEAEAE', fontSize: '20px' }}>Weight: </div>
+                <div style={{ float: 'right', margin: '0px 10% 0px 0%' }}>
+                    <TextField className="weight" placeholder="Weight (lbs)" style={{ margin: '-40px 41.5vw 0px 0px', float: 'right', width: '20vw' }}></TextField>
+                </div>
+                <div className="shipping-price" style={{ margin: '50px 0vw 0px 5%', fontFamily: 'Quicksand', color: '#AEAEAE', fontSize: '20px' }}>
+                    <div style={{ display: 'inline-block', margin: '0px 2vw 0px 0px'}}>Shipping Price:</div> 
+                    <div style={{ display: 'inline-block'}}>10 Algo</div>
+                </div>
+            </div>
+            <div className="list-item-button" style={{ margin: '30px 0px 50px 0px', borderRadius: '10px', textAlign: 'center' }}>
+                <Button onClick={handleListItem} style={{ textAlign: 'center', background: 'black', color: 'white', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '20px', width: '150px' }}>List Item</Button>
             </div>
         </div>
     )
