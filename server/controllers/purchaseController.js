@@ -7,12 +7,12 @@ addToCart = async (req, res) => {
 }
 
 //TODO
-purchase = async (req, res) => {
+purchaseFromCart = async (req, res) => {
 	console.log("purchase")
 
 }
 
 module.exports = {
 	addToCart,
-	purchase,
+	purchaseFromCart,
 }
