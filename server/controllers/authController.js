@@ -1,6 +1,7 @@
 const User = require('../models/userModel')
 const constants = require('./constants.json')
 const bcryptjs = require('bcryptjs')
+const auth = require('../auth')
 
 // TODO
 register = async (req, res) => {
@@ -67,6 +68,13 @@ register = async (req, res) => {
 					email: user.email
 				} 
 			}
+
+			const token = auth.signToken(user);
+			res.cookie("token", token, {
+				httpOnly: true,
+				secure: true,
+				sameSite: "none"
+			})
 		}
 		console.log("response:", json)
 		res.status(200).json(json);
