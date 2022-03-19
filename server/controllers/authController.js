@@ -3,7 +3,6 @@ const constants = require('./constants.json')
 const bcryptjs = require('bcryptjs')
 const auth = require('../auth')
 
-// TODO
 register = async (req, res) => {
 	console.log("register", req.body);
 
@@ -76,6 +75,7 @@ register = async (req, res) => {
 				} 
 			}
 
+			// LOGIN USER
 			const token = auth.signToken(user);
 			res.cookie("token", token, {
 				httpOnly: true,
