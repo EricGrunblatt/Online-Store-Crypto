@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { GlobalStoreContextProvider } from './store'
 import {
     Cart,
+    Checkout,
     HomeScreen,
     Listings,
     ListItem,
@@ -33,6 +34,7 @@ const App = () => {
                         <Route path="/listings" exact component={Listings} />
                         <Route path="/cart" exact component={Cart} />
                         <Route path="/listitem" exact component={ListItem} />
+                        <Route path="/checkout" exact component={Checkout} />
                     </Switch>    
                 </GlobalStoreContextProvider>
             {/*</AuthContextProvider>*/}

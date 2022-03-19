@@ -38,7 +38,7 @@ export default function NavigationBar() {
     else {
         navBarLoggedIn = 
         <Box style={{ display: 'flex', float: 'right', margin: '60px 10px 0px 20px' }}>
-            <ShoppingCartRoundedIcon onClick={() => { history.push("/cart") }} style={{ cursor: 'pointer', fontSize: '45px', paddingRight: '40px' }}></ShoppingCartRoundedIcon>
+            <ShoppingCartRoundedIcon onClick={() => { history.push("/cart") }} style={{ cursor: 'pointer', fontSize: '45px', marginRight: '40px' }}></ShoppingCartRoundedIcon>
             <AccountCircleRoundedIcon onClick={handleProfileMenuOpen} 
             style={{ cursor: 'pointer', color: 'white', fontSize: '45px' }}></AccountCircleRoundedIcon>
         </Box>   
