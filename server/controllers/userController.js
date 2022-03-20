@@ -41,8 +41,8 @@ updateProfileImage = async (req, res) => {
 			json = {status: constants.status.ERROR, errorMessage: constants.user.missingRequiredField}
 		}
 		else {
-			const fileId = await createAndSaveImage(file, "test")
 			const user = await User.findById(userId)
+			const fileId = await createAndSaveImage(file, "profileImage for " + user.username);
 			user.profileImageId = fileId
 			await user.save()
 			json = {status: constants.status.OK}
