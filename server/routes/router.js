@@ -25,7 +25,7 @@ router.post('/user/getAccount', auth.verify, userController.getAccount)
 // Update Your Account
 router.post('/user/updateAccount', auth.verify, userController.updateAccount)
 // Update Profile Image
-router.post('/user/updateProfileImage', auth.verify, upload.single('image'), userController.updateProfileImage)
+router.post('/user/updateProfileImage', auth.verify, userController.updateProfileImage)
 // Write Review
 router.post('/user/writeReview', auth.verify,  userController.writeReview)
 
@@ -33,10 +33,20 @@ router.post('/user/writeReview', auth.verify,  userController.writeReview)
 router.post('/product/getCatalog', productController.getCatalog)
 // Get Product
 router.post('/product/getProduct', productController.getProduct)
-// Get Products For User's Personal Lists
-router.post('/product/getProductsForUser', auth.verify, productController.getProductsForUser)
-// Sell Product
-router.post('/product/sellProduct', auth.verify, productController.sellProduct)
+// Get Ordererd Products For User
+router.post('/product/getOrderedProductsForUser', auth.verify, productController.getOrderedProductsForUser)
+// Get Cart Products For User
+router.post('/product/getCartProductsForUser', auth.verify, productController.getCartProductsForUser)
+// Get Listing Products For User
+router.post('/product/getListingProductsForUser', auth.verify, productController.getListingProductsForUser)
+// Get Selling Products For User
+router.post('/product/getSellingProductsForUser', auth.verify, productController.getSellingProductsForUser)
+// Add Listing Product
+router.post('/product/addListingProduct', auth.verify, productController.addListingProduct)
+// Update Listing Product
+router.post('/product/updateListingProduct', auth.verify, productController.updateListingProduct)
+// Delete Listing Product
+router.post('/product/deleteListingProduct', auth.verify, productController.deleteListingProduct)
 
 // Add Product to Cart
 router.post('/purchase/addToCart', auth.verify, purchaseController.addToCart)

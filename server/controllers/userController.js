@@ -4,7 +4,7 @@ const constants = require('./constants.json')
 const Image = require('../models/imageModel')
 const fs = require('fs')
 const path = require('path')
-const { createAndSaveImage } = require('../handlers/imageHandler')
+const { createAndSaveImage, upload } = require('../handlers/imageHandler')
 
 // TODO
 getProfileByUsername = async (req, res) => {
@@ -26,34 +26,35 @@ updateAccount = async (req, res) => {
 
 }
 
-// TODO
 updateProfileImage = async (req, res) => {
 	// NOTE: data must be sent in form-data format with the image value at key value "image"
 	console.log("updateProfileImage", req.body)
 	
-	// REQUEST DATA
-	const userId = req.userId
-	const file = req.file
+	const imageMiddleware = upload.single('image')
+	imageMiddleware(req, res, async () => {
+		const userId = req.userId
+		const file = req.file
 
-	let json = {}
-	try {
-		if (!file) {
-			json = {status: constants.status.ERROR, errorMessage: constants.user.missingRequiredField}
+		let json = {}
+		try {
+			if (!file) {
+				json = {status: constants.status.ERROR, errorMessage: constants.user.missingRequiredField}
+			}
+			else {
+				const user = await User.findById(userId)
+				const fileId = await createAndSaveImage(file, "profileImage for " + user.username);
+				user.profileImageId = fileId
+				await user.save()
+				json = {status: constants.status.OK}
+			}
+			console.log("RESPONSE:", json)
+			res.status(200).json(json)
 		}
-		else {
-			const user = await User.findById(userId)
-			const fileId = await createAndSaveImage(file, "profileImage for " + user.username);
-			user.profileImageId = fileId
-			await user.save()
-			json = {status: constants.status.OK}
+		catch (err) {
+			console.log(err)
+			res.status(500).send()
 		}
-		console.log("RESPONSE:", json)
-		res.status(200).json(json)
-	}
-	catch (err) {
-		console.log(err)
-		res.status(500).send()
-	}
+	})
 }
 
 // TODO
