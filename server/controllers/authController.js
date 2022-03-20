@@ -79,7 +79,7 @@ register = async (req, res) => {
 			const token = auth.signToken(user)
 			auth.setCookie(res, token)
 		}
-		console.log("response:", json)
+		console.log("RESPONSE:", json)
 		res.status(200).json(json)
 	}
 	catch (err) {
@@ -128,7 +128,7 @@ login = async (req, res) => {
 				auth.setCookie(res, token)
 			}
 		}
-		console.log("response:", json)
+		console.log("RESPONSE:", json)
 		res.status(200).json(json)
 	}
 	catch (err) {

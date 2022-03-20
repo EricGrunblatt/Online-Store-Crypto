@@ -4,7 +4,9 @@ const auth = require('../auth');
 const authController = require('../controllers/authController');
 const userController = require('../controllers/userController');
 const productController = require('../controllers/productController');
-const purchaseController = require('../controllers/purchaseController')
+const purchaseController = require('../controllers/purchaseController');
+
+const {upload} = require('../handlers/imageHandler')
 
 // Router
 const router = express.Router()
@@ -23,7 +25,7 @@ router.post('/user/getAccount', auth.verify, userController.getAccount)
 // Update Your Account
 router.post('/user/updateAccount', auth.verify, userController.updateAccount)
 // Update Profile Image
-router.post('/user/updateProfileImage', auth.verify, userController.updateProfileImage)
+router.post('/user/updateProfileImage', auth.verify, upload.single('image'), userController.updateProfileImage)
 // Write Review
 router.post('/user/writeReview', auth.verify,  userController.writeReview)
 
