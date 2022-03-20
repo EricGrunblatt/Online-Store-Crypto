@@ -102,12 +102,14 @@ login = async (req, res) => {
 		if (!emailOrUsername || !password) {
 			json = {status: constants.status.ERROR, errorMessage: constants.user.missingRequiredField}
 		}
-		// VERIFY THE USER
 		else {
 			const user = await User.findOne({$or: [{email: emailOrUsername}, {username: emailOrUsername}]})
+			
+			// CHECK IF USER EXISTS
 			if (!user) {
 				json = {status: constants.status.ERROR, errorMessage: constants.user.userDoesNotExist}
 			}
+			// CHECK IF PASSWORD IS CORRECT
 			else if (!(await bcryptjs.compare(password, user.passwordHash))) {
 				json = {status: constants.status.ERROR, errorMessage: constants.user.passwordsDoNotMatch}
 			}
@@ -122,6 +124,7 @@ login = async (req, res) => {
 					}
 				}
 
+				// SET COOKIE
 				const token = auth.signToken(user)
 				auth.setCookie(res, token)
 			}
