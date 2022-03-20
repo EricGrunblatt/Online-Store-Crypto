@@ -19,7 +19,7 @@ router.post('/auth/login', authController.login)
 router.post('/auth/logout', authController.logout)
 
 // Get Profile
-router.post('/user/getProfileByUsername/:username', userController.getProfileByUsername)
+router.post('/user/getProfileByUsername', userController.getProfileByUsername)
 // Get Account
 router.post('/user/getAccount', auth.verify, userController.getAccount)
 // Update Your Account
