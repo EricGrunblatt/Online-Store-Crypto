@@ -1,0 +1,18 @@
+{
+	"status": {
+		"OK": "OK",
+		"ERROR": "ERROR",
+		"FATAL_ERROR": "FATAL ERROR"
+	},
+	"user": {
+		"missingRequiredField": "MISSING REQUIRED FIELD",
+		"passwordTooShort": "PASSWORD TOO SHORT",
+		"userAlreadyExists": "USER ALREADY EXISTS",
+		"emailAlreadyExists": "EMAIL ALREADY EXISTS",
+		"invalidEmail": "INVALID EMAIL",
+		"invalidUsername": "INVALID USERNAME",
+		"userDoesNotExist": "USER DOES NOT EXIST",
+		"passwordsDoNotMatch": "PASSWORDS DO NOT MATCH"
+	}
+
+}

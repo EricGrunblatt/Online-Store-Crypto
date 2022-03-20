@@ -27,7 +27,16 @@ signToken = function (user) {
 	}, process.env.JWT_SECRET);
 }
 
+setCookie = function (res, token) {
+	res.cookie("token", token, {
+		httpOnly: true,
+		secure: true,
+		sameSite: "none"
+	})
+}
+
 module.exports = {
     verify,
 	signToken,
+	setCookie,
 }

@@ -40,5 +40,6 @@ module.exports = {
 	getProfileByUsername,
 	getAccount,
 	updateAccount,
+	updateProfileImage,
 	writeReview,
 }
