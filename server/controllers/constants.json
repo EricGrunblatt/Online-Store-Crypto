@@ -10,7 +10,9 @@
 		"userAlreadyExists": "USER ALREADY EXISTS",
 		"emailAlreadyExists": "EMAIL ALREADY EXISTS",
 		"invalidEmail": "INVALID EMAIL",
-		"invalidUsername": "INVALID USERNAME"
+		"invalidUsername": "INVALID USERNAME",
+		"userDoesNotExist": "USER DOES NOT EXIST",
+		"passwordsDoNotMatch": "PASSWORDS DO NOT MATCH"
 	}
 
 }

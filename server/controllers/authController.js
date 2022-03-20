@@ -10,7 +10,7 @@ register = async (req, res) => {
 	const { firstName, lastName, username, email, password, phoneNumber } = req.body;
 	const { addressFirstLine, addressSecondLine, city, state, zipcode } = req.body;
 
-	// GET JSON
+	// PROCESS DATA
 	let json = {}
 	try {
 		// CHECK FOR MISSING FIELD
@@ -76,28 +76,63 @@ register = async (req, res) => {
 			}
 
 			// LOGIN USER
-			const token = auth.signToken(user);
-			res.cookie("token", token, {
-				httpOnly: true,
-				secure: true,
-				sameSite: "none"
-			})
+			const token = auth.signToken(user)
+			auth.setCookie(res, token)
 		}
 		console.log("response:", json)
-		res.status(200).json(json);
+		res.status(200).json(json)
 	}
 	catch (err) {
 		console.log(err)
-		res.status(500).send(constants.status.FATAL_ERROR);
+		res.status(500).send(constants.status.FATAL_ERROR)
 	}
 }
 
 // TODO
 login = async (req, res) => {
-	console.log("login")
-	const emailOrUsername = req.body.emailOrUsername;
-	const password = req.body.password;
+	console.log("login", req.body)
 
+	// GET REQUEST BODY DATA
+	const { emailOrUsername, password } = req.body
+
+	// PROCESS DATA
+	let json = {}
+	try {
+		// CHECK FOR MISSING FIELD
+		if (!emailOrUsername || !password) {
+			json = {status: constants.status.ERROR, errorMessage: constants.user.missingRequiredField}
+		}
+		// VERIFY THE USER
+		else {
+			const user = await User.findOne({$or: [{email: emailOrUsername}, {username: emailOrUsername}]})
+			if (!user) {
+				json = {status: constants.status.ERROR, errorMessage: constants.user.userDoesNotExist}
+			}
+			else if (!(await bcryptjs.compare(password, user.passwordHash))) {
+				json = {status: constants.status.ERROR, errorMessage: constants.user.passwordsDoNotMatch}
+			}
+			else {
+				json = {
+					status: constants.status.OK,
+					user: {
+						firstName: user.firstName,
+						lastName: user.lastName,
+						username: user.username,
+						email: user.email
+					}
+				}
+
+				const token = auth.signToken(user)
+				auth.setCookie(res, token)
+			}
+		}
+		console.log("response:", json)
+		res.status(200).json(json)
+	}
+	catch (err) {
+		console.log(err)
+		res.status(500).send(constants.status.FATAL_ERROR);
+	}
 }
 
 // TODO
