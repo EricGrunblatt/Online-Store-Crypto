@@ -9,6 +9,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import { Select, MenuItem, FormControl, InputLabel } from '@mui/material'
 import LoginModal from './LoginModal';
 import RegisterModal from './RegisterModal';
+import HomeProduct from "./HomeProduct";
 
 
 export default function HomeScreen() {
@@ -107,7 +108,7 @@ export default function HomeScreen() {
     function handleOpenCategory() {
         if(!openCat) {
             setOpenCat(
-                <div className="filter-category-list" style={{ fontSize: '10px' }}>
+                <div className="filter-category-list" style={{ fontSize: '10px', paddingTop: '7px' }}>
                     {categories.map((item, index) => (
                         <div key={index}>
                             <input value={item} type="checkbox" onChange={handleCatCheck} />
@@ -156,7 +157,7 @@ export default function HomeScreen() {
 
 
     return (
-        <Box className="homescreen" sx={{ minHeight: '750px', border: 'black 1px solid' }}>
+        <Box className="homescreen" style={{ minHeight: '803px' }}>
             <div className="homescreen-category-bar" style={{ padding: '10px 0px 10px 10px'}}>
                 <span style={{ paddingRight: '10px' }}> Electronics </span>
                 <span style={{ paddingRight: '10px' }}> Clothing </span>
@@ -219,8 +220,24 @@ export default function HomeScreen() {
                     </Select>
                 </FormControl>
             </Box>
-            <Box style={{ position: 'absolute', margin: '-20px 0% 20px 20%', background: 'white', top: '450px', width: '79%', minHeight: '450px', border: 'black 1px solid', borderRadius: '20px'}}>
-                    
+            <Box style={{ position: 'absolute', margin: '-20px 0% 20px 20%', background: 'white', top: '450px', width: '79%', minHeight: '450px', border: 'black 1px solid', borderRadius: '20px',
+                        display: 'grid', gridTemplateColumns: 'repeat(4, 19.5vw)', gridTemplateRows: 'minmax(19.5vw, auto) repeat(4, 25.5vw)'}}>
+                    <HomeProduct></HomeProduct>
+                    <HomeProduct></HomeProduct>
+                    <HomeProduct></HomeProduct>
+                    <HomeProduct></HomeProduct>
+                    <HomeProduct></HomeProduct>
+                    <HomeProduct></HomeProduct>
+                    <HomeProduct></HomeProduct>
+                    <HomeProduct></HomeProduct>
+                    <HomeProduct></HomeProduct>
+                    <HomeProduct></HomeProduct>
+                    <HomeProduct></HomeProduct>
+                    <HomeProduct></HomeProduct>
+                    <HomeProduct></HomeProduct>
+                    <HomeProduct></HomeProduct>
+                    <HomeProduct></HomeProduct>
+                    <HomeProduct></HomeProduct>
             </Box>
             <LoginModal />
             <RegisterModal />

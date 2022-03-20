@@ -7,6 +7,7 @@ import { useHistory } from "react-router-dom";
 
 export default function ListItem() {
     const [category, setCategory] = useState("");
+    const [condition, setCondition] = useState("");
     const history = useHistory();
     let bgColor = "white";
     let fontColor = "black";
@@ -16,8 +17,21 @@ export default function ListItem() {
         setCategory(event.target.value);
     };
 
+    /* LISTS ITEM */
     function handleListItem() {
         history.push("/listings")
+    }
+
+    /* CHANGE COLOR OF BUTTON WHEN SELECTED */
+    const handleConButton = (event) => {
+        let conButtons = document.querySelectorAll('[data-con-button]');
+        conButtons.forEach(button => {
+            button.style.background = 'white';
+            button.style.color = 'black';
+        });
+        event.target.style.background = 'black';
+        event.target.style.color = 'white';
+        setCondition(event.target.value);
     }
 
     return (
@@ -86,12 +100,14 @@ export default function ListItem() {
             </div>
             <div className="condition" style={{ margin: '-20vw 0px 0px 10%'}}>
                 <div style={{ margin: '10px 0% 0px 0%', display: 'inline-block', fontFamily: 'Quicksand', fontWeight: 'bold', color: '#808080', fontSize: '25px' }}>Condition:</div>
+                <div style={{ margin: '10px 0% 0px 1%', display: 'inline-block', fontFamily: 'Quicksand', fontWeight: 'bold', color: '#808080', fontSize: '25px' }}>{condition}</div>
+
             </div>
             <div className="condition-buttons" style={{ display: 'flex', flexDirection: 'row', margin: '20px 0px 0px 10%' }}>
-                <Button style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>Mint</Button>
-                <Button style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>New</Button>
-                <Button style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>Lightly Used</Button>
-                <Button style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>Used</Button>
+                <Button data-con-button value="Mint" onClick={handleConButton} style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>Mint</Button>
+                <Button data-con-button value="New" onClick={handleConButton} style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>New</Button>
+                <Button data-con-button value="Lightly Used" onClick={handleConButton} style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>Lightly Used</Button>
+                <Button data-con-button value="Used" onClick={handleConButton} style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>Used</Button>
             </div>
             <div className="description" style={{ margin: '40px 0px 0px 10%'}}>
                 <div style={{ margin: '10px 0% 0px 0%', fontFamily: 'Quicksand', fontWeight: 'bold', color: '#808080', fontSize: '25px' }}>Description:</div>
