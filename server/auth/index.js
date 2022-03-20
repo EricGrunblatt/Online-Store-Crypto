@@ -27,12 +27,16 @@ signToken = function (user) {
 	}, process.env.JWT_SECRET);
 }
 
-setCookie = function (res, token) {
-	res.cookie("token", token, {
+setCookie = function (res, token, options) {
+	let cookieOptions = {
 		httpOnly: true,
 		secure: true,
 		sameSite: "none"
-	})
+	}
+	if (options) {
+		cookieOptions = {...cookieOptions, ...options}
+	}
+	res.cookie("token", token, cookieOptions)
 }
 
 module.exports = {
