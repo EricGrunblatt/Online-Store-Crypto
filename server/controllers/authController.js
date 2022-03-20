@@ -141,7 +141,12 @@ login = async (req, res) => {
 // TODO
 logout = async (req, res) => {
 	console.log("logout")
-
+	res.cookie("token", "", {
+		httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        expires: new Date(0)
+	}).send({status: constants.status.OK});
 }
 
 module.exports = {
