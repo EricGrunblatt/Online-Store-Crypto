@@ -7,8 +7,8 @@ register = async (req, res) => {
 	console.log("register", req.body);
 
 	// GET REQUEST BODY DATA
-	const { firstName, lastName, username, email, password, phoneNumber } = req.body;
-	const { addressFirstLine, addressSecondLine, city, state, zipcode } = req.body;
+	const {firstName, lastName, username, email, password, phoneNumber} = req.body;
+	const {addressFirstLine, addressSecondLine, city, state, zipcode} = req.body;
 
 	// PROCESS DATA
 	let json = {}
@@ -92,7 +92,7 @@ login = async (req, res) => {
 	console.log("login", req.body)
 
 	// GET REQUEST BODY DATA
-	const { emailOrUsername, password } = req.body
+	const {emailOrUsername, password} = req.body
 
 	// PROCESS DATA
 	let json = {}
