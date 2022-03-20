@@ -1,4 +1,7 @@
-const { upload } = require("../handlers/imageHandler")
+const { upload, createAndSaveImage } = require("../handlers/imageHandler")
+const Product = require("../models/productModel")
+const User = require('../models/userModel')
+const constants = require('./constants.json')
 
 // TODO
 getCatalog = async (req, res) => {
@@ -90,18 +93,81 @@ getSellingProductsForUser = async (req, res) => {
 	// }]
 }
 
-// TODO
 addListingProduct = async (req, res) => {
-	console.log("addListingProduct")
-
-	const userId = req.userId
-	const {name, category, condition, description} = req.body
-	const {price, boxLength, boxWidth, boxHeight} = req.body
-	const images = req.files
-	
 	const imageMiddleware = upload.array('image')
 	imageMiddleware(req, res, async () => {
-		console.log(req.files)
+		console.log("addListingProduct", req.body)
+
+		const userId = req.userId
+		const {name, description, condition, category} = req.body
+		const {price, boxLength, boxWidth, boxHeight} = req.body
+		const images = req.files
+		
+		let json = {}
+		try {
+			if (!userId) {
+				throw "did not get a userId"
+			}
+			else if (!name || !description || !condition || !category) {
+				json = {status: constants.status.ERROR, errorMessage: constants.product.missingRequiredField}
+			}
+			else if (!price || !boxLength || !boxWidth || !boxHeight) {
+				json = {status: constants.status.ERROR, errorMessage: constants.product.missingRequiredField}
+			}
+			else if (images.length == 0) {
+				json = {status: constants.status.ERROR, errorMessage: constants.product.missingImages}
+			}
+			else {
+				// GET USER
+				const user = await User.findById(userId)
+				if (!user) {
+					throw "no user with userId: " + userId
+				}
+
+				// TODO: Calculate shipping price via api
+				const shippingPrice = boxLength * boxWidth * boxHeight
+		
+				let product = new Product({
+					name: name,
+					description: description,
+					condition: condition,
+					category: category,
+					sellerUsername: user.username,
+					price: price,
+					shippingPrice: shippingPrice,
+					imageIds: []
+				})
+		
+				// ADD IMAGE FILES
+				let imageIds = []
+				let imageIndex = 0
+				await images.forEach(async image => {
+					const imageId = await createAndSaveImage(image, "product image " + imageIndex + " for productId=" + product._id)
+					imageIds.push(imageId)
+					imageIndex++
+				})
+				product.imageIds = imageIds
+
+				// SAVE THE 
+				product.save()
+
+				json = {status: constants.status.OK, product: {
+					name: product.name,
+					description: product.description,
+					condition: product.condition,
+					category: product.category,
+					sellerUsername: user.username,
+					price: product.price,
+					shippingPrice: product.shippingPrice
+				}}
+			}
+			console.log("RESPONSE:", json)
+			res.status(200).json(json)
+		}
+		catch (err) {
+			console.log(err)
+			res.status(500).send(constants.status.FATAL_ERROR)
+		}
 	})
 }
 

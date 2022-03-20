@@ -16,6 +16,10 @@
 	},
 	"user": {
 		"missingRequiredField": "MISSING REQUIRED FIELD"
+	},
+	"product": {
+		"missingRequiredField": "MISSING REQUIRED FIELD",
+		"missingImages": "MISSING IMAGES"
 	}
 
 }
