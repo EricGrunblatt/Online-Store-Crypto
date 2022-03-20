@@ -88,7 +88,6 @@ register = async (req, res) => {
 	}
 }
 
-// TODO
 login = async (req, res) => {
 	console.log("login", req.body)
 
@@ -138,7 +137,6 @@ login = async (req, res) => {
 	}
 }
 
-// TODO
 logout = async (req, res) => {
 	console.log("logout")
 	res.cookie("token", "", {
