@@ -2,7 +2,6 @@ const constants = require('./constants.json')
 const Product = require('../models/productModel')
 const User = require('../models/userModel')
 
-//TODO
 addToCart = async (req, res) => {
 	console.log("addToCart", req.body)
 	const userId = req.userId
@@ -10,6 +9,7 @@ addToCart = async (req, res) => {
 
 	let json = {}
 	let user = null
+	let product = null
 	try {
 		if (!userId) {
 			throw "did not get a userId"
@@ -20,11 +20,14 @@ addToCart = async (req, res) => {
 		else if (! (user = await User.findById(userId))) {
 			json = {status: constants.status.ERROR, errorMessage: constants.purchase.userDoesNotExist}
 		}
-		else if (! (await Product.findById(_id))) {
+		else if (! (product = await Product.findById(_id))) {
 			json = {status: constants.status.ERROR, errorMessage: constants.purchase.productDoesNotExist}
 		}
 		else if (user.cartProductIds.includes(_id)) {
 			json = {status: constants.status.ERROR, errorMessage: constants.purchase.cartAlreadyIncludesProduct}
+		}
+		else if (product.sellerUsername === user.username) {
+			json = {status: constants.status.ERROR, errorMessage: constants.purchase.userOwnsThisItem}
 		}
 		else {
 			user.cartProductIds.push(_id)
@@ -39,7 +42,6 @@ addToCart = async (req, res) => {
 	}
 }
 
-// TODO
 removeFromCart = async (req, res) => {
 	console.log("removeFromCart", req.body)
 	const userId = req.userId
