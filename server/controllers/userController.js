@@ -24,6 +24,7 @@ getProfileByUsername = async (req, res) => {
 		}
 		else {
 			const profileImage = await Image.findById(user.profileImageId)
+				.select({"_id": 0, "data": 1, "contentType": 1})
 
 			const sellingProducts = await Products.find({sellerUsername: username, buyerUsername: null})
 				.select({"_id": 1, "name": 1, "price": 1, "sellerUsername": 1, "dateListed": 1})

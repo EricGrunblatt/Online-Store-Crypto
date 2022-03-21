@@ -20,7 +20,11 @@
 	},
 	"product": {
 		"missingRequiredField": "MISSING REQUIRED FIELD",
-		"missingImages": "MISSING IMAGES"
+		"missingImages": "MISSING IMAGES",
+		"userDoesNotExist": "USER DOES NOT EXIST",
+		"productDoesNotExist": "PRODUCT DOES NOT EXIST",
+		"youAreNotTheSeller": "YOU ARE NOT THE SELLER",
+		"productIsSold": "PRODUCT IS SOLD"
 	}
 
 }

@@ -104,6 +104,7 @@ addListingProduct = async (req, res) => {
 		const images = req.files
 
 		let json = {}
+		let user = null
 		try {
 			if (!userId) {
 				throw "did not get a userId"
@@ -117,13 +118,10 @@ addListingProduct = async (req, res) => {
 			else if (Object.keys(images).length === 0) {
 				json = {status: constants.status.ERROR, errorMessage: constants.product.missingImages}
 			}
+			else if (! (user = await User.findById(userId))) {
+				json = {status: constants.status.ERROR, errorMessage: constants.product.userDoesNotExist}
+			}
 			else {
-				// GET USER
-				const user = await User.findById(userId)
-				if (!user) {
-					throw "no user with userId: " + userId
-				}
-
 				// TODO: Calculate shipping price via api
 				const shippingPrice = boxLength * boxWidth * boxHeight
 		
@@ -175,6 +173,8 @@ updateListingProduct = async (req, res) => {
 		const images = req.files
 
 		let json = {}
+		let user = null
+		let product = null
 		try {
 			if (!userId) {
 				throw "did not get a userId"
@@ -185,26 +185,21 @@ updateListingProduct = async (req, res) => {
 			else if (!price || !boxLength || !boxWidth || !boxHeight) {
 				json = {status: constants.status.ERROR, errorMessage: constants.product.missingRequiredField}
 			}
+			else if (! (user = await User.findById(userId))) {
+				json = {status: constants.status.ERROR, errorMessage: constants.product.userDoesNotExist}
+			}
+			else if (! (product = await Product.findById(_id))) {
+				json = {status: constants.status.ERROR, errorMessage: constants.product.productDoesNotExist}
+			}
+			else if (product.sellerUsername !== user.username) {
+				json = {status: constants.status.ERROR, errorMessage: constants.product.youAreNotTheSeller}
+			}
+			else if (product.dateSold || product.buyerUsername) {
+				json = {status: constants.status.ERROR, errorMessage: constants.product.productIsSold}
+			}
 			else {
-				// GET USER
-				const user = await User.findById(userId)
-				if (!user) {
-					throw "no user with userId: " + userId
-				}
-
 				// TODO: Calculate shipping price via api
 				const shippingPrice = boxLength * boxWidth * boxHeight
-
-				let product = await Product.findById(_id)
-				if (!product) {
-					throw "product with id=" + _id + " not found"
-				}
-				else if (product.sellerUsername !== user.username) {
-					throw "attempted to update listing that user is not selling"
-				}
-				else if (product.dateSold || product.buyerUsername) {
-					throw "attempted to update listing that is already purchased"
-				}
 				
 				product.name = name
 				product.description = description
