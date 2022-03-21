@@ -21,7 +21,7 @@ createAndSaveImage = async (file, description) => {
 		contentType: 'image/png',
 		description: description
 	})
-	image.save()
+	await image.save()
 	return image._id
 }
 

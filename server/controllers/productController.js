@@ -146,6 +146,7 @@ addListingProduct = async (req, res) => {
 				await product.save()
 
 				json = {status: constants.status.OK, product: {
+					_id: product._id,
 					name: product.name,
 					description: product.description,
 					condition: product.condition,
@@ -167,7 +168,7 @@ addListingProduct = async (req, res) => {
 
 // TODO
 updateListingProduct = async (req, res) => {
-	const imageMiddleware = upload.array('image')
+	const imageMiddleware = upload.fields(productImageFields)
 	imageMiddleware(req, res, async () => {
 		console.log("updateListingProduct", req.body)
 
@@ -175,7 +176,7 @@ updateListingProduct = async (req, res) => {
 		const {_id, name, description, condition, category} = req.body
 		const {price, boxLength, boxWidth, boxHeight} = req.body
 		const images = req.files
-		
+
 		let json = {}
 		try {
 			if (!userId) {
@@ -187,9 +188,6 @@ updateListingProduct = async (req, res) => {
 			else if (!price || !boxLength || !boxWidth || !boxHeight) {
 				json = {status: constants.status.ERROR, errorMessage: constants.product.missingRequiredField}
 			}
-			else if (images.length == 0) {
-				json = {status: constants.status.ERROR, errorMessage: constants.product.missingImages}
-			}
 			else {
 				// GET USER
 				const user = await User.findById(userId)
@@ -199,30 +197,33 @@ updateListingProduct = async (req, res) => {
 
 				// TODO: Calculate shipping price via api
 				const shippingPrice = boxLength * boxWidth * boxHeight
-		
-				let product = await Product.findById(_id)
 
-				if (product.sellerUsername !== user.username) {
+				let product = await Product.findById(_id)
+				if (!product) {
+					throw "product with id=" + _id + " not found"
+				}
+				else if (product.sellerUsername !== user.username) {
 					throw "attempted to update listing that user is not selling"
 				}
-				else if (!product.dateSold || !product.buyerUsername) {
-					throw "attempted to update listing taht is already purchased"
+				else if (product.dateSold || product.buyerUsername) {
+					throw "attempted to update listing that is already purchased"
 				}
+				
+				product.name = name
+				product.description = description
+				product.condition = condition
+				product.category = category
+				product.price = price
+				product.shippingPrice = shippingPrice
 		
 				// ADD IMAGE FILES
-				let imageIds = []
-				let imageIndex = 0
-				await images.forEach(async image => {
-					const imageId = await createAndSaveImage(image, "product image " + imageIndex + " for productId=" + product._id)
-					imageIds.push(imageId)
-					imageIndex++
-				})
-				product.imageIds = imageIds
+				product.imageIds = await updateProductImageFields(images, [...product.imageIds], _id)
 
 				// SAVE THE 
-				product.save()
+				await product.save()
 
 				json = {status: constants.status.OK, product: {
+					_id: _id,
 					name: product.name,
 					description: product.description,
 					condition: product.condition,
