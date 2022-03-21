@@ -5,6 +5,7 @@ const ObjectId = Schema.Types.ObjectId
 const ReviewSchema = new Schema(
 	{
 		forUsername: {type: String, required: true},
+		byUsername: {type: String, required: true},
 		stars: {type: Number, required: true},
 		comment: {type: String, default: null}
 	},

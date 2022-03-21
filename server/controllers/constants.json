@@ -15,7 +15,8 @@
 		"passwordsDoNotMatch": "PASSWORDS DO NOT MATCH"
 	},
 	"user": {
-		"missingRequiredField": "MISSING REQUIRED FIELD"
+		"missingRequiredField": "MISSING REQUIRED FIELD",
+		"userDoesNotExist": "USER DOES NOT EXIST"
 	},
 	"product": {
 		"missingRequiredField": "MISSING REQUIRED FIELD",

@@ -2,6 +2,7 @@ const { upload, createAndSaveImage } = require("../handlers/imageHandler")
 const Product = require("../models/productModel")
 const User = require('../models/userModel')
 const constants = require('./constants.json')
+const productControllerHelper = require('./helpers/productControllerHelper')
 
 // TODO
 getCatalog = async (req, res) => {
@@ -18,7 +19,7 @@ getCatalog = async (req, res) => {
 // TODO
 getProduct = async (req, res) => {
 	console.log("getProduct")
-	const id = req.body.id;
+	const _id = req.body._id;
 	
 }
 
@@ -94,7 +95,7 @@ getSellingProductsForUser = async (req, res) => {
 }
 
 addListingProduct = async (req, res) => {
-	const imageMiddleware = upload.array('image')
+	const imageMiddleware = upload.fields(productControllerHelper.productImageFields)
 	imageMiddleware(req, res, async () => {
 		console.log("addListingProduct", req.body)
 
@@ -102,6 +103,8 @@ addListingProduct = async (req, res) => {
 		const {name, description, condition, category} = req.body
 		const {price, boxLength, boxWidth, boxHeight} = req.body
 		const images = req.files
+
+		console.log(images)
 		
 		let json = {}
 		try {
@@ -114,7 +117,7 @@ addListingProduct = async (req, res) => {
 			else if (!price || !boxLength || !boxWidth || !boxHeight) {
 				json = {status: constants.status.ERROR, errorMessage: constants.product.missingRequiredField}
 			}
-			else if (images.length == 0) {
+			else if (Object.keys(images).length === 0) {
 				json = {status: constants.status.ERROR, errorMessage: constants.product.missingImages}
 			}
 			else {
@@ -137,6 +140,86 @@ addListingProduct = async (req, res) => {
 					shippingPrice: shippingPrice,
 					imageIds: []
 				})
+		
+				// ADD IMAGE FILES
+				let imageIds = []
+				for (let field of productControllerHelper.productImageFields) {
+					const imageKey = field.name
+					let imageId = null
+					if (Object.keys(images).includes(imageKey)) {
+						const imageValue = images[imageKey][0]
+						imageId = await createAndSaveImage(imageValue, "product image key=" + imageKey + " for productId=" + product._id)
+					}
+					imageIds.push(imageId)
+				}
+				product.imageIds = imageIds
+
+				// SAVE THE 
+				product.save()
+
+				json = {status: constants.status.OK, product: {
+					name: product.name,
+					description: product.description,
+					condition: product.condition,
+					category: product.category,
+					sellerUsername: user.username,
+					price: product.price,
+					shippingPrice: product.shippingPrice
+				}}
+			}
+			console.log("RESPONSE:", json)
+			res.status(200).json(json)
+		}
+		catch (err) {
+			console.log(err)
+			res.status(500).send(constants.status.FATAL_ERROR)
+		}
+	})
+}
+
+// TODO
+updateListingProduct = async (req, res) => {
+	const imageMiddleware = upload.array('image')
+	imageMiddleware(req, res, async () => {
+		console.log("updateListingProduct", req.body)
+
+		const userId = req.userId
+		const {_id, name, description, condition, category} = req.body
+		const {price, boxLength, boxWidth, boxHeight} = req.body
+		const images = req.files
+		
+		let json = {}
+		try {
+			if (!userId) {
+				throw "did not get a userId"
+			}
+			else if (!_id || !name || !description || !condition || !category) {
+				json = {status: constants.status.ERROR, errorMessage: constants.product.missingRequiredField}
+			}
+			else if (!price || !boxLength || !boxWidth || !boxHeight) {
+				json = {status: constants.status.ERROR, errorMessage: constants.product.missingRequiredField}
+			}
+			else if (images.length == 0) {
+				json = {status: constants.status.ERROR, errorMessage: constants.product.missingImages}
+			}
+			else {
+				// GET USER
+				const user = await User.findById(userId)
+				if (!user) {
+					throw "no user with userId: " + userId
+				}
+
+				// TODO: Calculate shipping price via api
+				const shippingPrice = boxLength * boxWidth * boxHeight
+		
+				let product = await Product.findById(_id)
+
+				if (product.sellerUsername !== user.username) {
+					throw "attempted to update listing that user is not selling"
+				}
+				else if (!product.dateSold || !product.buyerUsername) {
+					throw "attempted to update listing taht is already purchased"
+				}
 		
 				// ADD IMAGE FILES
 				let imageIds = []
@@ -169,16 +252,6 @@ addListingProduct = async (req, res) => {
 			res.status(500).send(constants.status.FATAL_ERROR)
 		}
 	})
-}
-
-// TODO
-updateListingProduct = async (req, res) => {
-	console.log("updateListingProduct")
-
-	const userId = req.userId
-	const {id, name, category, condition, description} = req.body
-	const {price, boxLength, boxWidth, boxHeight} = req.body
-	const images = req.files
 }
 
 // TODO
