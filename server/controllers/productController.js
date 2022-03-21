@@ -2,7 +2,7 @@ const { upload, createAndSaveImage } = require("../handlers/imageHandler")
 const Product = require("../models/productModel")
 const User = require('../models/userModel')
 const constants = require('./constants.json')
-const productControllerHelper = require('./helpers/productControllerHelper')
+const {productImageFields, updateProductImageFields} = require('./helpers/productControllerHelper')
 
 // TODO
 getCatalog = async (req, res) => {
@@ -95,7 +95,7 @@ getSellingProductsForUser = async (req, res) => {
 }
 
 addListingProduct = async (req, res) => {
-	const imageMiddleware = upload.fields(productControllerHelper.productImageFields)
+	const imageMiddleware = upload.fields(productImageFields)
 	imageMiddleware(req, res, async () => {
 		console.log("addListingProduct", req.body)
 
@@ -104,8 +104,6 @@ addListingProduct = async (req, res) => {
 		const {price, boxLength, boxWidth, boxHeight} = req.body
 		const images = req.files
 
-		console.log(images)
-		
 		let json = {}
 		try {
 			if (!userId) {
@@ -142,20 +140,10 @@ addListingProduct = async (req, res) => {
 				})
 		
 				// ADD IMAGE FILES
-				let imageIds = []
-				for (let field of productControllerHelper.productImageFields) {
-					const imageKey = field.name
-					let imageId = null
-					if (Object.keys(images).includes(imageKey)) {
-						const imageValue = images[imageKey][0]
-						imageId = await createAndSaveImage(imageValue, "product image key=" + imageKey + " for productId=" + product._id)
-					}
-					imageIds.push(imageId)
-				}
-				product.imageIds = imageIds
+				product.imageIds = await updateProductImageFields(images, [...product.imageIds], product._id)
 
 				// SAVE THE 
-				product.save()
+				await product.save()
 
 				json = {status: constants.status.OK, product: {
 					name: product.name,
