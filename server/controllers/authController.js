@@ -6,11 +6,11 @@ const auth = require('../auth')
 register = async (req, res) => {
 	console.log("register", req.body);
 
-	// GET REQUEST BODY DATA
+	// REQUEST BODY DATA
 	const {firstName, lastName, username, email, password, phoneNumber} = req.body;
 	const {addressFirstLine, addressSecondLine, city, state, zipcode} = req.body;
 
-	// PROCESS DATA
+	// PROCESSING
 	let json = {}
 	try {
 		// CHECK FOR MISSING FIELD
@@ -39,7 +39,6 @@ register = async (req, res) => {
 		else if (await User.findOne({ username: username })) {
 			json = { status: constants.status.ERROR, errorMessage: constants.auth.userAlreadyExists }
 		}
-		// REGISTER USER
 		else {
 			// HASH PASSWORD
 			const saltRounds = 10
@@ -64,7 +63,6 @@ register = async (req, res) => {
 			// SAVE USER
 			await user.save()
 
-			// OK JSON
 			json = { 
 				status: constants.status.OK, 
 				user: {
@@ -91,10 +89,10 @@ register = async (req, res) => {
 login = async (req, res) => {
 	console.log("login", req.body)
 
-	// GET REQUEST BODY DATA
+	// REQUEST BODY DATA
 	const {emailOrUsername, password} = req.body
 
-	// PROCESS DATA
+	// PROCESSING
 	let json = {}
 	try {
 		// CHECK FOR MISSING FIELD
@@ -139,6 +137,8 @@ login = async (req, res) => {
 
 logout = async (req, res) => {
 	console.log("logout")
+
+	// SET COOKIE TO EXPIRE
 	auth.setCookie(res, "", {expires: new Date(0)})
 	res.send({status: constants.status.OK});
 }
