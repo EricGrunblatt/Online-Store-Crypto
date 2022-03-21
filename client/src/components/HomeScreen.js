@@ -157,7 +157,7 @@ export default function HomeScreen() {
 
 
     return (
-        <Box className="homescreen" style={{ minHeight: '803px' }}>
+        <Box className="homescreen">
             <div className="homescreen-category-bar" style={{ padding: '10px 0px 10px 10px'}}>
                 <span style={{ paddingRight: '10px' }}> Electronics </span>
                 <span style={{ paddingRight: '10px' }}> Clothing </span>
@@ -220,24 +220,30 @@ export default function HomeScreen() {
                     </Select>
                 </FormControl>
             </Box>
-            <Box style={{ position: 'absolute', margin: '-20px 0% 20px 20%', background: 'white', top: '450px', width: '79%', minHeight: '450px', border: 'black 1px solid', borderRadius: '20px',
-                        display: 'grid', gridTemplateColumns: 'repeat(4, 19.5vw)', gridTemplateRows: 'minmax(19.5vw, auto) repeat(4, 25.5vw)'}}>
-                    <HomeProduct></HomeProduct>
-                    <HomeProduct></HomeProduct>
-                    <HomeProduct></HomeProduct>
-                    <HomeProduct></HomeProduct>
-                    <HomeProduct></HomeProduct>
-                    <HomeProduct></HomeProduct>
-                    <HomeProduct></HomeProduct>
-                    <HomeProduct></HomeProduct>
-                    <HomeProduct></HomeProduct>
-                    <HomeProduct></HomeProduct>
-                    <HomeProduct></HomeProduct>
-                    <HomeProduct></HomeProduct>
-                    <HomeProduct></HomeProduct>
-                    <HomeProduct></HomeProduct>
-                    <HomeProduct></HomeProduct>
-                    <HomeProduct></HomeProduct>
+            <Box style={{ position: 'absolute', margin: '-20px 0px 50px 20%', background: 'white', top: '450px', width: '79%', minHeight: '1010px', border: 'black 1px solid', borderRadius: '20px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 19.5vw)', gridTemplateRows: 'repeat(4, 25.5vw)' }}>
+                        <HomeProduct></HomeProduct>
+                        <HomeProduct></HomeProduct>
+                        <HomeProduct></HomeProduct>
+                        <HomeProduct></HomeProduct>
+                        <HomeProduct></HomeProduct>
+                        <HomeProduct></HomeProduct>
+                        <HomeProduct></HomeProduct>
+                        <HomeProduct></HomeProduct>
+                        <HomeProduct></HomeProduct>
+                        <HomeProduct></HomeProduct>
+                        <HomeProduct></HomeProduct>
+                        <HomeProduct></HomeProduct>
+                        <HomeProduct></HomeProduct>
+                        <HomeProduct></HomeProduct>
+                        <HomeProduct></HomeProduct>
+                        <HomeProduct></HomeProduct>
+                    </div>
+            </Box>
+            <Box style={{ margin: '950px 0px 25px 0vw', textAlign: 'center', fontSize: '35px', width: '99%' }}>
+                <ArrowBackIosIcon style={{ marginRight: '5vw' }}></ArrowBackIosIcon>
+                1 2 3 4
+                <ArrowForwardIosIcon style={{ marginLeft: '5vw' }}></ArrowForwardIosIcon>
             </Box>
             <LoginModal />
             <RegisterModal />
