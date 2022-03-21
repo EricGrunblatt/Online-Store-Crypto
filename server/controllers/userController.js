@@ -52,14 +52,14 @@ getProfileByUsername = async (req, res) => {
 
 // TODO
 getAccount = async (req, res) => {
-	console.log("getAccount")
+	console.log("getAccount", req.body)
 	const userId = req.userId
 
 }
 
 // TODO
 updateAccount = async (req, res) => {
-	console.log("updateAccount")
+	console.log("updateAccount", req.body)
 	const userId = req.userId
 
 }
@@ -97,7 +97,7 @@ updateProfileImage = async (req, res) => {
 
 // TODO
 writeReview = async (req, res) => {
-	console.log("writeReview")
+	console.log("writeReview", req.body)
 	const userId = req.userId
 	const objectId = req.body.objectId
 	const stars = req.body.stars
