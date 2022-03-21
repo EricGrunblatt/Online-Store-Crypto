@@ -1,4 +1,4 @@
-const {createAndSaveImage} = require('../../handlers/imageHandler')
+const {createAndSaveImage, upload} = require('../../handlers/imageHandler')
 
 const productImageFields = [
 	{name: 'image0', maxCount: 1},
@@ -10,6 +10,8 @@ const productImageFields = [
 	{name: 'image6', maxCount: 1},
 	{name: 'image7', maxCount: 1},
 ]
+
+const productImageMiddleware = upload.fields(productImageFields)
 
 updateProductImageFields = async (images, oldImageIds, productId) => {
 	let fieldIndex = 0
@@ -28,4 +30,4 @@ updateProductImageFields = async (images, oldImageIds, productId) => {
 	return imageIds
 }
 
-module.exports = {productImageFields, updateProductImageFields}
+module.exports = {productImageMiddleware, updateProductImageFields}

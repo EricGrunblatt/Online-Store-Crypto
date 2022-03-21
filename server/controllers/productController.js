@@ -2,7 +2,7 @@ const { upload, createAndSaveImage } = require("../handlers/imageHandler")
 const Product = require("../models/productModel")
 const User = require('../models/userModel')
 const constants = require('./constants.json')
-const {productImageFields, updateProductImageFields} = require('./helpers/productControllerHelper')
+const {productImageMiddleware, updateProductImageFields} = require('./helpers/productControllerHelper')
 
 // TODO
 getCatalog = async (req, res) => {
@@ -95,8 +95,7 @@ getSellingProductsForUser = async (req, res) => {
 }
 
 addListingProduct = async (req, res) => {
-	const imageMiddleware = upload.fields(productImageFields)
-	imageMiddleware(req, res, async () => {
+	productImageMiddleware(req, res, async () => {
 		console.log("addListingProduct", req.body)
 
 		const userId = req.userId
@@ -166,10 +165,8 @@ addListingProduct = async (req, res) => {
 	})
 }
 
-// TODO
 updateListingProduct = async (req, res) => {
-	const imageMiddleware = upload.fields(productImageFields)
-	imageMiddleware(req, res, async () => {
+	productImageMiddleware(req, res, async () => {
 		console.log("updateListingProduct", req.body)
 
 		const userId = req.userId
