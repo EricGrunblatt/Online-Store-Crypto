@@ -25,6 +25,13 @@
 		"productDoesNotExist": "PRODUCT DOES NOT EXIST",
 		"youAreNotTheSeller": "YOU ARE NOT THE SELLER",
 		"productIsSold": "PRODUCT IS SOLD"
+	},
+	"purchase": {
+		"missingRequiredField": "MISSING REQUIRED FIELD",
+		"userDoesNotExist": "USER DOES NOT EXIST",
+		"productDoesNotExist": "PRODUCT DOES NOT EXIST",
+		"cartDoesNotIncludeProduct": "CART DOES NOT INCLUDE PRODUCT",
+		"cartAlreadyIncludesProduct": "CART ALREADY INCLUDES PRODUCT"
 	}
 
 }

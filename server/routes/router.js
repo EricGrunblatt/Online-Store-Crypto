@@ -51,6 +51,8 @@ router.post('/product/deleteListingProduct', auth.verify, productController.dele
 
 // Add Product to Cart
 router.post('/purchase/addToCart', auth.verify, purchaseController.addToCart)
+// Remove Product From Cart
+router.post('/purchase/removeFromCart', auth.verify, purchaseController.removeFromCart)
 // Purchase Products
 router.post('/purchase/purchaseFromCart', auth.verify, purchaseController.purchaseFromCart)
 
