@@ -12,7 +12,9 @@ import {
     NavigationBar,
     Orders,
     ProfileScreen,
-    Wallet
+    Wallet,
+	ProductPage,
+	ViewProfile
 } from './components'
 /*
     This is our application's top-level component and entry-point
@@ -35,6 +37,8 @@ const App = () => {
                         <Route path="/cart" exact component={Cart} />
                         <Route path="/listitem" exact component={ListItem} />
                         <Route path="/checkout" exact component={Checkout} />
+						<Route path="/product" exact component={ProductPage} />
+						<Route path="/viewprofile" exact component={ViewProfile} />
                     </Switch>    
                 </GlobalStoreContextProvider>
             {/*</AuthContextProvider>*/}

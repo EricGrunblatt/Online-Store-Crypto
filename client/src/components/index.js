@@ -14,6 +14,7 @@ import ProductPage from './ProductPage.js';
 import ProfileScreen from './ProfileScreen.js';
 import RegisterModal from './RegisterModal.js';
 import Wallet from './Wallet.js';
+import ViewProfile from './ViewProfile.js';
 /*
     This serves as a module so that we can import
     all the other components as we wish.
@@ -36,4 +37,5 @@ export {
     ProductPage,
     ProfileScreen,
     RegisterModal,
-    Wallet, }
+    Wallet,
+	ViewProfile }
