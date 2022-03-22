@@ -13,6 +13,7 @@ import Orders from './Orders.js';
 import ProductPage from './ProductPage.js';
 import ProfileScreen from './ProfileScreen.js';
 import RegisterModal from './RegisterModal.js';
+import ViewProfile from './ViewProfile.js';
 import Wallet from './Wallet.js';
 /*
     This serves as a module so that we can import
@@ -36,4 +37,5 @@ export {
     ProductPage,
     ProfileScreen,
     RegisterModal,
+    ViewProfile,
     Wallet, }

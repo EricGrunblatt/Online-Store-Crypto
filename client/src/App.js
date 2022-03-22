@@ -11,7 +11,9 @@ import {
     ListItem,
     NavigationBar,
     Orders,
+    ProductPage,
     ProfileScreen,
+    ViewProfile,
     Wallet
 } from './components'
 /*
@@ -35,6 +37,8 @@ const App = () => {
                         <Route path="/cart" exact component={Cart} />
                         <Route path="/listitem" exact component={ListItem} />
                         <Route path="/checkout" exact component={Checkout} />
+                        <Route path="/product" exact component={ProductPage} />
+						<Route path="/viewprofile" exact component={ViewProfile} />
                     </Switch>    
                 </GlobalStoreContextProvider>
             {/*</AuthContextProvider>*/}

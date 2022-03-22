@@ -58,9 +58,10 @@ export default function HomeScreen() {
     if(!openCat) {
         catButton = 
         <div style={{ height: '20px', display: 'flex', float: 'right' }}>
-            <div style={{ display: 'inline-block', float: 'left', fontSize: '18px' }}>
+            <div style={{ display: 'flex', float: 'left', fontSize: '18px' }}>
                 Category <br />
             </div>
+            <div style={{ flexGrow: '1' }}></div>
             <Button style={{ maxHeight: '25px',  minHeight: '25px',  maxWidth: '25px',  minWidth: '25px' }} onClick={() => { handleOpenCategory() }}>
                 <AddIcon style={{ color: 'black' }}></AddIcon>
             </Button>
@@ -68,9 +69,10 @@ export default function HomeScreen() {
     } else {
         catButton = 
         <div style={{ height: '20px', display: 'flex', float: 'right' }}>
-            <div style={{ display: 'inline-block', float: 'left', fontSize: '18px' }}>
+            <div style={{ display: 'flex', float: 'left', fontSize: '18px' }}>
                 Category <br />
             </div>
+            <div style={{ flexGrow: '1' }}></div>
             <Button style={{ maxHeight: '25px',  minHeight: '25px',  maxWidth: '25px',  minWidth: '25px' }} onClick={() => { handleOpenCategory() }}>
                 <RemoveIcon style={{ color: 'black' }}></RemoveIcon>
             </Button>
@@ -81,9 +83,10 @@ export default function HomeScreen() {
     if(!openPrice) {
         priceButton = 
         <div style={{ height: '20px', display: 'flex', float: 'right' }}>
-            <div style={{ display: 'inline-block', float: 'left', fontSize: '18px' }}>
+            <div style={{ display: 'flex', float: 'left', fontSize: '18px' }}>
                 Price
             </div>
+            <div style={{ flexGrow: '1' }}></div>
             <Button style={{ maxHeight: '25px',  minHeight: '25px',  maxWidth: '25px',  minWidth: '25px' }} onClick={() => { handleOpenPrice() }}>
                 <AddIcon style={{ color: 'black' }}></AddIcon>
             </Button>
@@ -91,9 +94,10 @@ export default function HomeScreen() {
     } else {
         priceButton = 
         <div style={{ height: '20px', display: 'flex', float: 'right' }}>
-            <div style={{ display: 'inline-block', float: 'left', fontSize: '18px' }}>
+            <div style={{ display: 'flex', float: 'left', fontSize: '18px' }}>
                 Price
             </div>
+            <div style={{ flexGrow: '1' }}></div>
             <Button style={{ maxHeight: '25px',  minHeight: '25px',  maxWidth: '25px',  minWidth: '25px' }} onClick={() => { handleOpenPrice() }}>
                 <RemoveIcon style={{ color: 'black' }}></RemoveIcon>
             </Button>
@@ -104,22 +108,26 @@ export default function HomeScreen() {
     if(!openCon) {
         conButton = 
         <div style={{ height: '20px', display: 'flex' }}>
-            <div style={{ display: 'inline-block', fontSize: '18px' }}>
+            <div style={{ display: 'flex', fontSize: '18px' }}>
                 Condition
             </div>
-            <Button style={{ margin: '0px 0px 0px 5vw', maxHeight: '25px',  minHeight: '25px',  maxWidth: '25px',  minWidth: '25px' }} onClick={() => { handleOpenCondition() }}>
+            <div style={{ flexGrow: '1' }}></div>
+            <Button style={{ margin: '0px 0px 0px 0px', maxHeight: '25px',  minHeight: '25px',  maxWidth: '25px',  minWidth: '25px' }} onClick={() => { handleOpenCondition() }}>
                 <AddIcon style={{ color: 'black' }}></AddIcon>
             </Button>
         </div>
     } else {
         conButton = 
         <div style={{ height: '20px', display: 'flex' }}>
-            <div style={{ display: 'inline-block', float: 'left', fontSize: '18px' }}>
+            <div style={{ display: 'flex', float: 'left', fontSize: '18px' }}>
                 Condition
             </div>
-            <Button style={{ maxHeight: '25px',  minHeight: '25px',  maxWidth: '25px',  minWidth: '25px' }} onClick={() => { handleOpenCondition() }}>
+            <div style={{ flexGrow: '1' }}></div>
+            <Button style={{ display: 'flex', maxHeight: '25px',  minHeight: '25px',  maxWidth: '25px',  minWidth: '25px' }} onClick={() => { handleOpenCondition() }}>
                 <RemoveIcon style={{ color: 'black' }}></RemoveIcon>
             </Button>
+            
+            
         </div>
     }
 

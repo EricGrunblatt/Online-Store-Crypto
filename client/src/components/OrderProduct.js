@@ -3,7 +3,6 @@ import StarIcon from '@mui/icons-material/Star';
 import { Button, TextareaAutosize } from '@mui/material';
 
 export default function OrderProduct() {
-
     let numStars = 0;
 
     const handleStars = (index) => {
@@ -35,9 +34,9 @@ export default function OrderProduct() {
                         <div style={{ marginRight: '1vw', display: 'inline-block' }}>
                             Seller:
                         </div>
-                        <div style={{ display: 'inline-block', color: '#879ED9' }}>
+                        <a href="/viewprofile" style={{ display: 'inline-block', color: '#879ED9' }}>
                             User3
-                        </div>
+                        </a>
                     </div>
                     <div className="order-date" style={{ marginTop: '5px', color: '#808080', fontSize: '2vw' }}>
                         <div style={{ marginRight: '10px', display: 'inline-block' }}>
