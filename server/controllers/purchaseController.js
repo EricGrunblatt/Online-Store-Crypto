@@ -1,6 +1,7 @@
 const constants = require('./constants.json')
 const Product = require('../models/productModel')
 const User = require('../models/userModel')
+const { coingateClient } = require('../handlers/purchaseHandler')
 
 addToCart = async (req, res) => {
 	console.log("addToCart", req.body)
@@ -34,6 +35,7 @@ addToCart = async (req, res) => {
 			user.save()
 			json = {status: constants.status.OK}
 		}
+		console.log("RESPONSE: ", json)
 		res.status(200).json(json)
 	}
 	catch (err) {
@@ -71,6 +73,7 @@ removeFromCart = async (req, res) => {
 			user.save()
 			json = {status: constants.status.OK}
 		}
+		console.log("RESPONSE: ", json)
 		res.status(200).json(json)
 	}
 	catch (err) {
@@ -81,8 +84,40 @@ removeFromCart = async (req, res) => {
 
 //TODO
 purchaseFromCart = async (req, res) => {
-	console.log("purchase")
+	console.log("purchase", req.body)
+	const userId = req.userId
+	
+	let json = {}
+	let user = null
+	try {
+		if (!userId) {
+			throw "did not get a userId"
+		}
+		else if (! (user = await User.findById(userId))) {
+			json = {status: constants.status.ERROR, errorMessage: constants.purchase.userDoesNotExist}
+		}
+		else if (user.cartProductIds.length === 0) {
+			json = {status: constants.status.ERROR, errorMessage: constants.purchase.cartIsEmpty}
+		}
+		else {
+			const price_amount = 1
+			const price_currency = 'BTC'
+			const receive_currency = 'BTC'
 
+			const order = await coingateClient.createOrder({
+				price_amount: price_amount,
+				price_currency: price_currency,
+				receive_currency: receive_currency,
+			})
+			json = order
+			res.redirect(order.payment_url)
+		}
+		console.log("RESPONSE: ", json)
+		// res.status(200).json(json)
+	} catch (err) {
+		console.log(err)
+		res.status(500).send(constants.status.FATAL_ERROR)
+	}
 }
 
 module.exports = {

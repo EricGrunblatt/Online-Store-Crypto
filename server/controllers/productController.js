@@ -153,7 +153,7 @@ addListingProduct = async (req, res) => {
 					shippingPrice: product.shippingPrice
 				}}
 			}
-			console.log("RESPONSE:", json)
+			console.log("RESPONSE: ", json)
 			res.status(200).json(json)
 		}
 		catch (err) {
@@ -225,7 +225,7 @@ updateListingProduct = async (req, res) => {
 					shippingPrice: product.shippingPrice
 				}}
 			}
-			console.log("RESPONSE:", json)
+			console.log("RESPONSE: ", json)
 			res.status(200).json(json)
 		}
 		catch (err) {

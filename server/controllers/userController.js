@@ -45,7 +45,7 @@ getProfileByUsername = async (req, res) => {
 				dateJoined: user.createdAt
 			}
 		}
-		console.log("RESPONSE:", json)
+		console.log("RESPONSE: ", json)
 		res.status(200).json(json)
 	}
 	catch (err) {
@@ -99,7 +99,7 @@ updateProfileImage = async (req, res) => {
 				await user.save()
 				json = {status: constants.status.OK}
 			}
-			console.log("RESPONSE:", json)
+			console.log("RESPONSE: ", json)
 			res.status(200).json(json)
 		}
 		catch (err) {

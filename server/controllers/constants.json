@@ -32,7 +32,8 @@
 		"productDoesNotExist": "PRODUCT DOES NOT EXIST",
 		"cartDoesNotIncludeProduct": "CART DOES NOT INCLUDE PRODUCT",
 		"cartAlreadyIncludesProduct": "CART ALREADY INCLUDES PRODUCT",
-		"userOwnsThisItem": "USER OWNS THIS ITEM" 
+		"userOwnsThisItem": "USER OWNS THIS ITEM",
+		"cartIsEmpty": "CART IS EMPTY"
 	}
 
 }
