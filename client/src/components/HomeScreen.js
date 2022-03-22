@@ -10,6 +10,7 @@ import { Select, MenuItem, FormControl, InputLabel } from '@mui/material'
 import LoginModal from './LoginModal';
 import RegisterModal from './RegisterModal';
 import HomeProduct from "./HomeProduct";
+import TextField from "@mui/material/TextField";
 
 
 export default function HomeScreen() {
@@ -57,6 +58,9 @@ export default function HomeScreen() {
     if(!openCat) {
         catButton = 
         <div style={{ height: '20px', display: 'flex', float: 'right' }}>
+            <div style={{ display: 'inline-block', float: 'left', fontSize: '18px' }}>
+                Category <br />
+            </div>
             <Button style={{ maxHeight: '25px',  minHeight: '25px',  maxWidth: '25px',  minWidth: '25px' }} onClick={() => { handleOpenCategory() }}>
                 <AddIcon style={{ color: 'black' }}></AddIcon>
             </Button>
@@ -64,6 +68,9 @@ export default function HomeScreen() {
     } else {
         catButton = 
         <div style={{ height: '20px', display: 'flex', float: 'right' }}>
+            <div style={{ display: 'inline-block', float: 'left', fontSize: '18px' }}>
+                Category <br />
+            </div>
             <Button style={{ maxHeight: '25px',  minHeight: '25px',  maxWidth: '25px',  minWidth: '25px' }} onClick={() => { handleOpenCategory() }}>
                 <RemoveIcon style={{ color: 'black' }}></RemoveIcon>
             </Button>
@@ -74,6 +81,9 @@ export default function HomeScreen() {
     if(!openPrice) {
         priceButton = 
         <div style={{ height: '20px', display: 'flex', float: 'right' }}>
+            <div style={{ display: 'inline-block', float: 'left', fontSize: '18px' }}>
+                Price
+            </div>
             <Button style={{ maxHeight: '25px',  minHeight: '25px',  maxWidth: '25px',  minWidth: '25px' }} onClick={() => { handleOpenPrice() }}>
                 <AddIcon style={{ color: 'black' }}></AddIcon>
             </Button>
@@ -81,6 +91,9 @@ export default function HomeScreen() {
     } else {
         priceButton = 
         <div style={{ height: '20px', display: 'flex', float: 'right' }}>
+            <div style={{ display: 'inline-block', float: 'left', fontSize: '18px' }}>
+                Price
+            </div>
             <Button style={{ maxHeight: '25px',  minHeight: '25px',  maxWidth: '25px',  minWidth: '25px' }} onClick={() => { handleOpenPrice() }}>
                 <RemoveIcon style={{ color: 'black' }}></RemoveIcon>
             </Button>
@@ -90,14 +103,20 @@ export default function HomeScreen() {
     /* OPEN/CLOSE FILTER BY CONDITION SECTION */
     if(!openCon) {
         conButton = 
-        <div style={{ height: '20px', display: 'flex', float: 'right' }}>
-            <Button style={{ maxHeight: '25px',  minHeight: '25px',  maxWidth: '25px',  minWidth: '25px' }} onClick={() => { handleOpenCondition() }}>
+        <div style={{ height: '20px', display: 'flex' }}>
+            <div style={{ display: 'inline-block', fontSize: '18px' }}>
+                Condition
+            </div>
+            <Button style={{ margin: '0px 0px 0px 5vw', maxHeight: '25px',  minHeight: '25px',  maxWidth: '25px',  minWidth: '25px' }} onClick={() => { handleOpenCondition() }}>
                 <AddIcon style={{ color: 'black' }}></AddIcon>
             </Button>
         </div>
     } else {
         conButton = 
-        <div style={{ height: '20px', display: 'flex', float: 'right' }}>
+        <div style={{ height: '20px', display: 'flex' }}>
+            <div style={{ display: 'inline-block', float: 'left', fontSize: '18px' }}>
+                Condition
+            </div>
             <Button style={{ maxHeight: '25px',  minHeight: '25px',  maxWidth: '25px',  minWidth: '25px' }} onClick={() => { handleOpenCondition() }}>
                 <RemoveIcon style={{ color: 'black' }}></RemoveIcon>
             </Button>
@@ -125,7 +144,20 @@ export default function HomeScreen() {
     function handleOpenPrice() {
         if(!openPrice) {
             setOpenPrice(
-                <div>Hello</div>
+                <div style={{ paddingTop: '7px'}}>
+					<TextField className="price_from" sx={{ bgcolor:'white' }}
+							inputProps={{style: {fontSize: 13}}}
+							size = 'small'
+							style={{ width: '6vw', float: 'left', borderRadius: '3px' }}
+							placeholder="$" >
+					</TextField>
+					<TextField className="price_to" sx={{ bgcolor:'white' }}
+							inputProps={{style: {fontSize: 13}}}
+							size = 'small'
+							style={{ width: '6vw', float: 'right', borderRadius: '3px' }}
+							placeholder="$$$" >
+					</TextField>
+				</div>
             );
         } else {
             setOpenPrice("");
@@ -135,7 +167,7 @@ export default function HomeScreen() {
     function handleOpenCondition() {
         if(!openCon) {
             setOpenCon(
-                <div className="filter-conditions-list" style={{ fontSize: '10px' }}>
+                <div className="filter-conditions-list" style={{ fontSize: '10px', paddingTop: '7px' }}>
                     {conditions.map((item, index) => (
                         <div key={index}>
                             <input value={item} type="checkbox" onChange={handleConCheck} />
@@ -175,28 +207,20 @@ export default function HomeScreen() {
                 
             </div>
             <div className="homescreen-item-display" style={{ display: 'inline-block', backgroundColor: 'white' }}>
-                <div className="homescreen-filter-by" style={{ padding: '10px 0px 0px 10px', fontSize: '25px', width: '16vw' }}>
+                <div className="homescreen-filter-by" style={{ padding: '10px 0px 0px 10px', fontSize: '25px', width: '16vw', display: 'grid', gridAutoColumns: 'auto' }}>
                     <div> Filter By </div>
                     <hr style={{ float: 'left', color: 'black', width: '16vw' }} />
-
-                    <div style={{ display: 'inline-block', float: 'left', fontSize: '18px' }}>
-                        Category <br />
-                    </div>
+                
                     {catButton}
                     {openCat}
-                    
 
                     <hr style={{ float: 'left', color: 'black', width: '16vw' }} />
-                    <div style={{ display: 'inline-block', float: 'left', fontSize: '18px' }}>
-                        Price
-                    </div>
+                    
                     {priceButton}
                     {openPrice}
 
                     <hr style={{ float: 'left', color: 'black', width: '16vw' }} />
-                    <div style={{ display: 'inline-block', float: 'left', fontSize: '18px' }}>
-                        Condition
-                    </div>
+                    
                     {conButton}
                     {openCon}
 

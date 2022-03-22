@@ -1,4 +1,5 @@
 import React from "react";
+import OrderProduct from "./OrderProduct";
 
 export default function Orders() {
     return (
@@ -6,6 +7,7 @@ export default function Orders() {
             <div className="display-name-orders" style={{ margin: '20px 0% 0px 5%', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '65px', color: 'black' }}>
                 <u> Orders </u>
             </div>
+            <OrderProduct />
         </div>
     )
 }

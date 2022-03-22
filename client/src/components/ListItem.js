@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { TextField, Box, Select, MenuItem } from '@mui/material';
+import { TextareaAutosize, TextField, Box, Select, MenuItem } from '@mui/material';
 import { FormControl, InputLabel, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useHistory } from "react-router-dom";
@@ -113,7 +113,7 @@ export default function ListItem() {
                 <div style={{ margin: '10px 0% 0px 0%', fontFamily: 'Quicksand', fontWeight: 'bold', color: '#808080', fontSize: '25px' }}>Description:</div>
             </div>
             <div className="description-textfield" style={{ margin: '10px 0px 0px 10%'}}>
-                <TextField style={{ width: '90%' }}></TextField>
+                <TextareaAutosize style={{ minWidth: '90%', minHeight: '200px', maxWidth: '90%', maxHeight: '200px', fontSize: '20px' }}></TextareaAutosize>
             </div>
             <div className="item-price" style={{ margin: '20px 0px 0px 10%' }}>
                 <div style={{ margin: '10px 2% 0px 0%', display: 'inline-block', fontFamily: 'Quicksand', fontWeight: 'bold', color: '#808080', fontSize: '25px' }}> Item Price: </div>
