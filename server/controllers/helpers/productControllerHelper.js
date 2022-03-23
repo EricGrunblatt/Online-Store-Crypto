@@ -1,4 +1,5 @@
 const {createAndSaveImage, upload} = require('../../handlers/imageHandler')
+const Image = require('../../models/imageModel')
 
 const productImageFields = [
 	{name: 'image0', maxCount: 1},
@@ -30,4 +31,24 @@ updateProductImageFields = async (images, oldImageIds, productId) => {
 	return imageIds
 }
 
-module.exports = {productImageMiddleware, updateProductImageFields}
+getProductImages = async (product) => {
+	let images = []
+	try {
+		console.log(product.imageIds)
+		for (let imageId of product.imageIds) {
+			console.log(imageId)
+			if (imageId) {
+				console.log("processing imageId: " + imageId)
+				const image = await Image.findById(imageId);
+				images.push(image)
+			}
+		}
+		return images	
+	}
+	catch (err) {
+		console.log("NO IMAGES FOUND")
+		return []
+	}
+}
+
+module.exports = {productImageMiddleware, updateProductImageFields, getProductImages}
