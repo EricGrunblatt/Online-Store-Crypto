@@ -34,11 +34,8 @@ updateProductImageFields = async (images, oldImageIds, productId) => {
 getProductImages = async (product) => {
 	let images = []
 	try {
-		console.log(product.imageIds)
 		for (let imageId of product.imageIds) {
-			console.log(imageId)
 			if (imageId) {
-				console.log("processing imageId: " + imageId)
 				const image = await Image.findById(imageId);
 				images.push(image)
 			}
@@ -46,7 +43,7 @@ getProductImages = async (product) => {
 		return images	
 	}
 	catch (err) {
-		console.log("NO IMAGES FOUND")
+		console.log("FAILED TO GET IMAGES")
 		return []
 	}
 }
