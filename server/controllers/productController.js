@@ -141,7 +141,7 @@ addListingProduct = async (req, res) => {
 
 		const userId = req.userId
 		const {name, description, condition, category} = req.body
-		const {price, boxLength, boxWidth, boxHeight} = req.body
+		const {price, boxLength, boxWidth, boxHeight, boxWeight} = req.body
 		const images = req.files
 
 		let json = {}
@@ -153,7 +153,7 @@ addListingProduct = async (req, res) => {
 			else if (!name || !description || !condition || !category) {
 				json = {status: constants.status.ERROR, errorMessage: constants.product.missingRequiredField}
 			}
-			else if (!price || !boxLength || !boxWidth || !boxHeight) {
+			else if (!price || !boxLength || !boxWidth || !boxHeight || !boxWeight) {
 				json = {status: constants.status.ERROR, errorMessage: constants.product.missingRequiredField}
 			}
 			else if (Object.keys(images).length === 0) {
@@ -164,7 +164,7 @@ addListingProduct = async (req, res) => {
 			}
 			else {
 				// TODO: Calculate shipping price via api
-				const shippingPrice = boxLength * boxWidth * boxHeight
+				const shippingPrice = boxLength * boxWidth * boxHeight * boxWeight
 		
 				let product = new Product({
 					name: name,
@@ -174,6 +174,10 @@ addListingProduct = async (req, res) => {
 					sellerUsername: user.username,
 					price: price,
 					shippingPrice: shippingPrice,
+					boxLength: boxLength,
+					boxWidth: boxWidth,
+					boxHeight: boxHeight,
+					boxWeight: boxWeight,
 					imageIds: []
 				})
 		
@@ -210,7 +214,7 @@ updateListingProduct = async (req, res) => {
 
 		const userId = req.userId
 		const {_id, name, description, condition, category} = req.body
-		const {price, boxLength, boxWidth, boxHeight} = req.body
+		const {price, boxLength, boxWidth, boxHeight, boxWeight} = req.body
 		const images = req.files
 
 		let json = {}
@@ -223,7 +227,7 @@ updateListingProduct = async (req, res) => {
 			else if (!_id || !name || !description || !condition || !category) {
 				json = {status: constants.status.ERROR, errorMessage: constants.product.missingRequiredField}
 			}
-			else if (!price || !boxLength || !boxWidth || !boxHeight) {
+			else if (!price || !boxLength || !boxWidth || !boxHeight || !boxWeight) {
 				json = {status: constants.status.ERROR, errorMessage: constants.product.missingRequiredField}
 			}
 			else if (! (user = await User.findById(userId))) {
@@ -240,13 +244,17 @@ updateListingProduct = async (req, res) => {
 			}
 			else {
 				// TODO: Calculate shipping price via api
-				const shippingPrice = boxLength * boxWidth * boxHeight
+				const shippingPrice = boxLength * boxWidth * boxHeight * boxWeight
 				
 				product.name = name
 				product.description = description
 				product.condition = condition
 				product.category = category
 				product.price = price
+				product.boxLength = boxLength
+				product.boxWidth = boxWidth
+				product.boxHeight = boxHeight
+				product.boxWeight = boxWeight
 				product.shippingPrice = shippingPrice
 		
 				// ADD IMAGE FILES
