@@ -31,14 +31,14 @@ export default function NavigationBar() {
     /* cHECKS IF USER IS LOGGED IN TO DECIDE WHAT GOES ON BANNER */
     if(!loggedIn) {
         navBarLoggedIn = 
-        <a href onClick={handleLogin} style={{ cursor: 'pointer', float: 'right', margin: '55px 0px 0px 40px', width: '25%', color: '#879ED9', fontSize: '25px'}}>
+        <a href onClick={handleLogin} style={{ cursor: 'pointer', float: 'right', margin: '55px 0px 0px 5vw', width: '25%', color: '#879ED9', fontSize: '25px'}}>
             Login/Register
         </a>
     }
     else {
         navBarLoggedIn = 
-        <Box style={{ display: 'flex', float: 'right', margin: '60px 10px 0px 20px' }}>
-            <ShoppingCartRoundedIcon onClick={() => { history.push("/cart") }} style={{ cursor: 'pointer', fontSize: '45px', marginRight: '40px' }}></ShoppingCartRoundedIcon>
+        <Box style={{ display: 'flex', float: 'right', margin: '60px 1vw 0px 7vw' }}>
+            <ShoppingCartRoundedIcon onClick={() => { history.push("/cart") }} style={{ cursor: 'pointer', fontSize: '45px', marginRight: '5vw' }}></ShoppingCartRoundedIcon>
             <AccountCircleRoundedIcon onClick={handleProfileMenuOpen} 
             style={{ cursor: 'pointer', color: 'white', fontSize: '45px' }}></AccountCircleRoundedIcon>
         </Box>   
@@ -103,15 +103,15 @@ export default function NavigationBar() {
         <Box id="navigation-bar">
             <AppBar position="static" style={{ height: '15%', background: 'black' }}>
                 <Toolbar>
-                    <div sx={{ width: '25%' }} style={{ margin: '50px 0px 0px 0px', justifyContent: 'center', float: 'left' }}>
-                        <img onClick={() => { history.push("/") }} src={logo} alt="" width="200" height="40" style={{ cursor: 'pointer', marginBottom: '5px', marginLeft: '1px'}}></img>
+                    <div sx={{ width: '25%' }} style={{ margin: '60px 5vw 0px 0px', justifyContent: 'center', float: 'left' }}>
+                        <img onClick={() => { history.push("/") }} src={logo} alt="" width="200" height="40" style={{ cursor: 'pointer', margin: '0px 0px 5px 1px' }}></img>
                         <div id="navigation-slogan" style={{ marginLeft: '3px' }}>
                             Buy and Sell Items with <br></br>
                             Cryptocurrency
                         </div>
                     </div>
-                    <TextField className="search-bar" sx={{ width: '70%', bgcolor:'white' }}
-                            style={{ margin: '60px 0px 0px 5px', float: 'right', borderRadius: '10px' }}
+                    <TextField className="search-bar" sx={{ width: '65vw', bgcolor:'white' }}
+                            style={{ margin: '70px 0px 0px 0px', float: 'right', borderRadius: '10px' }}
                             placeholder="Search..."
                     >
                     </TextField>

@@ -10,7 +10,7 @@ import { useHistory } from "react-router-dom";
 
 export default function ProductPage() {
 	const history = useHistory();
-	const productName = "Hodie"
+	const productName = "Hoodie"
 	const productNum = 287013
 	const condition = "New"
 	const seller = "seller3"
@@ -68,13 +68,13 @@ export default function ProductPage() {
 					</div>
 					<div style={{ paddingTop: '10px', fontFamily: 'Quicksand', fontSize: '20px', color: 'black', textAlign: 'right' }}>
 						60 days returns
-						seller pay for return shipping
+						seller pays for return shipping
 					</div>
 					<div style={{ paddingTop: '40px', fontFamily: 'Quicksand', fontWeight: '500', fontSize: '25px', color: 'black' }}>
                     	<u> Shipping Info </u>
 					</div>
 					<div style={{ paddingTop: '10px', paddingBottom: '80px', fontFamily: 'Quicksand', fontSize: '20px', color: 'black', textAlign: 'right' }}>
-						15 Algo Standard Shipping
+						Standard 3-Day Priority Shipping through USPS. Shipping costs varies based on location
 					</div>
 					
 				</Grid>

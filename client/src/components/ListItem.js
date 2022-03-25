@@ -133,12 +133,8 @@ export default function ListItem() {
                 <div style={{ float: 'right', margin: '0px 10% 0px 0%' }}>
                     <TextField className="weight" placeholder="Weight (lbs)" style={{ margin: '-40px 41.5vw 0px 0px', float: 'right', width: '20vw' }}></TextField>
                 </div>
-                <div className="shipping-price" style={{ margin: '50px 0vw 0px 5%', fontFamily: 'Quicksand', color: '#AEAEAE', fontSize: '20px' }}>
-                    <div style={{ display: 'inline-block', margin: '0px 2vw 0px 0px'}}>Shipping Price:</div> 
-                    <div style={{ display: 'inline-block'}}>10 Algo</div>
-                </div>
             </div>
-            <div className="list-item-button" style={{ margin: '30px 0px 50px 0px', borderRadius: '10px', textAlign: 'center' }}>
+            <div className="list-item-button" style={{ margin: '50px 0px 50px 0px', borderRadius: '10px', textAlign: 'center' }}>
                 <Button onClick={handleListItem} style={{ textAlign: 'center', background: 'black', color: 'white', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '20px', width: '150px' }}>List Item</Button>
             </div>
         </div>
