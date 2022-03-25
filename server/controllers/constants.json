@@ -1,0 +1,41 @@
+{
+	"status": {
+		"OK": "OK",
+		"ERROR": "ERROR",
+		"FATAL_ERROR": "FATAL ERROR"
+	},
+	"auth": {
+		"missingRequiredField": "MISSING REQUIRED FIELD",
+		"passwordTooShort": "PASSWORD TOO SHORT",
+		"userAlreadyExists": "USER ALREADY EXISTS",
+		"emailAlreadyExists": "EMAIL ALREADY EXISTS",
+		"invalidEmail": "INVALID EMAIL",
+		"invalidUsername": "INVALID USERNAME",
+		"userDoesNotExist": "USER DOES NOT EXIST",
+		"passwordsDoNotMatch": "PASSWORDS DO NOT MATCH"
+	},
+	"user": {
+		"missingRequiredField": "MISSING REQUIRED FIELD",
+		"userDoesNotExist": "USER DOES NOT EXIST"
+	},
+	"product": {
+		"missingRequiredField": "MISSING REQUIRED FIELD",
+		"missingImages": "MISSING IMAGES",
+		"userDoesNotExist": "USER DOES NOT EXIST",
+		"productDoesNotExist": "PRODUCT DOES NOT EXIST",
+		"youAreNotTheSeller": "YOU ARE NOT THE SELLER",
+		"productIsSold": "PRODUCT IS SOLD",
+		"reviewSpecifiedButNotFound": "REVIEW SPECIFIED BUT NOT FOUND",
+		"failedToGetImages": "FAILED TO GET IMAGES"
+	},
+	"purchase": {
+		"missingRequiredField": "MISSING REQUIRED FIELD",
+		"userDoesNotExist": "USER DOES NOT EXIST",
+		"productDoesNotExist": "PRODUCT DOES NOT EXIST",
+		"cartDoesNotIncludeProduct": "CART DOES NOT INCLUDE PRODUCT",
+		"cartAlreadyIncludesProduct": "CART ALREADY INCLUDES PRODUCT",
+		"userOwnsThisItem": "USER OWNS THIS ITEM",
+		"cartIsEmpty": "CART IS EMPTY"
+	}
+
+}
