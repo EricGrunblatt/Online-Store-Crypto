@@ -14,7 +14,7 @@ export default function NavigationBar() {
     const [anchorEl, setAnchorEl] = useState(null);
     const history = useHistory();
     let isMenuOpen = Boolean(anchorEl);
-    let loggedIn = true;
+    let loggedIn = false;
     let navBarLoggedIn = "";
 
     /* OPENS MENU IF PRESSED */
@@ -31,7 +31,7 @@ export default function NavigationBar() {
     /* cHECKS IF USER IS LOGGED IN TO DECIDE WHAT GOES ON BANNER */
     if(!loggedIn) {
         navBarLoggedIn = 
-        <a href onClick={handleLogin} style={{ cursor: 'pointer', float: 'right', margin: '55px 0px 0px 5vw', width: '25%', color: '#879ED9', fontSize: '25px'}}>
+        <a href onClick={handleLogin} style={{ cursor: 'pointer', float: 'right', margin: '65px 0px 0px 5vw', width: '25%', color: '#879ED9', fontSize: '25px'}}>
             Login/Register
         </a>
     }

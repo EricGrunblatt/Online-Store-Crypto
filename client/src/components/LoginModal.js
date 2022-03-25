@@ -1,4 +1,5 @@
-import { useContext } from "react";
+import React from "react";
+import AuthContext from '../auth'
 import { GlobalStoreContext } from '../store'
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
@@ -31,6 +32,8 @@ const style = {
   };
 
 function LoginModal() {
+    const { useContext } = React;
+    const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
 
     let isOpen = false;
@@ -38,13 +41,19 @@ function LoginModal() {
         isOpen = true;
     }
 
-    function handleLogin() {
-        store.setCloseLoginModal();
-    }
-
     function handleRegister() {
         store.setOpenRegisterModal();
     }   
+
+    const handleLogin = (event) => {
+        store.setCloseLoginModal();
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        auth.loginUser({
+            userName: formData.get('emailAddress'),
+            password: formData.get('password')
+        }, store);
+    };
 
     return (
         <div>
@@ -67,8 +76,18 @@ function LoginModal() {
 
                     <div>
                         <h1 style={{ margin: '100px 0px 0px 0px' }}>Sign In With</h1>
-                        <TextField placeholder='Email Address*' style={{ margin: '15px 0px 0px 0px', float: 'left', width: '500px' }}></TextField>
-                        <TextField placeholder='Password*' style={{ margin: '15px 0px 0px 0px', float: 'left', width: '500px' }}></TextField>
+                        <TextField 
+                            required
+                            name="emailAddress"
+                            id="emailAddress"
+                            label='Email Address' 
+                            style={{ margin: '15px 0px 0px 0px', float: 'left', width: '500px' }}></TextField>
+                        <TextField 
+                            required
+                            name="password"
+                            id="password"
+                            label='Password' 
+                            style={{ margin: '15px 0px 0px 0px', float: 'left', width: '500px' }}></TextField>
                     </div>
                     <h5 style={{ padding: '0px 0px 0px 0px', color: '#879ED9', fontSize: '20px' }}>Forgot Password?</h5>
                     <Button onClick={handleLogin} style={{ color: 'white', background: 'black', width: '150px', height: '40px', fontSize: '8px', borderRadius: '10px' }}><h1>Login</h1></Button>
