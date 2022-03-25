@@ -1,30 +1,24 @@
-// TODO
+//TODO
 getWallets = async (req, res) => {
-	console.log("getWallets")
-    const userId = req.userId
-    
+	console.log("getWallets", req.body)
+	const userId = req.userId
+	
 }
 
-// TODO
+//TODO
 addWallet = async (req, res) => {
-	console.log("addWallet")
-    const userId = req.userId
-    const name = req.body.name
-    const type = req.body.type
-    const address = req.body.address
-    
+	console.log("addWallet", req.body)
+	const userId = req.userId
 }
 
-// TODO
+//TODO
 removeWallet = async (req, res) => {
-	console.log("removeWallet")
-    const userId = req.userId
-    const walletId = req.body.walletId
-    
+	console.log("removeWallet", req.body)
+	const userId = req.userId
 }
 
 module.exports = {
 	getWallets,
 	addWallet,
-	removeWallet,
+	removeWallet
 }
