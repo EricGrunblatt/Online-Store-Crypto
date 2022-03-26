@@ -1,3 +1,4 @@
+import AccountErrorModal from './AccountErrorModal.js';
 import Cart from './Cart.js';
 import Checkout from './Checkout.js'
 import HomeProduct from './HomeProduct.js'
@@ -19,6 +20,7 @@ import Wallet from './Wallet.js';
     @author Eric Grunblatt
 */
 export { 
+    AccountErrorModal,
     Cart,
     Checkout,
     HomeProduct,

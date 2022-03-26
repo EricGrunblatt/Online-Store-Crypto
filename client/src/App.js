@@ -22,7 +22,8 @@ import {
     
     @author Eric Grunblatt
 */
-const App = () => {
+export default function App() {
+
     return (
         <BrowserRouter>
             <AuthContextProvider>
@@ -39,11 +40,9 @@ const App = () => {
                         <Route path="/checkout" exact component={Checkout} />
                         <Route path="/product" exact component={ProductPage} />
 						<Route path="/viewprofile" exact component={ViewProfile} />
-                    </Switch>    
+                    </Switch>   
                 </GlobalStoreContextProvider>
             </AuthContextProvider>
         </BrowserRouter>
-    )
+    );
 }
-
-export default App

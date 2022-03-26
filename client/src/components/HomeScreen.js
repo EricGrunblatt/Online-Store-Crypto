@@ -9,6 +9,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import { Select, MenuItem, FormControl, InputLabel } from '@mui/material'
 import LoginModal from './LoginModal';
 import RegisterModal from './RegisterModal';
+import AccountErrorModal from "./AccountErrorModal";
 import HomeProduct from "./HomeProduct";
 import TextField from "@mui/material/TextField";
 
@@ -279,6 +280,7 @@ export default function HomeScreen() {
             </Box>
             <LoginModal />
             <RegisterModal />
+            <AccountErrorModal />
         </Box>  
     )
 }

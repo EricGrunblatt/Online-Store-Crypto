@@ -6,16 +6,22 @@ import TextField from '@mui/material/TextField';
 import logo from "../images/CryptoriumLogo.png";
 import ShoppingCartRoundedIcon from '@mui/icons-material/ShoppingCartRounded';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
-import { MenuItem, Menu, AppBar, Toolbar, Box } from '@mui/material'
+import { MenuItem, Menu, AppBar, Toolbar, Box } from '@mui/material';
+import AuthContext from '../auth';
 
 
 export default function NavigationBar() {
+    const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
     const [anchorEl, setAnchorEl] = useState(null);
     const history = useHistory();
     let isMenuOpen = Boolean(anchorEl);
     let loggedIn = false;
     let navBarLoggedIn = "";
+
+    if(auth.user !== null) {
+        loggedIn = true;
+    }
 
     /* OPENS MENU IF PRESSED */
     const handleProfileMenuOpen = (event) => {
@@ -31,9 +37,9 @@ export default function NavigationBar() {
     /* cHECKS IF USER IS LOGGED IN TO DECIDE WHAT GOES ON BANNER */
     if(!loggedIn) {
         navBarLoggedIn = 
-        <a href onClick={handleLogin} style={{ cursor: 'pointer', float: 'right', margin: '65px 0px 0px 5vw', width: '25%', color: '#879ED9', fontSize: '25px'}}>
+        <div onClick={handleLogin} style={{ cursor: 'pointer', float: 'right', margin: '65px 0px 0px 5vw', width: '25%', color: '#879ED9', fontSize: '25px'}}>
             Login/Register
-        </a>
+        </div>
     }
     else {
         navBarLoggedIn = 

@@ -4,6 +4,8 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import AuthContext from '../auth'
+import AccountErrorModal from './AccountErrorModal'
 
 
 /*
@@ -32,6 +34,7 @@ const style = {
   };
 
 function RegisterModal() {
+    const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
     const [cont, setCont] = useState(false);
     let isOpen = false;
@@ -43,8 +46,25 @@ function RegisterModal() {
         setCont(true);
     }
 
-    function handleRegister() {
+    const handleRegister = (event) => {
         store.setCloseRegisterModal();
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        if(formData.get('password') === formData.get('confirmPassword')) {
+            auth.registerUser({
+                firstName: formData.get('firstName'),
+                lastName: formData.get('lastName'),
+                email: formData.get('email'),
+                username: formData.get('username'),
+                password: formData.get('password'),
+                addressFirstLine: formData.get('addressFirstLine'),
+                addressSecondLine: formData.get('addressSecondLine'),
+                phoneNumber: formData.get('phoneNumber'),
+                city: formData.get('city'),
+                state: formData.get('state'),
+                zipcode: formData.get('zipcode')
+            }, store);
+        }
     }
 
     function handleLogin() {
@@ -55,15 +75,45 @@ function RegisterModal() {
     if(!cont) {
         list =
         <div>
-            <div>
+            <Box component="form" noValidate>
                 <h1 style={{ margin: '100px 0px 0px 0px' }}>Sign Up With</h1>
-                <TextField placeholder="First Name*" style={{ display: 'flex', float: 'left', margin: '15px 15px 0px 0px', width: '242.5px' }}></TextField>
-                <TextField placeholder="Last Name*" style={{ display: 'flex', float: 'right', margin: '15px 0px 0px 0px', width: '242.5px' }}></TextField>
-                <TextField placeholder='Email Address*' style={{ margin: '15px 0px 0px 0px', float: 'left', width: '500px' }}></TextField>
-                <TextField placeholder='Username*' style={{ margin: '15px 0px 0px 0px', float: 'left', width: '500px' }}></TextField>
-                <TextField placeholder='Password*' style={{ margin: '15px 0px 0px 0px', float: 'left', width: '500px' }}></TextField>
-                <TextField placeholder='Confirm Password*' style={{ margin: '15px 0px 0px 0px', float: 'left', width: '500px' }}></TextField>
-            </div>
+                <TextField 
+                    required
+                    name="firstName"
+                    id="firstName"
+                    label="First Name" 
+                    style={{ display: 'flex', float: 'left', margin: '15px 15px 0px 0px', width: '242.5px' }}></TextField>
+                <TextField 
+                    required
+                    name="lastName"
+                    id="lastName"
+                    label="Last Name" 
+                    style={{ display: 'flex', float: 'right', margin: '15px 0px 0px 0px', width: '242.5px' }}></TextField>
+                <TextField 
+                    required
+                    name="email"
+                    id="email"
+                    label="Email Address" 
+                    style={{ margin: '15px 0px 0px 0px', float: 'left', width: '500px' }}></TextField>
+                <TextField 
+                    required
+                    name="username"
+                    id="username"
+                    label="Username"  
+                    style={{ margin: '15px 0px 0px 0px', float: 'left', width: '500px' }}></TextField>
+                <TextField 
+                    required
+                    name="password"
+                    id="password"
+                    label="Password"  
+                    style={{ margin: '15px 0px 0px 0px', float: 'left', width: '500px' }}></TextField>
+                <TextField 
+                    required
+                    name="confirmPassword"
+                    id="confirmPassword"
+                    label="Confirm Password" 
+                    style={{ margin: '15px 0px 0px 0px', float: 'left', width: '500px' }}></TextField>
+            </Box>
             <Button onClick={handleContinue} style={{ margin: '15px 0px 0px 0px', color: 'white', background: 'black', width: '150px', height: '40px', fontSize: '8px', borderRadius: '10px' }}><h1>Continue</h1></Button>
         </div>;
     } else {
@@ -71,12 +121,41 @@ function RegisterModal() {
         <div>
             <div>
                 <h1 style={{ margin: '100px 0px 0px 0px' }}>Enter Your Shipping Address</h1>
-                <TextField placeholder='Address Line 1*' style={{ margin: '15px 0px 0px 0px', float: 'left', width: '500px' }}></TextField>
-                <TextField placeholder='Address Line 2*' style={{ margin: '15px 0px 0px 0px', float: 'left', width: '500px' }}></TextField>
-                <TextField placeholder='Phone Number*' style={{ margin: '15px 0px 0px 0px', float: 'left', width: '500px' }}></TextField>
-                <TextField placeholder='City*' style={{ margin: '15px 0px 0px 0px', float: 'left', width: '500px' }}></TextField>
-                <TextField placeholder="State*" style={{ display: 'flex', float: 'left', margin: '15px 15px 0px 0px', width: '242.5px' }}></TextField>
-                <TextField placeholder="Zip Code*" style={{ display: 'flex', float: 'right', margin: '15px 0px 0px 0px', width: '242.5px' }}></TextField>
+                <TextField 
+                    required
+                    name="addressFirstLine"
+                    id="addressFirstLine"
+                    label="Address Line 1" 
+                    style={{ margin: '15px 0px 0px 0px', float: 'left', width: '500px' }}></TextField>
+                <TextField 
+                    name="addressSecondLine"
+                    id="addressSecondLine"
+                    label="Address Line 2" 
+                    style={{ margin: '15px 0px 0px 0px', float: 'left', width: '500px' }}></TextField>
+                <TextField 
+                    required
+                    name="phoneNumber"
+                    id="phoneNumber"
+                    label="Phone Number"  
+                    style={{ margin: '15px 0px 0px 0px', float: 'left', width: '500px' }}></TextField>
+                <TextField 
+                    required
+                    name="city"
+                    id="city"
+                    label="City" 
+                    style={{ margin: '15px 0px 0px 0px', float: 'left', width: '500px' }}></TextField>
+                <TextField 
+                    required
+                    name="state"
+                    id="state"
+                    label="State" 
+                    style={{ display: 'flex', float: 'left', margin: '15px 15px 0px 0px', width: '242.5px' }}></TextField>
+                <TextField 
+                    required
+                    name="zipcode"
+                    id="zipcode"
+                    label="Zip Code"  
+                    style={{ display: 'flex', float: 'right', margin: '15px 0px 0px 0px', width: '242.5px' }}></TextField>
             </div>
             <Button onClick={handleRegister} style={{ cursor: 'pointer', margin: '15px 0px 0px 0px', color: 'white', background: 'black', width: '150px', height: '40px', fontSize: '8px', borderRadius: '10px' }}><h1>Register</h1></Button>
         </div>;
@@ -105,6 +184,7 @@ function RegisterModal() {
                     
                 </Box>
             </Modal>
+            <AccountErrorModal />
         </div>
     );
 }
