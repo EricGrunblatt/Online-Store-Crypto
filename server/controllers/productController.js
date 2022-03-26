@@ -51,6 +51,10 @@ getProduct = async (req, res) => {
 				isSold: isSold,
 				price: product.price,
 				shippingPrice: product.shippingPrice,
+				boxLength: product.boxLength,
+				boxWidth: product.boxWidth,
+				boxHeight: product.boxHeight,
+				boxWeight: product.boxWeight,
 				review: review,
 				images: images,
 			}}
