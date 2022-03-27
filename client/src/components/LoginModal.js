@@ -1,5 +1,5 @@
 import React from "react";
-import { useContext } from "react"; 
+import { useContext, useState } from "react"; 
 import AuthContext from '../auth'
 import { GlobalStoreContext } from '../store'
 import Box from '@mui/material/Box';
@@ -36,6 +36,8 @@ const style = {
 function LoginModal() {
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
+    const [emailOrUsername, setEmailOrUsername] = useState("");
+    const [password, setPassword] = useState("");
 
     let isOpen = false;
     if(store.loginModal) {
@@ -49,10 +51,9 @@ function LoginModal() {
     const handleLogin = (event) => {
         store.setCloseLoginModal();
         event.preventDefault();
-        const formData = new FormData(event.currentTarget);
         auth.loginUser({
-            emailOrUsername: formData.get('emailAddress'),
-            password: formData.get('password')
+            emailOrUsername: emailOrUsername,
+            password: password
         }, store);
     };
 
@@ -75,25 +76,26 @@ function LoginModal() {
                     <hr style={{ margin: '40px 0px 0px -140px', display: 'inline-block', float: 'left', width: '250px', background: '#0038FF', border: '#0038FF 2px solid', borderRadius: '2px 0px 0px 2px' }}></hr>
                     <hr style={{ margin: '-4px -0px 0px 0px', display: 'inline-block', float: 'right', width: '250px', background: '#AEAEAE', border: '#AEAEAE 2px solid', borderRadius: '0px 2px 2px 0px' }}></hr>
 
-                    <Box component="form" onSubmit={handleLogin} noValidate>
+                    <Box>
                         <h1 style={{ margin: '100px 0px 0px 0px' }}>Sign In With</h1>
                         <TextField 
                             required
                             name="emailOrUsername"
                             id="emailOrUsername"
-                            label='Email or Username' 
+                            label='Email or Username'
+                            value={emailOrUsername} 
+                            onChange={(event) => { setEmailOrUsername(event.target.value) }}
                             style={{ margin: '15px 0px 0px 0px', float: 'left', width: '500px' }}></TextField>
                         <TextField 
                             required
                             name="password"
                             id="password"
                             label='Password' 
+                            value={password}
+                            onChange={(event) => { setPassword(event.target.value) }}
                             style={{ margin: '15px 0px 0px 0px', float: 'left', width: '500px' }}></TextField>
-                            <h5 style={{ padding: '0px 0px 0px 0px', color: '#879ED9', fontSize: '20px' }}>Forgot Password?</h5>
-                            <Button 
-                                type="submit"
-                                variant="contained" 
-                                style={{ color: 'white', background: 'black', width: '150px', height: '40px', fontSize: '8px', borderRadius: '10px' }}><h1>Login</h1></Button>
+                        <h5 style={{ padding: '0px 0px 0px 0px', color: '#879ED9', fontSize: '20px' }}>Forgot Password?</h5>
+                        <Button onClick={handleLogin} style={{ color: 'white', background: 'black', width: '150px', height: '40px', fontSize: '8px', borderRadius: '10px' }}><h1>Login</h1></Button>
                     </Box>
                     
                 </Box>

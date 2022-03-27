@@ -19,9 +19,9 @@ function AuthContextProvider(props) {
     });
     const history = useHistory();
 
-    function setErrorMessage() {
-        return setAuth({
-            errorMessage: ''
+    function setErrorMessage(message) {
+        setAuth({
+            errorMessage: message
         })
     }
 
@@ -54,7 +54,11 @@ function AuthContextProvider(props) {
     auth.registerUser = async function(userData, store) {
         try {
             const response = await api.registerUser(userData);  
-            if (response.status === 200) {
+            if (response.status !== 200) {
+                alert("ERROR: received response.status=" + response.status)
+            }
+            else if (response.data.status === "OK") {
+                console.log(response.data.errorMessage);
                 authReducer({
                     type: AuthActionType.REGISTER_USER,
                     payload: {
@@ -63,18 +67,27 @@ function AuthContextProvider(props) {
                 })
                 history.push("/");
             }
+            else if (response.data.status === "ERROR") {
+                return setAuth({
+                    errorMessage: response.body.errorMessage
+                }) 
+            }
+            else {
+                alert("ERROR: response.status=200, but response.body.status not recognized")
+            }
             
         } catch (err) {
-            return setAuth({
-                errorMessage: err.response.data.errorMessage
-            })
+            alert("ERROR: something went really wrong");
         }
     }
 
     auth.loginUser = async function(userData, store) {
         try {
             const response = await api.loginUser(userData);
-            if (response.status === 200) {
+            if (response.status !== 200) {
+                alert("ERROR: received response.status=" + response.status)
+            }
+            else if (response.data.status === "OK") {
                 authReducer({
                     type: AuthActionType.LOGIN_USER,
                     payload: {
@@ -83,18 +96,23 @@ function AuthContextProvider(props) {
                 })
                 history.push("/");
             }
+            else if (response.data.status === "ERROR") {
+                return setAuth({
+                    errorMessage: response.data.errorMessage
+                })
+            }
+            else {
+                alert("ERROR: response.status=200, but response.body.status not recognized")
+            }
         } catch (err) {
-            console.log(err.response.data.errorMessage);
-            return setAuth({
-                errorMessage: err.response.data.errorMessage
-            })
+            alert("ERROR: something went really wrong")
         }
         
     }
 
     auth.logoutUser = async function() {
         const response = await api.logoutUser();
-        if(response.status === 200) {
+        if(response.data.status === "OK") {
             authReducer({
                 type: AuthActionType.LOGOUT_USER,
                 payload: {

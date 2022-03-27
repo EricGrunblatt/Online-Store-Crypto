@@ -36,6 +36,7 @@ function AccountErrorModal() {
     let errorMessage = "";
     let isOpen = false;
     if(auth.errorMessage) {
+        console.log(auth.errorMessage);
         errorMessage = auth.errorMessage;
         isOpen = true;
     }
