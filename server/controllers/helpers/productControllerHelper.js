@@ -39,6 +39,9 @@ getProductImages = async (product) => {
 				const image = await Image.findById(imageId);
 				images.push(image)
 			}
+			else {
+				images.push(null)
+			}
 		}
 		return images	
 	}
