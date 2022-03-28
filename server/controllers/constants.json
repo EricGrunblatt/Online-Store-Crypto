@@ -25,6 +25,7 @@
 		"productDoesNotExist": "PRODUCT DOES NOT EXIST",
 		"youAreNotTheSeller": "YOU ARE NOT THE SELLER",
 		"productIsSold": "PRODUCT IS SOLD",
+		"reviewExist":"REVIEW EXIST",
 		"reviewSpecifiedButNotFound": "REVIEW SPECIFIED BUT NOT FOUND",
 		"failedToGetImages": "FAILED TO GET IMAGES"
 	},
@@ -36,6 +37,10 @@
 		"cartAlreadyIncludesProduct": "CART ALREADY INCLUDES PRODUCT",
 		"userOwnsThisItem": "USER OWNS THIS ITEM",
 		"cartIsEmpty": "CART IS EMPTY"
+	},
+	"review":{
+		"missingRequiredField": "MISSING REQUIRED FIELD",
+		"starsNotInRange":"PLEASE RATE IT 1-5"
 	}
 
 }
