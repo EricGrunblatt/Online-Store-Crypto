@@ -25,7 +25,9 @@
 		"productDoesNotExist": "PRODUCT DOES NOT EXIST",
 		"youAreNotTheSeller": "YOU ARE NOT THE SELLER",
 		"productIsSold": "PRODUCT IS SOLD",
-		"reviewExist":"REVIEW EXIST"
+		"reviewExist":"REVIEW EXIST",
+		"reviewSpecifiedButNotFound": "REVIEW SPECIFIED BUT NOT FOUND",
+		"failedToGetImages": "FAILED TO GET IMAGES"
 	},
 	"purchase": {
 		"missingRequiredField": "MISSING REQUIRED FIELD",

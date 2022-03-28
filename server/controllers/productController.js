@@ -1,8 +1,9 @@
 const { upload, createAndSaveImage } = require("../handlers/imageHandler")
 const Product = require("../models/productModel")
 const User = require('../models/userModel')
+const Review = require('../models/reviewModel')
 const constants = require('./constants.json')
-const {productImageMiddleware, updateProductImageFields} = require('./helpers/productControllerHelper')
+const {productImageMiddleware, updateProductImageFields, getProductImages} = require('./helpers/productControllerHelper')
 
 // TODO
 getCatalog = async (req, res) => {
@@ -16,11 +17,55 @@ getCatalog = async (req, res) => {
 	
 }
 
-// TODO
 getProduct = async (req, res) => {
-	console.log("getProduct")
+	console.log("getProduct", req.body)
 	const _id = req.body._id;
-	
+
+	let json = {}
+	let product = null
+	let review = null
+	let images = null
+	try {
+		if (!_id) {
+			json = {status: constants.status.ERROR, errorMessage: constants.product.missingRequiredField}
+		}
+		else if (! (product = await Product.findById(_id))) {
+			json = {status: constants.status.ERROR, errorMessage: constants.product.productDoesNotExist}
+		}
+		else if ((product.reviewId) && (!(review = await Review.findById(product.reviewId)))) {
+			json = {status: constants.status.ERROR, errorMessage: constants.product.reviewSpecifiedButNotFound}
+		}
+		else if (! (images = await getProductImages(product))) {
+			json = {status: constants.status.ERROR, errorMessage: constants.product.failedToGetImages}
+		}
+		else {
+			const isSold = !! (product.buyerUsername || product.dateSold)
+
+			json = {status: constants.status.OK, product: {
+				_id: _id,
+				name: product.name,
+				description: product.description,
+				condition: product.condition,
+				category: product.category,
+				sellerUsername: product.sellerUsername,
+				isSold: isSold,
+				price: product.price,
+				shippingPrice: product.shippingPrice,
+				boxLength: product.boxLength,
+				boxWidth: product.boxWidth,
+				boxHeight: product.boxHeight,
+				boxWeight: product.boxWeight,
+				review: review,
+				images: images,
+			}}
+		}
+		console.log("RESPONSE: ", json)
+		res.status(200).json(json)
+	}
+	catch (err) {
+		console.log(err)
+		res.status(500).send(constants.status.FATAL_ERROR)
+	}
 }
 
 // TODO
@@ -100,7 +145,7 @@ addListingProduct = async (req, res) => {
 
 		const userId = req.userId
 		const {name, description, condition, category} = req.body
-		const {price, boxLength, boxWidth, boxHeight} = req.body
+		const {price, boxLength, boxWidth, boxHeight, boxWeight} = req.body
 		const images = req.files
 
 		let json = {}
@@ -112,7 +157,7 @@ addListingProduct = async (req, res) => {
 			else if (!name || !description || !condition || !category) {
 				json = {status: constants.status.ERROR, errorMessage: constants.product.missingRequiredField}
 			}
-			else if (!price || !boxLength || !boxWidth || !boxHeight) {
+			else if (!price || !boxLength || !boxWidth || !boxHeight || !boxWeight) {
 				json = {status: constants.status.ERROR, errorMessage: constants.product.missingRequiredField}
 			}
 			else if (Object.keys(images).length === 0) {
@@ -123,7 +168,7 @@ addListingProduct = async (req, res) => {
 			}
 			else {
 				// TODO: Calculate shipping price via api
-				const shippingPrice = boxLength * boxWidth * boxHeight
+				const shippingPrice = boxLength * boxWidth * boxHeight * boxWeight
 		
 				let product = new Product({
 					name: name,
@@ -133,6 +178,10 @@ addListingProduct = async (req, res) => {
 					sellerUsername: user.username,
 					price: price,
 					shippingPrice: shippingPrice,
+					boxLength: boxLength,
+					boxWidth: boxWidth,
+					boxHeight: boxHeight,
+					boxWeight: boxWeight,
 					imageIds: []
 				})
 		
@@ -169,7 +218,7 @@ updateListingProduct = async (req, res) => {
 
 		const userId = req.userId
 		const {_id, name, description, condition, category} = req.body
-		const {price, boxLength, boxWidth, boxHeight} = req.body
+		const {price, boxLength, boxWidth, boxHeight, boxWeight} = req.body
 		const images = req.files
 
 		let json = {}
@@ -182,7 +231,7 @@ updateListingProduct = async (req, res) => {
 			else if (!_id || !name || !description || !condition || !category) {
 				json = {status: constants.status.ERROR, errorMessage: constants.product.missingRequiredField}
 			}
-			else if (!price || !boxLength || !boxWidth || !boxHeight) {
+			else if (!price || !boxLength || !boxWidth || !boxHeight || !boxWeight) {
 				json = {status: constants.status.ERROR, errorMessage: constants.product.missingRequiredField}
 			}
 			else if (! (user = await User.findById(userId))) {
@@ -199,13 +248,17 @@ updateListingProduct = async (req, res) => {
 			}
 			else {
 				// TODO: Calculate shipping price via api
-				const shippingPrice = boxLength * boxWidth * boxHeight
+				const shippingPrice = boxLength * boxWidth * boxHeight * boxWeight
 				
 				product.name = name
 				product.description = description
 				product.condition = condition
 				product.category = category
 				product.price = price
+				product.boxLength = boxLength
+				product.boxWidth = boxWidth
+				product.boxHeight = boxHeight
+				product.boxWeight = boxWeight
 				product.shippingPrice = shippingPrice
 		
 				// ADD IMAGE FILES

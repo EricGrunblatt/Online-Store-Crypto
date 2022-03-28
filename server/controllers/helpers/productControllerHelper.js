@@ -1,4 +1,5 @@
 const {createAndSaveImage, upload} = require('../../handlers/imageHandler')
+const Image = require('../../models/imageModel')
 
 const productImageFields = [
 	{name: 'image0', maxCount: 1},
@@ -30,4 +31,24 @@ updateProductImageFields = async (images, oldImageIds, productId) => {
 	return imageIds
 }
 
-module.exports = {productImageMiddleware, updateProductImageFields}
+getProductImages = async (product) => {
+	let images = []
+	try {
+		for (let imageId of product.imageIds) {
+			if (imageId) {
+				const image = await Image.findById(imageId);
+				images.push(image)
+			}
+			else {
+				images.push(null)
+			}
+		}
+		return images	
+	}
+	catch (err) {
+		console.log("FAILED TO GET IMAGES")
+		return []
+	}
+}
+
+module.exports = {productImageMiddleware, updateProductImageFields, getProductImages}
