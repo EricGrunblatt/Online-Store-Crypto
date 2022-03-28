@@ -59,7 +59,7 @@ getProduct = async (req, res) => {
 				images: images,
 			}}
 		}
-		console.log("RESPONSE:", json)
+		console.log("RESPONSE: ", json)
 		res.status(200).json(json)
 	}
 	catch (err) {
