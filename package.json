@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "jsonwebtoken": "^8.5.1"
+    "coingate-v2": "^1.0.1"
   }
 }

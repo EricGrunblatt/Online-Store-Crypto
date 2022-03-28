@@ -6,40 +6,39 @@ const auth = require('../auth')
 register = async (req, res) => {
 	console.log("register", req.body);
 
-	// GET REQUEST BODY DATA
-	const { firstName, lastName, username, email, password, phoneNumber } = req.body;
-	const { addressFirstLine, addressSecondLine, city, state, zipcode } = req.body;
+	// REQUEST BODY DATA
+	const {firstName, lastName, username, email, password, phoneNumber} = req.body;
+	const {addressFirstLine, addressSecondLine, city, state, zipcode} = req.body;
 
-	// PROCESS DATA
+	// PROCESSING
 	let json = {}
 	try {
 		// CHECK FOR MISSING FIELD
 		if (!firstName || !lastName || !username || !email || !password || !phoneNumber) {
-			json = { status: constants.status.ERROR, errorMessage: constants.user.missingRequiredField }
+			json = { status: constants.status.ERROR, errorMessage: constants.auth.missingRequiredField }
 		}
 		else if (!addressFirstLine || !city || !state || !zipcode) {
 			// NOTE: addressSecondLine not included, since it can be empty string
-			json = { status: constants.status.ERROR, errorMessage: constants.user.missingRequiredField }
+			json = { status: constants.status.ERROR, errorMessage: constants.auth.missingRequiredField }
 		}
 		// CHECK PASSWORD LENGTH
 		else if (password.length < 8) {
-			json = { status: constants.status.ERROR, errorMessage: constants.user.passwordTooShort }
+			json = { status: constants.status.ERROR, errorMessage: constants.auth.passwordTooShort }
 		}
 		// CHECK EMAIL AND USERNAME CONTENTS
 		else if (!email.includes("@")) {
-			json = { status: constants.status.ERROR, errorMessage: constants.user.invalidEmail}
+			json = { status: constants.status.ERROR, errorMessage: constants.auth.invalidEmail}
 		}
 		else if (username.includes("@")) {
-			json = { status: constants.status.ERROR, errorMessage: constants.user.invalidUsername}
+			json = { status: constants.status.ERROR, errorMessage: constants.auth.invalidUsername}
 		}
 		// CHECK IF USER WITH IDENTIFIER ALREADY EXISTS
 		else if (await User.findOne({ email: email })) {
-			json = { status: constants.status.ERROR, errorMessage: constants.user.emailAlreadyExists }
+			json = { status: constants.status.ERROR, errorMessage: constants.auth.emailAlreadyExists }
 		}
 		else if (await User.findOne({ username: username })) {
-			json = { status: constants.status.ERROR, errorMessage: constants.user.userAlreadyExists }
+			json = { status: constants.status.ERROR, errorMessage: constants.auth.userAlreadyExists }
 		}
-		// REGISTER USER
 		else {
 			// HASH PASSWORD
 			const saltRounds = 10
@@ -64,7 +63,6 @@ register = async (req, res) => {
 			// SAVE USER
 			await user.save()
 
-			// OK JSON
 			json = { 
 				status: constants.status.OK, 
 				user: {
@@ -79,7 +77,7 @@ register = async (req, res) => {
 			const token = auth.signToken(user)
 			auth.setCookie(res, token)
 		}
-		console.log("response:", json)
+		console.log("RESPONSE: ", json)
 		res.status(200).json(json)
 	}
 	catch (err) {
@@ -91,26 +89,26 @@ register = async (req, res) => {
 login = async (req, res) => {
 	console.log("login", req.body)
 
-	// GET REQUEST BODY DATA
-	const { emailOrUsername, password } = req.body
+	// REQUEST BODY DATA
+	const {emailOrUsername, password} = req.body
 
-	// PROCESS DATA
+	// PROCESSING
 	let json = {}
 	try {
 		// CHECK FOR MISSING FIELD
 		if (!emailOrUsername || !password) {
-			json = {status: constants.status.ERROR, errorMessage: constants.user.missingRequiredField}
+			json = {status: constants.status.ERROR, errorMessage: constants.auth.missingRequiredField}
 		}
 		else {
 			const user = await User.findOne({$or: [{email: emailOrUsername}, {username: emailOrUsername}]})
 			
 			// CHECK IF USER EXISTS
 			if (!user) {
-				json = {status: constants.status.ERROR, errorMessage: constants.user.userDoesNotExist}
+				json = {status: constants.status.ERROR, errorMessage: constants.auth.userDoesNotExist}
 			}
 			// CHECK IF PASSWORD IS CORRECT
 			else if (!(await bcryptjs.compare(password, user.passwordHash))) {
-				json = {status: constants.status.ERROR, errorMessage: constants.user.passwordsDoNotMatch}
+				json = {status: constants.status.ERROR, errorMessage: constants.auth.passwordsDoNotMatch}
 			}
 			else {
 				json = {
@@ -128,7 +126,7 @@ login = async (req, res) => {
 				auth.setCookie(res, token)
 			}
 		}
-		console.log("response:", json)
+		console.log("RESPONSE: ", json)
 		res.status(200).json(json)
 	}
 	catch (err) {
@@ -139,12 +137,10 @@ login = async (req, res) => {
 
 logout = async (req, res) => {
 	console.log("logout")
-	res.cookie("token", "", {
-		httpOnly: true,
-        secure: true,
-        sameSite: "none",
-        expires: new Date(0)
-	}).send({status: constants.status.OK});
+
+	// SET COOKIE TO EXPIRE
+	auth.setCookie(res, "", {expires: new Date(0)})
+	res.send({status: constants.status.OK});
 }
 
 module.exports = {

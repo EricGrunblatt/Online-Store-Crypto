@@ -5,7 +5,7 @@ const ObjectId = Schema.Types.ObjectId
 const OrderSchema = new Schema(
 	{
 		thirdPartyOrderId: {type: String, required: true},
-		productIds: {type: [ObjectId], required: true}
+		productId: {type: ObjectId, required: true}
 	},
 	{ timestamps: true },
 )
