@@ -114,6 +114,9 @@ updateAccount = async (req, res) => {
 		else if(!firstName|| !lastName || !email || !city || !state || !zipcode || !addressFirstLine || !phoneNumber){
 			json = { status: constants.status.ERROR, errorMessage: constants.user.missingRequiredField };
 		}
+		else if ((newPassword || confirmPassword) && !oldPassword) {
+			json = { status: constants.status.ERROR, errorMessage: constants.user.oldPasswordNotProvided };
+		}
 		else if (oldPassword && !newPassword) {
 			json = { status: constants.status.ERROR, errorMessage: constants.user.newPasswordNotProvided };
 		}
