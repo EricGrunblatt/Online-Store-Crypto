@@ -1,5 +1,5 @@
 const { application } = require('express')
-const bcrypt = require('bcryptjs')
+const bcryptjs = require('bcryptjs')
 const User = require('../models/userModel')
 const Product = require('../models/productModel')
 const Review = require('../models/reviewModel')
@@ -56,7 +56,6 @@ getProfileByUsername = async (req, res) => {
 	}
 }
 
-// TODO
 getAccount = async (req, res) => {
 	console.log("getAccount", req.body)
 	const userId = req.userId
@@ -64,23 +63,25 @@ getAccount = async (req, res) => {
 	let json = {}
 	try {
 		if (!userId) {
-			json = { status: constants.status.ERROR, errorMessage: constants.user.missingRequiredField }
+			throw "did not get a userId"
 		}
 
 		else if (!(user = await User.findOne({ "_id": userId }))) {
-			json = { status: constants.status.ERROR, errorMessage: constants.user.missingRequiredField }
+			json = { status: constants.status.ERROR, errorMessage: constants.user.userDoesNotExist }
 		}
 		else {
-			console.log("id:"+userId);
 			json = {
-				"status": constants.status.OK,
-				"firstName": user.firstName,
-				"lastName": user.lastName,
-				"city": user.city,
-				"zipcode": user.zipcode,
-				"addressFirstLine": user.addressFirstLine,
-				"addressSecondLine": user.addressSecondLine,
-				"phoneNumber": user.phoneNumber
+				status: constants.status.OK,
+				user: {
+					firstName: user.firstName,
+					lastName: user.lastName,
+					city: user.city,
+					state: user.state,
+					zipcode: user.zipcode,
+					addressFirstLine: user.addressFirstLine,
+					addressSecondLine: user.addressSecondLine,
+					phoneNumber: user.phoneNumber
+				}
 			}
 		}
 		console.log("RESPONSE: ", json)
@@ -90,10 +91,6 @@ getAccount = async (req, res) => {
 		console.log(err);
 		res.status(500).send(constants.status.FATAL_ERROR);
 	}
-
-
-
-
 }
 
 // TODO
@@ -106,54 +103,49 @@ updateAccount = async (req, res) => {
 
 	let json = {}
 	let user = null
+	let passwordHash = null
 	try {
 		if (!userId) {
-			json = { status: constants.status.ERROR, errorMessage: constants.user.missingRequiredField };
+			throw "did not get a userId"
 		}
-
 		else if (!(user = await User.findOne({ "_id": userId }))) {
+			json = { status: constants.status.ERROR, errorMessage: constants.user.userDoesNotExist };
+		}
+		else if(!firstName|| !lastName || !email || !city || !state || !zipcode || !addressFirstLine || !phoneNumber){
 			json = { status: constants.status.ERROR, errorMessage: constants.user.missingRequiredField };
 		}
-		else if(!email ||!userId||!firstName||!lastName||!city||!state||!zipcode||!addressFirstLine||!phoneNumber){
-			json = { status: constants.status.ERROR, errorMessage: constants.user.missingRequiredField };
+		else if (oldPassword && !newPassword) {
+			json = { status: constants.status.ERROR, errorMessage: constants.user.newPasswordNotProvided };
+		}
+		else if (oldPassword && (newPassword !== confirmPassword)) {
+			json = { status: constants.status.ERROR, errorMessage: constants.user.newPasswordDoesNotMatchConfirmPassword };
+		}
+		else if (oldPassword && !(await bcryptjs.compare(oldPassword, user.passwordHash))) {
+			json = { status: constants.status.ERROR, errorMessage: constants.user.incorrectPassword };
 		}
 		else {
-			let passwordHash = null;
 			if (oldPassword) {
-				
-				const passwordCorrect = await bcrypt.compare(oldPassword, user.passwordHash);
-				console.log(newPassword,user.passwordHash,confirmPassword,passwordCorrect);
-				if (!passwordCorrect || newPassword !== confirmPassword) {
-					json = { status: constants.status.ERROR, errorMessage: constants.auth.passwordsDoNotMatch };
-					console.log("RESPONSE: ", json);
-					return res.status(200).json(json);
-				}
 				const saltRounds = 10;
-				const salt = await bcrypt.genSalt(saltRounds);
-				passwordHash = await bcrypt.hash(newPassword, salt);
-			}
-			else {
-				passwordHash = user.passwordHash
+				const salt = await bcryptjs.genSalt(saltRounds);
+				passwordHash = await bcryptjs.hash(newPassword, salt);
 			}
 
-			user.email=email;
 			user.firstName = firstName;
 			user.lastName = lastName;
+			user.email=email;
 			user.city = city;
+			user.state = state;
 			user.zipcode = zipcode;
-			user.passwordHash = passwordHash;
+			user.passwordHash = passwordHash || user.passwordHash;
 			user.addressFirstLine = addressFirstLine;
 			user.addressSecondLine = addressSecondLine;
 			user.phoneNumber = phoneNumber;
 
 			await user.save();
-			json = { "status": constants.status.OK, "userId": userId };
-			
+			json = { "status": constants.status.OK };
 		}
-
 		console.log("RESPONSE: ", json);
 		res.status(200).json(json)
-
 	}
 	catch (err) {
 		console.log(err);
@@ -206,54 +198,52 @@ updateProfileImage = async (req, res) => {
 writeReview = async (req, res) => {
 	console.log("writeReview", req.body);
 	const userId = req.userId;
-	const { stars, comment, objectId } = req.body;
+	const { stars, comment, productId } = req.body;
 
 	let json = {};
 	let user = null;
 	let product = null;
-
 	try {
 		if (!userId) {
+			throw "did not get a userId"
+		}
+		else if (!(user = await User.findById(userId))) {
+			json = { status: constants.status.ERROR, errorMessage: constants.user.userDoesNotExist };
+		}
+		else if (!stars || !productId) {
 			json = { status: constants.status.ERROR, errorMessage: constants.user.missingRequiredField };
 		}
-
-		else if (!(user = await User.find({ "_id": userId }))) {
-			json = { status: constants.status.ERROR, errorMessage: constants.user.missingRequiredField };
+		else if (!(product = await Product.findById(productId))) {
+			json = { status: constants.status.ERROR, errorMessage: constants.user.productDoesNotExist };
 		}
-
-		else if (!(product = await Product.findOne({ "_id": objectId }))) {
-			json = { status: constants.status.ERROR, errorMessage: constants.product.missingRequiredField };
+		else if (product.buyerUsername !== user.username) {
+			json = { status: constants.status.ERROR, errorMessage: constants.user.userDidNotPurchaseThisProduct };
 		}
 		else if (product.reviewId) {
-			json = { status: constants.status.ERROR, errorMessage: constants.product.reviewExist };
+			json = { status: constants.status.ERROR, errorMessage: constants.user.reviewAlreadyExists };
 		}
 		else if(stars<1 || stars>5){
 			json = { status: constants.status.ERROR, errorMessage: constants.review.starsNotInRange };
 		}
 		else {
 			const review = new Review({
-				"forUsername": product.sellerUsername,
-				"byUsername": product.buyerUsername,
-				"stars": stars,
-				"comment": comment
+				forUsername: product.sellerUsername,
+				byUsername: product.buyerUsername,
+				stars: stars,
+				comment: comment
 			});
-			console.log("review:",review._id);
 			await review.save();
-			product.reviewId=review._id;
+			product.reviewId = review._id;
 			await product.save();
-			
 			json = { "status": constants.status.OK};
+		}
+		console.log("RESPONSE: ", json);
+		res.status(200).json(json);
 	}
-	console.log("RESPONSE: ", json);
-	res.status(200).json(json);
-
-}
-	
 	catch (err) {
 		console.log(err);
-		res.status(500).send();
+		res.status(500).send({status: constants.status.FATAL_ERROR});
 	}
-
 }
 
 module.exports = {
