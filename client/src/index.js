@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-//import { AuthContextProvider } from './auth';
 import reportWebVitals from './reportWebVitals';
 /*
   This is the entry-point for our application. Notice that we

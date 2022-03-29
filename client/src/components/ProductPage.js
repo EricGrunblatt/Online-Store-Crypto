@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+//import { useState } from "react";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
@@ -10,7 +10,7 @@ import { useHistory } from "react-router-dom";
 
 export default function ProductPage() {
 	const history = useHistory();
-	const productName = "Hodie"
+	const productName = "Hoodie"
 	const productNum = 287013
 	const condition = "New"
 	const seller = "seller3"
@@ -27,11 +27,11 @@ export default function ProductPage() {
 			<Grid container spacing={17}>
 				{/* LEFT IMAGES & DESCRIPTION */}
 				<Grid item xs>
-					<img src="https://dummyimage.com/600x400/000/fff" style={{ borderRadius: '10%' }} ></img>
+					<img src="https://dummyimage.com/600x400/000/fff" alt="" style={{ borderRadius: '10%' }} ></img>
 					<Grid container spacing={4}>
 						{itemImages.map((index) => (
 								<Grid item xs>
-									<img src={index.src} title={index.title} style={{ borderRadius: '10%' }} ></img>
+									<img src={index.src} alt="" title={index.title} style={{ borderRadius: '10%' }} ></img>
 								</Grid>
 							))}
 					</Grid>
@@ -68,13 +68,13 @@ export default function ProductPage() {
 					</div>
 					<div style={{ paddingTop: '10px', fontFamily: 'Quicksand', fontSize: '20px', color: 'black', textAlign: 'right' }}>
 						60 days returns
-						seller pay for return shipping
+						seller pays for return shipping
 					</div>
 					<div style={{ paddingTop: '40px', fontFamily: 'Quicksand', fontWeight: '500', fontSize: '25px', color: 'black' }}>
                     	<u> Shipping Info </u>
 					</div>
 					<div style={{ paddingTop: '10px', paddingBottom: '80px', fontFamily: 'Quicksand', fontSize: '20px', color: 'black', textAlign: 'right' }}>
-						15 Algo Standard Shipping
+						Standard 3-Day Priority Shipping through USPS. Shipping costs varies based on location
 					</div>
 					
 				</Grid>

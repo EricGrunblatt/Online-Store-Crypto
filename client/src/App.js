@@ -1,7 +1,7 @@
 import './App.css';
 import { React } from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
-//import { AuthContextProvider } from './auth';
+import { AuthContextProvider } from './auth';
 import { GlobalStoreContextProvider } from './store'
 import {
     Cart,
@@ -11,10 +11,10 @@ import {
     ListItem,
     NavigationBar,
     Orders,
+    ProductPage,
     ProfileScreen,
-    Wallet,
-	ProductPage,
-	ViewProfile
+    ViewProfile,
+    Wallet
 } from './components'
 /*
     This is our application's top-level component and entry-point
@@ -22,10 +22,11 @@ import {
     
     @author Eric Grunblatt
 */
-const App = () => {
+export default function App() {
+
     return (
         <BrowserRouter>
-            {/*<AuthContextProvider>*/}
+            <AuthContextProvider>
                 <GlobalStoreContextProvider>              
                     <NavigationBar />
                     <Switch>
@@ -37,13 +38,11 @@ const App = () => {
                         <Route path="/cart" exact component={Cart} />
                         <Route path="/listitem" exact component={ListItem} />
                         <Route path="/checkout" exact component={Checkout} />
-						<Route path="/product" exact component={ProductPage} />
+                        <Route path="/product" exact component={ProductPage} />
 						<Route path="/viewprofile" exact component={ViewProfile} />
-                    </Switch>    
+                    </Switch>   
                 </GlobalStoreContextProvider>
-            {/*</AuthContextProvider>*/}
+            </AuthContextProvider>
         </BrowserRouter>
-    )
+    );
 }
-
-export default App

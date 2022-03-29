@@ -9,8 +9,9 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import { Select, MenuItem, FormControl, InputLabel } from '@mui/material'
 import LoginModal from './LoginModal';
 import RegisterModal from './RegisterModal';
-import TextField from '@mui/material/TextField';
-
+import AccountErrorModal from "./AccountErrorModal";
+import HomeProduct from "./HomeProduct";
+import TextField from "@mui/material/TextField";
 
 
 export default function HomeScreen() {
@@ -58,9 +59,10 @@ export default function HomeScreen() {
     if(!openCat) {
         catButton = 
         <div style={{ height: '20px', display: 'flex', float: 'right' }}>
-			<div style={{ display: 'inline-block', float: 'left', fontSize: '18px' }}>
-				Category <br />
-			</div>
+            <div style={{ display: 'flex', float: 'left', fontSize: '18px' }}>
+                Category <br />
+            </div>
+            <div style={{ flexGrow: '1' }}></div>
             <Button style={{ maxHeight: '25px',  minHeight: '25px',  maxWidth: '25px',  minWidth: '25px' }} onClick={() => { handleOpenCategory() }}>
                 <AddIcon style={{ color: 'black' }}></AddIcon>
             </Button>
@@ -68,9 +70,10 @@ export default function HomeScreen() {
     } else {
         catButton = 
         <div style={{ height: '20px', display: 'flex', float: 'right' }}>
-			<div style={{ display: 'inline-block', float: 'left', fontSize: '18px' }}>
-				Category <br />
-			</div>
+            <div style={{ display: 'flex', float: 'left', fontSize: '18px' }}>
+                Category <br />
+            </div>
+            <div style={{ flexGrow: '1' }}></div>
             <Button style={{ maxHeight: '25px',  minHeight: '25px',  maxWidth: '25px',  minWidth: '25px' }} onClick={() => { handleOpenCategory() }}>
                 <RemoveIcon style={{ color: 'black' }}></RemoveIcon>
             </Button>
@@ -81,9 +84,10 @@ export default function HomeScreen() {
     if(!openPrice) {
         priceButton = 
         <div style={{ height: '20px', display: 'flex', float: 'right' }}>
-			<div style={{ display: 'inline-block', float: 'left', fontSize: '18px' }}>
-				Price
-			</div>
+            <div style={{ display: 'flex', float: 'left', fontSize: '18px' }}>
+                Price
+            </div>
+            <div style={{ flexGrow: '1' }}></div>
             <Button style={{ maxHeight: '25px',  minHeight: '25px',  maxWidth: '25px',  minWidth: '25px' }} onClick={() => { handleOpenPrice() }}>
                 <AddIcon style={{ color: 'black' }}></AddIcon>
             </Button>
@@ -91,9 +95,10 @@ export default function HomeScreen() {
     } else {
         priceButton = 
         <div style={{ height: '20px', display: 'flex', float: 'right' }}>
-			<div style={{ display: 'inline-block', float: 'left', fontSize: '18px' }}>
-				Price
-			</div>
+            <div style={{ display: 'flex', float: 'left', fontSize: '18px' }}>
+                Price
+            </div>
+            <div style={{ flexGrow: '1' }}></div>
             <Button style={{ maxHeight: '25px',  minHeight: '25px',  maxWidth: '25px',  minWidth: '25px' }} onClick={() => { handleOpenPrice() }}>
                 <RemoveIcon style={{ color: 'black' }}></RemoveIcon>
             </Button>
@@ -103,23 +108,27 @@ export default function HomeScreen() {
     /* OPEN/CLOSE FILTER BY CONDITION SECTION */
     if(!openCon) {
         conButton = 
-        <div style={{ height: '20px', display: 'flex', float: 'right' }}>
-			<div style={{ display: 'inline-block', float: 'left', fontSize: '18px' }}>
-				Condition
-			</div>
-            <Button style={{ maxHeight: '25px',  minHeight: '25px',  maxWidth: '25px',  minWidth: '25px' }} onClick={() => { handleOpenCondition() }}>
+        <div style={{ height: '20px', display: 'flex' }}>
+            <div style={{ display: 'flex', fontSize: '18px' }}>
+                Condition
+            </div>
+            <div style={{ flexGrow: '1' }}></div>
+            <Button style={{ margin: '0px 0px 0px 0px', maxHeight: '25px',  minHeight: '25px',  maxWidth: '25px',  minWidth: '25px' }} onClick={() => { handleOpenCondition() }}>
                 <AddIcon style={{ color: 'black' }}></AddIcon>
             </Button>
         </div>
     } else {
         conButton = 
-        <div style={{ height: '20px', display: 'flex', float: 'right' }}>
-			<div style={{ display: 'inline-block', float: 'left', fontSize: '18px' }}>
-				Condition
-			</div>
-            <Button style={{ maxHeight: '25px',  minHeight: '25px',  maxWidth: '25px',  minWidth: '25px' }} onClick={() => { handleOpenCondition() }}>
+        <div style={{ height: '20px', display: 'flex' }}>
+            <div style={{ display: 'flex', float: 'left', fontSize: '18px' }}>
+                Condition
+            </div>
+            <div style={{ flexGrow: '1' }}></div>
+            <Button style={{ display: 'flex', maxHeight: '25px',  minHeight: '25px',  maxWidth: '25px',  minWidth: '25px' }} onClick={() => { handleOpenCondition() }}>
                 <RemoveIcon style={{ color: 'black' }}></RemoveIcon>
             </Button>
+            
+            
         </div>
     }
 
@@ -145,20 +154,19 @@ export default function HomeScreen() {
         if(!openPrice) {
             setOpenPrice(
                 <div style={{ paddingTop: '7px'}}>
-					<TextField className="price_from" sx={{ width: '60px', bgcolor:'white' }}
+					<TextField className="price_from" sx={{ bgcolor:'white' }}
 							inputProps={{style: {fontSize: 13}}}
 							size = 'small'
-							style={{ float: 'left', borderRadius: '3px' }}
+							style={{ width: '6vw', float: 'left', borderRadius: '3px' }}
 							placeholder="$" >
-					</TextField>~
-					<TextField className="price_to" sx={{ width: '60px', bgcolor:'white' }}
+					</TextField>
+					<TextField className="price_to" sx={{ bgcolor:'white' }}
 							inputProps={{style: {fontSize: 13}}}
 							size = 'small'
-							style={{ float: 'right', borderRadius: '3px' }}
+							style={{ width: '6vw', float: 'right', borderRadius: '3px' }}
 							placeholder="$$$" >
 					</TextField>
 				</div>
-				
             );
         } else {
             setOpenPrice("");
@@ -211,10 +219,9 @@ export default function HomeScreen() {
                 <div className="homescreen-filter-by" style={{ padding: '10px 0px 0px 10px', fontSize: '25px', width: '16vw', display: 'grid', gridAutoColumns: 'auto' }}>
                     <div> Filter By </div>
                     <hr style={{ float: 'left', color: 'black', width: '16vw' }} />
-
+                
                     {catButton}
                     {openCat}
-    
 
                     <hr style={{ float: 'left', color: 'black', width: '16vw' }} />
                     
@@ -246,11 +253,34 @@ export default function HomeScreen() {
                     </Select>
                 </FormControl>
             </Box>
-            <Box style={{ position: 'absolute', margin: '-20px 0% 20px 20%', background: 'white', top: '450px', width: '79%', minHeight: '450px', border: 'black 1px solid', borderRadius: '20px'}}>
-                    
+            <Box style={{ position: 'absolute', margin: '-30px 0px 50px 20%', background: 'white', top: '450px', width: '79%', minHeight: '1010px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 19.5vw)', gridTemplateRows: 'repeat(4, 25.5vw)' }}>
+                        <HomeProduct></HomeProduct>
+                        <HomeProduct></HomeProduct>
+                        <HomeProduct></HomeProduct>
+                        <HomeProduct></HomeProduct>
+                        <HomeProduct></HomeProduct>
+                        <HomeProduct></HomeProduct>
+                        <HomeProduct></HomeProduct>
+                        <HomeProduct></HomeProduct>
+                        <HomeProduct></HomeProduct>
+                        <HomeProduct></HomeProduct>
+                        <HomeProduct></HomeProduct>
+                        <HomeProduct></HomeProduct>
+                        <HomeProduct></HomeProduct>
+                        <HomeProduct></HomeProduct>
+                        <HomeProduct></HomeProduct>
+                        <HomeProduct></HomeProduct>
+                    </div>
+            </Box>
+            <Box style={{ margin: '950px 0px 25px 0vw', textAlign: 'center', fontSize: '35px', width: '99%' }}>
+                <ArrowBackIosIcon style={{ marginRight: '5vw' }}></ArrowBackIosIcon>
+                1 2 3 4
+                <ArrowForwardIosIcon style={{ marginLeft: '5vw' }}></ArrowForwardIosIcon>
             </Box>
             <LoginModal />
             <RegisterModal />
+            <AccountErrorModal />
         </Box>  
     )
 }
