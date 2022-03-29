@@ -2,12 +2,11 @@ import React from "react";
 import Button from '@mui/material/Button'
 import { useHistory } from "react-router-dom";
 import Grid from '@mui/material/Grid';
+import ListingsDeleteModal from "./ListingsDeleteModal";
 
 export default function Listings() {
     const history = useHistory();
-
-    let items = [];
-    /*
+    
     let items = [
 		{itemName: "Hoodie", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", listed: ""},
 		{itemName: "Hoodie", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", listed: ""},
@@ -15,7 +14,7 @@ export default function Listings() {
 		{itemName: "Hoodie", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", listed: "02/20/2022"},
 		{itemName: "Hoodie", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", listed: "02/20/2022"},
 		{itemName: "Hoodie", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", listed: "02/20/2022"}
-	]*/
+	]
 
     function handleList(listed) {
         if(listed === "") {
@@ -76,6 +75,7 @@ export default function Listings() {
                 </div>
                 {listings}
             </div>
+            <ListingsDeleteModal />
         </div>
     )
 }

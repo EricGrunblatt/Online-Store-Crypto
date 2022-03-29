@@ -2,12 +2,13 @@ import React from "react";
 import Button from '@mui/material/Button';
 import { useHistory } from "react-router-dom";
 import Grid from '@mui/material/Grid';
+import CartDeleteModal from "./CartDeleteModal";
 
 export default function Cart() {
     const history = useHistory();
 
-    let items = [];
-    /*
+    //let items = [];
+    
     let items = [
 		{itemName: "Hoodie", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", listed: ""},
 		{itemName: "Hoodie", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", listed: ""},
@@ -15,7 +16,7 @@ export default function Cart() {
 		{itemName: "Hoodie", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", listed: "02/20/2022"},
 		{itemName: "Hoodie", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", listed: "02/20/2022"},
 		{itemName: "Hoodie", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", listed: "02/20/2022"}
-	]*/
+	]
 
     let cartItems = 
         <div className="order-card" style={{ margin: '0px 0px 20px 0px' }}>
@@ -63,6 +64,7 @@ export default function Cart() {
                 </div>
                 {cartItems}
             </div>
+            <CartDeleteModal />
         </div>
     )
 }

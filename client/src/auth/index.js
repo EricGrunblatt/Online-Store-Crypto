@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
 import { useHistory } from 'react-router-dom'
 import api from '../api'
 
@@ -6,6 +6,7 @@ const AuthContext = createContext();
 
 // THESE ARE ALL THE TYPES OF UPDATES TO OUR AUTH STATE THAT CAN BE PROCESSED
 export const AuthActionType = {
+    GET_LOGGED_IN: "GET_LOGGED_IN",
     REGISTER_USER: "REGISTER_USER",
     LOGIN_USER: "LOGIN_USER",
     LOGOUT_USER: "LOGOUT_USER"
@@ -25,9 +26,19 @@ function AuthContextProvider(props) {
         })
     }
 
+    useEffect(() => {
+        auth.getLoggedIn();
+    }, []);
+
     const authReducer = (action) => {
         const { type, payload } = action;
         switch (type) {
+            case AuthActionType.GET_LOGGED_IN: {
+                return setAuth({
+                    user: payload.user,
+                    loggedIn: payload.loggedIn
+                })
+            }
             case AuthActionType.REGISTER_USER: {
                 return setAuth({
                     user: payload.user,
@@ -51,6 +62,34 @@ function AuthContextProvider(props) {
         }
     }
 
+    auth.getLoggedIn = async function () {
+        try {
+            const response = await api.getLoggedIn();
+            if (response.status !== 200) {
+                alert("ERROR: received response.status=" + response.status)
+            }
+            else if (response.data.status === "OK") {
+                authReducer({
+                    type: AuthActionType.GET_LOGGED_IN,
+                    payload: {
+                        loggedIn: response.data.loggedIn,
+                        user: response.data.user,
+                    }
+                });
+            }
+            else if (response.data.status === "ERROR") {
+                return setAuth({
+                    errorMessage: response.body.errorMessage
+                }) 
+            }
+            else {
+                alert("ERROR: response.status=200, but response.body.status not recognized")
+            }
+        } catch (err) {
+            alert("ERROR: something went really wrong");
+        }
+    }
+
     auth.registerUser = async function(userData, store) {
         try {
             const response = await api.registerUser(userData);  
@@ -58,7 +97,6 @@ function AuthContextProvider(props) {
                 alert("ERROR: received response.status=" + response.status)
             }
             else if (response.data.status === "OK") {
-                console.log(response.data.errorMessage);
                 authReducer({
                     type: AuthActionType.REGISTER_USER,
                     payload: {

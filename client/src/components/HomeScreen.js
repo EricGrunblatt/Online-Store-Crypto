@@ -198,7 +198,7 @@ export default function HomeScreen() {
 
 
     return (
-        <Box className="homescreen">
+        <Box className="homescreen" style={{ maxWidth: '99vw' }}>
             <div className="homescreen-category-bar" style={{ padding: '10px 0px 10px 10px'}}>
                 <span style={{ paddingRight: '10px' }}> Electronics </span>
                 <span style={{ paddingRight: '10px' }}> Clothing </span>
@@ -253,7 +253,7 @@ export default function HomeScreen() {
                     </Select>
                 </FormControl>
             </Box>
-            <Box style={{ position: 'absolute', margin: '-30px 0px 50px 20.5vw', background: 'white', top: '450px', width: '79%', minHeight: '1010px' }}>
+            <Box style={{ position: 'absolute', margin: '-30px 0px 50px 20vw', background: 'white', top: '450px', width: '79%', minHeight: '1010px' }}>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 20.5vw)', gridTemplateRows: 'repeat(4, 25.5vw)' }}>
                         <HomeProduct></HomeProduct>
                         <HomeProduct></HomeProduct>
@@ -273,7 +273,7 @@ export default function HomeScreen() {
                         <HomeProduct></HomeProduct>
                     </div>
             </Box>
-            <Box style={{ margin: '950px 0px 25px 0vw', textAlign: 'center', fontSize: '35px', width: '99%' }}>
+            <Box style={{ position: 'absolute', margin: '100vw 0px 5vw 0vw', textAlign: 'center', alignContent: 'center', fontSize: '35px', width: '99%' }}>
                 <ArrowBackIosIcon style={{ marginRight: '5vw' }}></ArrowBackIosIcon>
                 1 2 3 4
                 <ArrowForwardIosIcon style={{ marginLeft: '5vw' }}></ArrowForwardIosIcon>

@@ -18,6 +18,8 @@ router.post('/auth/register', authController.register)
 router.post('/auth/login', authController.login)
 // Logout
 router.post('/auth/logout', authController.logout)
+// Get Logged In
+router.post('/auth/getLoggedIn', auth.verify, authController.getLoggedIn)
 
 // Get Profile
 router.post('/user/getProfileByUsername', userController.getProfileByUsername)
@@ -55,6 +57,8 @@ router.post('/purchase/addToCart', auth.verify, purchaseController.addToCart)
 router.post('/purchase/removeFromCart', auth.verify, purchaseController.removeFromCart)
 // Purchase Products
 router.post('/purchase/purchaseFromCart', auth.verify, purchaseController.purchaseFromCart)
+// Process Purchase Callbacks
+router.post('/purchase/purchaseCallback', purchaseController.purchaseCallback)
 
 // Get Wallets
 router.post('/wallet/getWallets', auth.verify, walletController.getWallets)

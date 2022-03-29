@@ -16,7 +16,13 @@
 	},
 	"user": {
 		"missingRequiredField": "MISSING REQUIRED FIELD",
-		"userDoesNotExist": "USER DOES NOT EXIST"
+		"userDoesNotExist": "USER DOES NOT EXIST",
+		"newPasswordNotProvided": "NEW PASSWORD NOT PROVIDED",
+		"newPasswordDoesNotMatchConfirmPassword": "NEW PASSWORD DOES NOT MATCH CONFIRM PASSWORD",
+		"incorrectPassword": "INCORRECT PASSWORD",
+		"productDoesNotExist": "PRODUCT DOES NOT EXIST",
+		"userDidNotPurchaseThisProduct": "USER DID NOT PURCHASE THIS PRODUCT",
+		"reviewAlreadyExists":"REVIEW ALREADY EXISTS"
 	},
 	"product": {
 		"missingRequiredField": "MISSING REQUIRED FIELD",
@@ -36,6 +42,10 @@
 		"cartAlreadyIncludesProduct": "CART ALREADY INCLUDES PRODUCT",
 		"userOwnsThisItem": "USER OWNS THIS ITEM",
 		"cartIsEmpty": "CART IS EMPTY"
+	},
+	"review":{
+		"missingRequiredField": "MISSING REQUIRED FIELD",
+		"starsNotInRange":"PLEASE RATE IT 1-5"
 	}
 
 }

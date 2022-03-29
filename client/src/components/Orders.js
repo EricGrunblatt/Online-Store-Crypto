@@ -7,8 +7,8 @@ export default function Orders() {
     const history = useHistory();
     let numStars = 0;
 
-    let items = [];
-    /*
+    //let items = [];
+    
     let items = [
 		{itemName: "Hoodie", id: "fsdlkfj", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", ordered: "03/04/2022", submitRating: ["", ""]},
 		{itemName: "Hoodie", id: "dsfsdf", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", ordered: "03/01/2022", submitRating: ["", ""]},
@@ -16,7 +16,7 @@ export default function Orders() {
 		{itemName: "Hoodie", id: "fsdj", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", ordered: "02/20/2022", submitRating: ["", ""]},
 		{itemName: "Hoodie", id: "lrtfj", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", ordered: "02/20/2022", submitRating: ["", ""]},
 		{itemName: "Hoodie", id: "fsertfj", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", ordered: "02/20/2022", submitRating: ["", ""]}
-	]*/
+	]
 
     const handleSubmit = (index) => {
         let count = 0;
