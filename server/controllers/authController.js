@@ -143,8 +143,36 @@ logout = async (req, res) => {
 	res.send({status: constants.status.OK});
 }
 
+getLoggedIn = async (req, res) => {
+	console.log("getLoggedIn")
+	const userId = req.userId
+
+	const userSelect = {"_id": 0, "firstName": 1, "lastName": 1, "username": 1, "email": 1}
+
+	let json = {}
+	let user = null
+	try {
+		if (! userId) {
+			throw "did not get a userId"
+		}
+		else if (! (user = await User.findById(userId).select(userSelect))) {
+			json = {status: constants.status.ERROR, errorMessage: constants.auth.userDoesNotExist}
+		}
+		else {
+			json = {status: constants.status.OK, user: user, loggedIn: true}
+		}
+		console.log("RESPONSE: ", json)
+		res.status(200).json(json)
+	}
+	catch (err) {
+		console.log(err)
+		res.status(500).send({status: constants.status.FATAL_ERROR})
+	}
+}
+
 module.exports = {
 	register,
 	login,
 	logout,
+	getLoggedIn,
 }
