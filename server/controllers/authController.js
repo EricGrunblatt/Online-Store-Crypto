@@ -159,7 +159,7 @@ getLoggedIn = async (req, res) => {
 			json = {status: constants.status.ERROR, errorMessage: constants.auth.userDoesNotExist}
 		}
 		else {
-			json = {status: constants.status.OK, user: user}
+			json = {status: constants.status.OK, user: user, loggedIn: true}
 		}
 		console.log("RESPONSE: ", json)
 		res.status(200).json(json)
