@@ -1,10 +1,14 @@
 import React from "react";
 import StarIcon from '@mui/icons-material/Star';
 import { Button, TextareaAutosize } from '@mui/material';
+import { useHistory } from "react-router-dom";
 
 export default function Orders() {
+    const history = useHistory();
     let numStars = 0;
 
+    let items = [];
+    /*
     let items = [
 		{itemName: "Hoodie", id: "fsdlkfj", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", ordered: "03/04/2022", submitRating: ["", ""]},
 		{itemName: "Hoodie", id: "dsfsdf", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", ordered: "03/01/2022", submitRating: ["", ""]},
@@ -12,7 +16,7 @@ export default function Orders() {
 		{itemName: "Hoodie", id: "fsdj", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", ordered: "02/20/2022", submitRating: ["", ""]},
 		{itemName: "Hoodie", id: "lrtfj", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", ordered: "02/20/2022", submitRating: ["", ""]},
 		{itemName: "Hoodie", id: "fsertfj", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", ordered: "02/20/2022", submitRating: ["", ""]}
-	]
+	]*/
 
     const handleSubmit = (index) => {
         let count = 0;
@@ -59,11 +63,7 @@ export default function Orders() {
         }    
     }
 
-    return (
-        <div className="orders" style={{ margin: '50px 0% 50px 10%', width: '80%', minHeight: '700px', border: 'black 2px solid', borderRadius: '20px' }}>
-            <div className="display-name-orders" style={{ margin: '20px 0% 0px 5%', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '65px', color: 'black' }}>
-                <u> Orders </u>
-            </div>
+    let orders = 
             <div className="order-card" style={{ margin: '0px 0px 20px 0px' }}>
                 {items.map((index) => (
                     <div key={index.id} className="order-outer" style={{ margin: '20px 0vw 0px 1.25vw', width: '75.5vw', height: '160px', border: 'black 2px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>
@@ -123,8 +123,22 @@ export default function Orders() {
                         </div>
                     </div>
                 ))}
-
+            </div>;
+    
+    if(items.length === 0) {
+        orders = 
+            <div className="orders-empty" style={{ margin: '140px 0px 0px 0px', textAlign: 'center', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '40px', color: 'black' }}>
+                <div>Your orders are empty... Let's begin<br></br>shopping</div>
+                <Button onClick={() => {history.push("/")}} style={{ margin: '100px', background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>Start Shopping</Button>
             </div>
+    }
+
+    return (
+        <div className="orders" style={{ margin: '50px 0% 50px 10%', width: '80%', minHeight: '600px', border: 'black 2px solid', borderRadius: '20px' }}>
+            <div className="display-name-orders" style={{ margin: '20px 0% 0px 5%', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '65px', color: 'black' }}>
+                <u> Orders </u>
+            </div>
+            {orders}
         </div>
     )
 }

@@ -253,8 +253,8 @@ export default function HomeScreen() {
                     </Select>
                 </FormControl>
             </Box>
-            <Box style={{ position: 'absolute', margin: '-30px 0px 50px 20%', background: 'white', top: '450px', width: '79%', minHeight: '1010px' }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 19.5vw)', gridTemplateRows: 'repeat(4, 25.5vw)' }}>
+            <Box style={{ position: 'absolute', margin: '-30px 0px 50px 20.5vw', background: 'white', top: '450px', width: '79%', minHeight: '1010px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 20.5vw)', gridTemplateRows: 'repeat(4, 25.5vw)' }}>
                         <HomeProduct></HomeProduct>
                         <HomeProduct></HomeProduct>
                         <HomeProduct></HomeProduct>
