@@ -15,14 +15,19 @@ export const registerUser = (payload) => api.post(`/auth/register`, payload)
 export const loginUser = (payload) => api.post(`/auth/login`, payload)
 export const logoutUser = () => api.post(`/auth/logout`);
 
+// ALL REQUESTS FOR PROFILE
+export const getProfile = (payload) => api.post('/user/getProfileByUsername', payload);
+
 // ALL REQUESTS FOR CATALOG
-export const getCatalog = () => api.post('/product/getCatalog');
+export const getCatalog = (payload) => api.post('/product/getCatalog', payload);
 
 const apis = {
     getLoggedIn,
     registerUser,
     loginUser,
     logoutUser,
+
+    getProfile,    
 
     getCatalog
 }
