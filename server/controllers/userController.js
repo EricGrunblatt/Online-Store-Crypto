@@ -60,7 +60,8 @@ getAccount = async (req, res) => {
 	console.log("getAccount", req.body)
 	const userId = req.userId
 	
-	let json = {}
+	let json = {};
+	let user=null;
 	try {
 		if (!userId) {
 			throw "did not get a userId"

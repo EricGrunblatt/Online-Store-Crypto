@@ -47,6 +47,10 @@
 	"review":{
 		"missingRequiredField": "MISSING REQUIRED FIELD",
 		"starsNotInRange":"PLEASE RATE IT 1-5"
-	}
+	},
 
+	"wallet":{
+		"missingRequiredField": "MISSING REQUIRED FIELD",
+		"userDoesNotExist": "USER DOES NOT EXIST"
+	}
 }

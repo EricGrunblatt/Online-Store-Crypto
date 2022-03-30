@@ -17,6 +17,7 @@ const UserSchema = new Schema(
 		zipcode: 			{type: Number, required: true},
 		profileImageId: 	{type: ObjectId, default: null},
 		cartProductIds:		{type: [ObjectId], default: []},
+		wallets: 			{type:[Object], default:[]}
 	},
 	{ timestamps: true },
 )
