@@ -8,16 +8,23 @@ const api = axios.create({
     baseURL: 'http://localhost:4000/api',
 })
 
+
+// ALL REQUESTS FOR LOGIN/REGISTER/LOGOUT
 export const getLoggedIn = () => api.post('/auth/getLoggedIn');
 export const registerUser = (payload) => api.post(`/auth/register`, payload)
 export const loginUser = (payload) => api.post(`/auth/login`, payload)
 export const logoutUser = () => api.post(`/auth/logout`);
 
+// ALL REQUESTS FOR CATALOG
+export const getCatalog = () => api.post('/product/getCatalog');
+
 const apis = {
     getLoggedIn,
     registerUser,
     loginUser,
-    logoutUser
+    logoutUser,
+
+    getCatalog
 }
 
 export default apis

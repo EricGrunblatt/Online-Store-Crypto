@@ -34,6 +34,10 @@ function CartDeleteModal() {
     let name = "";
     let isOpen = false;
 
+    if(store.cartItemRemove) {
+        isOpen = true;
+    }
+
     function handleDeleteCartItem() {
         
     }
@@ -52,7 +56,7 @@ function CartDeleteModal() {
                     sx={{ ...style, width: 400 }}
                 >
                     <h2 className="dialog-header">
-                        Remove name from Cart?
+                        Remove {name} from Cart?
                     </h2>
                     <Button 
                         id="dialog-confirm-button"

@@ -34,6 +34,10 @@ function ListingsDeleteModal() {
     let name = "";
     let isOpen = false;
 
+    if(store.listingItemDelete) {
+        
+    }
+
     function handleDeleteListing() {
         
     }
@@ -52,7 +56,7 @@ function ListingsDeleteModal() {
                     sx={{ ...style, width: 400 }}
                 >
                     <h2 className="dialog-header">
-                        Remove name from Cart?
+                        Remove {name} from Listings?
                     </h2>
                     <Button 
                         id="dialog-confirm-button"
