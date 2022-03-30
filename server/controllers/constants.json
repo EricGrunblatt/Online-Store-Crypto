@@ -22,7 +22,8 @@
 		"incorrectPassword": "INCORRECT PASSWORD",
 		"productDoesNotExist": "PRODUCT DOES NOT EXIST",
 		"userDidNotPurchaseThisProduct": "USER DID NOT PURCHASE THIS PRODUCT",
-		"reviewAlreadyExists":"REVIEW ALREADY EXISTS"
+		"reviewAlreadyExists":"REVIEW ALREADY EXISTS",
+		"oldPasswordNotProvided": "OLD PASSWORD NOT PROVIDED"
 	},
 	"product": {
 		"missingRequiredField": "MISSING REQUIRED FIELD",
