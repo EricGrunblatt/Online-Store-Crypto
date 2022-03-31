@@ -1,9 +1,11 @@
 import AccountErrorModal from './AccountErrorModal.js';
 import Cart from './Cart.js';
+import CartDeleteModal from './CartDeleteModal.js';
 import Checkout from './Checkout.js'
 import HomeProduct from './HomeProduct.js'
 import HomeScreen from './HomeScreen.js';
 import Listings from './Listings.js';
+import ListingsDeleteModal from './ListingsDeleteModal.js';
 import ListItem from './ListItem.js';
 import LoginModal from './LoginModal.js';
 import NavigationBar from './NavigationBar.js';
@@ -22,10 +24,12 @@ import Wallet from './Wallet.js';
 export { 
     AccountErrorModal,
     Cart,
+    CartDeleteModal,
     Checkout,
     HomeProduct,
     HomeScreen,
     Listings,
+    ListingsDeleteModal,
     ListItem,
     LoginModal,
     NavigationBar,

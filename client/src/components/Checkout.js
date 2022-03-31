@@ -1,17 +1,78 @@
 import React from "react";
 import algo from '../images/Algorand.png';
+import { Button } from '@mui/material';
 
 export default function Checkout() {
-    return (
-        <div>
-            <div className="payment" style={{ margin: '50px 0% 0px 10%', width: '80%', height: '700px', border: 'black 2px solid', borderRadius: '20px' }}>
+    let items = [
+		{itemName: "Hoodie", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", shipping: 10},
+		{itemName: "Hoodie", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", shipping: 10},
+        {itemName: "Hoodie", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", shipping: 10},
+	]
+    let totalPrice = 0;
+    for(let i = 0; i < items.length; i++) {
+        totalPrice += items[i].price + items[i].shipping;
+    }
+
+    /*
+    <div className="payment" style={{ margin: '50px 0% 0px 10%', width: '80%', minHeight: '700px', border: 'black 2px solid', borderRadius: '20px' }}>
                 <div className="display-name-payment" style={{ margin: '20px 0% 0px 5%', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '45px', color: 'black' }}>
                     Payment
                 </div>
                 <div style={{ margin: '50px 0% 0px 5%', width: '90%', height: '500px', background: 'black', borderRadius: '20px' }}>
-                    <img src={algo} alt="" style={{ margin: '140px 0px 0px 5%', width: '20vw', height: '20vw' }}></img>
+                    <img src={algo} alt="" style={{ margin: '140px 0px 0px 5%', width: '200px', height: '200px' }}></img>
                     <div></div>
                 </div>
+            </div>
+    */
+    return (
+        <div className="checkout-page">
+            <div className="order-summary" style={{ margin: '50px 0% 50px 10%', width: '80%', minHeight: '430px', border: 'black 2px solid', borderRadius: '20px' }}>
+                <div className="display-name-order-summary" style={{ margin: '20px 0% 0px 5%', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '45px', color: 'black' }}>
+                    Order Summary
+                </div>
+                <div className="list-items-order" style={{ margin: '0px 0px 80px 0px' }}>
+                    {items.map((index) => (
+                        <div key={index.id} className="order-outer" style={{ margin: '20px 0vw 20px 1.25vw', width: '75.5vw', height: '250px', border: 'black 2px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>
+                            <div className="order-photo" style={{ display: 'inline-block', float: 'left', margin: '15px 0px 15px 15px', width: '220px', height: '220px', border: 'black 1px solid', borderRadius: '10px' }}>
+                                <img src={index.img} alt="" style={{ width: '220px', height: '220px', borderRadius: '10px' }}></img>
+                            </div>
+                            <div className="right-of-photo" style={{ padding: '0px 50px 0px 0px', display: 'inline-block', float: 'right' }}>
+                                <div className="product-data" style={{margin: '15px 0vw 0vw 15px', width: '40vw', height: '220px', border: 'white 1px solid' }}>
+                                    <div className="product-name">
+                                        <div style={{ position: 'absolute', float: 'left', fontSize: '50px', fontWeight: 'bold' }}>{index.itemName}</div>
+                                        <div style={{ float: 'right', fontSize: '40px', margin: '8px 20px 0px 0px' }}>{index.price} Algo</div>
+                                    </div>
+                                    <div className="seller-name" style={{ marginTop: '70px', display: 'flex', color: '#808080', fontSize: '30px' }}>
+                                        <div style={{ float: 'left', fontWeight: 'bold' }}>Seller:</div>
+                                        <div style={{ marginLeft: '20px' }}>
+                                            <a href="/viewprofile" style={{ color: '#879ED9' }}>
+                                                {index.seller}
+                                            </a>
+                                        </div>   
+                                    </div>
+                                    <div className="order-date" style={{ marginTop: '10px', color: '#808080', fontSize: '30px' }}>
+                                        <div style={{ marginRight: '10px', display: 'inline-block', fontWeight: 'bold' }}>
+                                            Shipping Price:
+                                        </div>
+                                        <div style={{ margin: '-5px 20px 0px 0px', float: 'right', color: 'black', fontSize: '40px' }}>
+                                            {index.shipping} Algo
+                                        </div>
+                                    </div>
+                                    <div className="price-divider-line">
+                                        <hr style={{ width: '40vw', float: 'right', margin: '10px 0vw 0px 0px' }}></hr>
+                                    </div>
+                                    <div className="added-price" style={{ float: 'right', margin: '0px 20px 0px 0px', fontSize: '40px' }}>{index.price + index.shipping} Algo</div> 
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                    <div className="total-payment" style={{ float: 'right', margin: '0px 20px 20px 20px', fontFamily: 'Quicksand', fontSize: '35px', color: '#FFBD59' }}>
+                        Total: {totalPrice} Algo
+                    </div>
+                </div>
+            </div>
+            <div className="place-order" style={{ textAlign: 'center' }}>
+                <Button className="place-order-button" style={{ margin: '0px 0px 50px 0px', background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>Place Order</Button>
             </div>
         </div>
     )

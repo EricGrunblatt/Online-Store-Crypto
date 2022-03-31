@@ -1,5 +1,5 @@
 import React from "react";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState } from "react";
 import { GlobalStoreContext } from '../store'
 import { useHistory} from 'react-router-dom';
 import TextField from '@mui/material/TextField';
@@ -16,12 +16,10 @@ export default function NavigationBar() {
     const [anchorEl, setAnchorEl] = useState(null);
     const history = useHistory();
     let isMenuOpen = Boolean(anchorEl);
-    let loggedIn = false;
     let navBarLoggedIn = "";
 
-    if(auth.user !== null && auth.user !== undefined) {
-        loggedIn = true;
-    }
+    console.log(auth.user);
+    console.log(auth.loggedIn);
 
     /* OPENS MENU IF PRESSED */
     const handleProfileMenuOpen = (event) => {
@@ -35,7 +33,7 @@ export default function NavigationBar() {
 
 
     /* cHECKS IF USER IS LOGGED IN TO DECIDE WHAT GOES ON BANNER */
-    if(!loggedIn) {
+    if(!auth.loggedIn) {
         navBarLoggedIn = 
         <div onClick={handleLogin} style={{ cursor: 'pointer', float: 'right', margin: '65px 0px 0px 7vw', color: '#879ED9', fontSize: '25px'}}>
             Login/Register
