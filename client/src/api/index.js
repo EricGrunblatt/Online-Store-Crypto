@@ -9,9 +9,20 @@ const api = axios.create({
 })
 
 
+// ALL REQUESTS FOR LOGIN/REGISTER/LOGOUT
+export const getLoggedIn = () => api.post('/auth/getLoggedIn');
+export const registerUser = (payload) => api.post(`/auth/register`, payload)
+export const loginUser = (payload) => api.post(`/auth/login`, payload)
+export const logoutUser = () => api.post(`/auth/logout`);
 
-const apiMethods = {
-    
+export const addListingProduct = (payload) => api.post('/product/addListingProduct', payload)
+
+const apis = {
+    getLoggedIn,
+    registerUser,
+    loginUser,
+    logoutUser,
+    addListingProduct
 }
 
-export default apiMethods
+export default apis
