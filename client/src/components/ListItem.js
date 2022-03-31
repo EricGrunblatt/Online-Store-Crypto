@@ -265,6 +265,7 @@ export default function ListItem(){
         formData.append("image7", file7);
 
         addListingProduct(formData);
+        history.push("/listings");
     }
 
     return (
@@ -370,7 +371,7 @@ export default function ListItem(){
                     </div>
                 </div>
                 <div className="list-item-button" style={{ margin: '50px 0px 50px 0px', borderRadius: '10px', textAlign: 'center' }}>
-                    <Button type="submit" onClick={handleListItem} style={{ textAlign: 'center', background: 'black', color: 'white', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '20px', width: '150px' }}>List Item</Button>
+                    <Button type="submit" onClick={() => { handleListItem() }} style={{ textAlign: 'center', background: 'black', color: 'white', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '20px', width: '150px' }}>List Item</Button>
                 </div> 
         </div>
     )
