@@ -188,7 +188,6 @@ export default function ListItem(){
 
     // BOX7
     let box7 = "";
-    
     const onImageChange7 = (event) => {
         if (event.target.files && event.target.files[0]) {
             setImage7(URL.createObjectURL(event.target.files[0]));
@@ -206,33 +205,41 @@ export default function ListItem(){
         box7 = <img src={image7} alt="preview image7" style={{border: 'black 1px', borderRadius: '10px'}}/>
     }
 
-    // const handleListItem = async function(itemData) {
-    //     itemData = {
-    //         name: name,
-    //         description: description,
-    //         condition: condition,
-    //         category: category,
-    //         price: price,
-    //         boxLength: length,
-    //         boxWidth: width,
-    //         boxHeight: height,
-    //         boxWeight: weight,
-    //         images: [image0]
-    //     };
-    //     console.log(itemData);
-    //     addListingProduct(itemData);
-    // }
+    const handleListItem = async function() {
+
+        var categoryTxts = ["Clothing", "Electronics", "Fashion", "Furniture", "Hardware",
+        "Home & Garden", "Music", "Office Supplies", "Other", "Photography & Video", "Sports Equipment", "Toys", "Video Games"]
+        var categoryTxt = categoryTxts[category - 1]
+        var formData = new FormData();
+
+        formData.append("name", name);
+        formData.append("description", description);
+        formData.append("condition", condition);
+        formData.append("category", categoryTxt);
+        formData.append("price", price);
+        formData.append("boxLength", length);
+        formData.append("boxWidth", width);
+        formData.append("boxHeight", height);
+        formData.append("boxWeight", weight);
+
+        const element0 = document.getElementById('image0')
+        const file0 = element0.files[0]
+
+        // HTML file input, chosen by user
+        formData.append("image0", file0);
+
+        addListingProduct(formData);
+    }
 
     return (
         <div className="list-item">
-            <form action="/" method="POST" enctype="multipart/form-data">
             <div className="item-name" style={{ margin: '20px 0px 0px 10%' }}>
                 <div for="name" style={{ margin: '10px 2% 0px 0%', display: 'inline-block', fontFamily: 'Quicksand', fontWeight: 'bold', color: '#808080', fontSize: '25px' }}> Item Name: </div>
-                    <input type="text" name="name" style={{ margin: '0px 10% 0px 0px', width: '62vw', float: 'right' }}></input>
+                    <TextField value={name} onChange={(event) => { setName(event.target.value) }}  style={{ margin: '0px 10% 0px 0px', width: '62vw', float: 'right' }}></TextField>
                 </div>
                 <div className="select-category" style={{ margin: '40px 0px 0px 10%' }}>
                     <div style={{ margin: '6px 1% 0px 0%', display: 'inline-block', fontFamily: 'Quicksand', fontWeight: 'bold', color: '#808080', fontSize: '25px' }}> Select Category: </div>
-                    {/* <Box style={{ margin: '0px 10% 0px 0px', border: 'black 1px solid', borderRadius: '10px', width: '55vw', height: '50px', display: 'inline-block', float: 'right' }}>
+                    <Box style={{ margin: '0px 10% 0px 0px', border: 'black 1px solid', borderRadius: '10px', width: '55vw', height: '50px', display: 'inline-block', float: 'right' }}>
                         <FormControl fullWidth>
                             <InputLabel style={{ color: 'black', margin: '-2px 0px 0px 0px' }} id="category-menu">Select Category</InputLabel>
                             <Select style={{ borderRadius: '10px', height: '50px' }} 
@@ -257,21 +264,20 @@ export default function ListItem(){
                                 
                             </Select>
                         </FormControl>
-                    </Box> */}
-                    <input type="text" name="condition" style={{ margin: '0px 0% 0px 0px', width: '22vw' }}></input>
+                    </Box>
                 </div>
                 <div className="display-name-photos" style={{ margin: '40px 0px 0px 10%' }}>
                     <div style={{ margin: '10px 0% 0px 0%', display: 'inline-block', fontFamily: 'Quicksand', fontWeight: 'bold', color: '#808080', fontSize: '25px' }}>Photos (1-8):</div>
                 </div>
                 <div className="photo-container" style={{ margin: '40px 0px 0px 5vw', display: 'grid', gridTemplateColumns: 'repeat(4, 20vw)', gridTemplateRows: 'minmax(20vw, auto) repeat(2, 20vw)', justifyContent: 'center', alignContent: 'center'}}>
                     {box0}
-                    {/* {box1}
+                    {box1}
                     {box2}
                     {box3}
                     {box4}
                     {box5}
                     {box6}
-                    {box7} */}
+                    {box7}
                 </div>
                 <div className="condition" style={{ margin: '-20vw 0px 0px 10%'}}>
                     <div style={{ margin: '10px 0% 0px 0%', display: 'inline-block', fontFamily: 'Quicksand', fontWeight: 'bold', color: '#808080', fontSize: '25px' }}>Condition:</div>
@@ -286,33 +292,32 @@ export default function ListItem(){
                     <div style={{ margin: '10px 0% 0px 0%', fontFamily: 'Quicksand', fontWeight: 'bold', color: '#808080', fontSize: '25px' }}>Description:</div>
                 </div>
                 <div className="description-textfield" style={{ margin: '10px 0px 0px 10%'}}>
-                    <input type="text" name="description" onChange={(event) => { setDescription(event.target.value) }} style={{ minWidth: '90%', minHeight: '200px', maxWidth: '90%', maxHeight: '200px', fontSize: '20px' }}></input>
+                    <TextareaAutosize value={description} onChange={(event) => { setDescription(event.target.value) }} style={{ minWidth: '90%', minHeight: '200px', maxWidth: '90%', maxHeight: '200px', fontSize: '20px' }}></TextareaAutosize>
                 </div>
                 <div className="item-price" style={{ margin: '20px 0px 0px 10%' }}>
                     <div style={{ margin: '10px 2% 0px 0%', display: 'inline-block', fontFamily: 'Quicksand', fontWeight: 'bold', color: '#808080', fontSize: '25px' }}> Item Price: </div>
-                    <input type="text" name="price" style={{ margin: '0px 0% 0px 0px', width: '22vw' }}></input>
+                    <TextField inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} value={price} onChange={(event) => { setPrice(event.target.value) }} style={{ margin: '0px 0% 0px 0px', width: '22vw' }}></TextField>
                     <div style={{ margin: '0px 0% 0px 1%', display: 'inline-block', fontFamily: 'Quicksand', fontWeight: 'bold', color: '#808080', fontSize: '25px' }}> Algo </div>
                 </div>
                 <div className="shipping" style={{ margin: '20px 0px 0px 10%' }}>
                     <div style={{ margin: '10px 2% 20px 0%', fontFamily: 'Quicksand', fontWeight: 'bold', color: '#808080', fontSize: '25px' }}> Shipping: </div>
                     <div style={{ display: 'inline-block', margin: '15px 0% 30px 5%', fontFamily: 'Quicksand', color: '#AEAEAE', fontSize: '20px' }}>Box Size:</div>
                     <div style={{ display: 'flex', float: 'right', margin: '0px 10% 0px 0%' }}>
-                        <input type="text" name="boxWidth" className="width" placeholder="Width (in.)" style={{ margin: '0px 0.5vw 0px 0px', width: '20vw' }}></input>
-                        <input type="text" name="boxLength" className="length" placeholder="length (in.)" style={{ margin: '0px 0.5vw 0px 0px', width: '20vw' }}></input>
-                        <input type="text" name="boxHeight" className="height" placeholder="height (in.)" style={{ margin: '0px 0.5vw 0px 0px', width: '20vw' }}></input>
+                        <TextField value={width} onChange={(event) => { setWidth(event.target.value) }} className="width" placeholder="Width (in.)" style={{ margin: '0px 0.5vw 0px 0px', width: '20vw' }}>
+                        </TextField>
+                        <TextField value={length} onChange={(event) => { setLength(event.target.value) }}className="length" placeholder="Length (in.)" style={{ margin: '0px 0.5vw 0px 0px', width: '20vw' }}></TextField>
+                        <TextField value={height} onChange={(event) => { setHeight(event.target.value) }} className="height" placeholder="Height (in.)" style={{ margin: '0px 0.5vw 0px 0px', width: '20vw' }}></TextField>
                     </div>
                     <div className="weight" style={{ margin: '15px 0vw 0px 5%', fontFamily: 'Quicksand', color: '#AEAEAE', fontSize: '20px' }}>Weight: </div>
                     <div style={{ float: 'right', margin: '0px 10% 0px 0%' }}>
-                        <input type="text" name="boxWeight"className="weight" placeholder="Weight (lbs)" style={{ margin: '-40px 41.5vw 0px 0px', float: 'right', width: '20vw' }}></input>
+                        <TextField value={weight} onChange={(event) => { setWeight(event.target.value) }} className="weight" placeholder="Weight (lbs)" style={{ margin: '-40px 41.5vw 0px 0px', float: 'right', width: '20vw' }}></TextField>
                     </div>
                 </div>
                 <div className="list-item-button" style={{ margin: '50px 0px 50px 0px', borderRadius: '10px', textAlign: 'center' }}>
-                    <Button type="submit" style={{ textAlign: 'center', background: 'black', color: 'white', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '20px', width: '150px' }}>List Item</Button>
+                    <Button type="submit" onClick={handleListItem} style={{ textAlign: 'center', background: 'black', color: 'white', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '20px', width: '150px' }}>List Item</Button>
                 </div> 
-            </form>    
         </div>
     )
 }
-
 
 
