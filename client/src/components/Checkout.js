@@ -1,5 +1,4 @@
 import React from "react";
-import algo from '../images/Algorand.png';
 import { Button } from '@mui/material';
 
 export default function Checkout() {
