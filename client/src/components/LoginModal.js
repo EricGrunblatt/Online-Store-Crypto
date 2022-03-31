@@ -88,6 +88,7 @@ function LoginModal() {
                             style={{ margin: '15px 0px 0px 0px', float: 'left', width: '500px' }}></TextField>
                         <TextField 
                             required
+                            type="password"
                             name="password"
                             id="password"
                             label='Password' 
