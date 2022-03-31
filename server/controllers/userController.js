@@ -93,7 +93,6 @@ getAccount = async (req, res) => {
 	}
 }
 
-// TODO
 updateAccount = async (req, res) => {
 	console.log("updateAccount", req.body)
 	const userId=req.userId;
@@ -114,6 +113,9 @@ updateAccount = async (req, res) => {
 		else if(!firstName|| !lastName || !email || !city || !state || !zipcode || !addressFirstLine || !phoneNumber){
 			json = { status: constants.status.ERROR, errorMessage: constants.user.missingRequiredField };
 		}
+		else if (newPassword && !oldPassword) {
+			json = { status: constants.status.ERROR, errorMessage: constants.user.oldPasswordNotProvided };
+		}
 		else if (oldPassword && !newPassword) {
 			json = { status: constants.status.ERROR, errorMessage: constants.user.newPasswordNotProvided };
 		}
@@ -130,13 +132,15 @@ updateAccount = async (req, res) => {
 				passwordHash = await bcryptjs.hash(newPassword, salt);
 			}
 
+			passwordHash = passwordHash || user.passwordHash
+
 			user.firstName = firstName;
 			user.lastName = lastName;
 			user.email=email;
 			user.city = city;
 			user.state = state;
 			user.zipcode = zipcode;
-			user.passwordHash = passwordHash || user.passwordHash;
+			user.passwordHash = passwordHash;
 			user.addressFirstLine = addressFirstLine;
 			user.addressSecondLine = addressSecondLine;
 			user.phoneNumber = phoneNumber;
@@ -194,7 +198,6 @@ updateProfileImage = async (req, res) => {
 	})
 }
 
-// TODO
 writeReview = async (req, res) => {
 	console.log("writeReview", req.body);
 	const userId = req.userId;
