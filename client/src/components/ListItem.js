@@ -48,35 +48,35 @@ export default function ListItem(){
         setCondition(event.target.value);
     }
 
-     // BOX0
-     let box0 = "";
-    
-     const onImageChange0 = (event) => {
-         if (event.target.files && event.target.files[0]) {
-             setImage0(URL.createObjectURL(event.target.files[0]));
-         }
-     }
-     if(!image0) {
-         box0 = 
-         <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px dashed', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
-             <label for='image0' style={{ cursor: 'pointer' }}>
-                 <AddIcon></AddIcon>
-             </label>
-             <input type='file' name='image0' id='image0' onChange={onImageChange0} style={{ display: 'none', visibility: 'none' }}></input>
-         </div>
-     } else {
-         box0 = 
-         <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
+    // BOX0
+    let box0 = "";
+
+    const onImageChange0 = (event) => {
+        if (event.target.files && event.target.files[0]) {
+            setImage0(URL.createObjectURL(event.target.files[0]));
+        }
+    }
+    if(!image0) {
+        box0 = 
+        <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px dashed', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
             <label for='image0' style={{ cursor: 'pointer' }}>
-                <img src={image0} alt="preview image0" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
+                <AddIcon></AddIcon>
             </label>
             <input type='file' name='image0' id='image0' onChange={onImageChange0} style={{ display: 'none', visibility: 'none' }}></input>
         </div>
-     }
+    } else {
+        box0 = 
+        <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
+        <label for='image0' style={{ cursor: 'pointer' }}>
+            <img src={image0} alt="preview image0" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
+        </label>
+        <input type='file' name='image0' id='image0' onChange={onImageChange0} style={{ display: 'none', visibility: 'none' }}></input>
+    </div>
+    }
 
     // BOX1
     let box1 = "";
-    
+        
     const onImageChange1 = (event) => {
         if (event.target.files && event.target.files[0]) {
             setImage1(URL.createObjectURL(event.target.files[0]));
@@ -88,10 +88,16 @@ export default function ListItem(){
             <label for='image1' style={{ cursor: 'pointer' }}>
                 <AddIcon></AddIcon>
             </label>
-            <input type='file' name='image1' id='image1' value='' onChange={onImageChange1} style={{ display: 'none', visibility: 'none' }}></input>
+            <input type='file' name='image1' id='image1' onChange={onImageChange1} style={{ display: 'none', visibility: 'none' }}></input>
         </div>
     } else {
-        box1 = <img src={image1} alt="preview image1" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px' }}/>
+        box1 = 
+        <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
+        <label for='image1' style={{ cursor: 'pointer' }}>
+            <img src={image1} alt="preview image1" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
+        </label>
+        <input type='file' name='image1' id='image1' onChange={onImageChange1} style={{ display: 'none', visibility: 'none' }}></input>
+    </div>
     }
 
     // BOX2
@@ -108,10 +114,16 @@ export default function ListItem(){
             <label for='image2' style={{ cursor: 'pointer' }}>
                 <AddIcon></AddIcon>
             </label>
-            <input type='file' name='image2' id='image2' value='' onChange={onImageChange2} style={{ display: 'none', visibility: 'none' }}></input>
+            <input type='file' name='image2' id='image2' onChange={onImageChange2} style={{ display: 'none', visibility: 'none' }}></input>
         </div>
     } else {
-        box2 = <img src={image2} alt="preview image2" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
+        box2 = 
+        <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
+           <label for='image2' style={{ cursor: 'pointer' }}>
+               <img src={image2} alt="preview image2" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
+           </label>
+           <input type='file' name='image2' id='image2' onChange={onImageChange2} style={{ display: 'none', visibility: 'none' }}></input>
+       </div>
     }
 
     // BOX3
@@ -128,10 +140,16 @@ export default function ListItem(){
             <label for='image3' style={{ cursor: 'pointer' }}>
                 <AddIcon></AddIcon>
             </label>
-            <input type='file' name='image3' id='image3' value='' onChange={onImageChange3} style={{ display: 'none', visibility: 'none' }}></input>
+            <input type='file' name='image3' id='image3' onChange={onImageChange3} style={{ display: 'none', visibility: 'none' }}></input>
         </div>
     } else {
-        box3 = <img src={image3} alt="preview image3" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px' }}/>
+        box3 = 
+        <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
+           <label for='image3' style={{ cursor: 'pointer' }}>
+               <img src={image3} alt="preview image3" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
+           </label>
+           <input type='file' name='image3' id='image3' onChange={onImageChange3} style={{ display: 'none', visibility: 'none' }}></input>
+       </div>
     }
 
     // BOX4
@@ -148,10 +166,16 @@ export default function ListItem(){
             <label for='image4' style={{ cursor: 'pointer' }}>
                 <AddIcon></AddIcon>
             </label>
-            <input type='file' name='image4' id='image4' value='' onChange={onImageChange4} style={{ display: 'none', visibility: 'none' }}></input>
+            <input type='file' name='image4' id='image4' onChange={onImageChange4} style={{ display: 'none', visibility: 'none' }}></input>
         </div>
     } else {
-        box4 = <img src={image4} alt="preview image4" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px' }}/>
+        box4 = 
+        <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
+           <label for='image4' style={{ cursor: 'pointer' }}>
+               <img src={image4} alt="preview image4" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
+           </label>
+           <input type='file' name='image4' id='image4' onChange={onImageChange4} style={{ display: 'none', visibility: 'none' }}></input>
+       </div>
     }
 
     // BOX5
@@ -168,34 +192,46 @@ export default function ListItem(){
             <label for='image5' style={{ cursor: 'pointer' }}>
                 <AddIcon></AddIcon>
             </label>
-            <input type='file' name='image5' id='image5' value='' onChange={onImageChange5} style={{ display: 'none', visibility: 'none' }}></input>
+            <input type='file' name='image5' id='image5' onChange={onImageChange5} style={{ display: 'none', visibility: 'none' }}></input>
         </div>
     } else {
-        box5 = <img src={image5} alt="preview image5" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px' }}/>
+        box5 = 
+        <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
+           <label for='image5' style={{ cursor: 'pointer' }}>
+               <img src={image5} alt="preview image5" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
+           </label>
+           <input type='file' name='image5' id='image5' onChange={onImageChange5} style={{ display: 'none', visibility: 'none' }}></input>
+       </div>
     }
 
-    // BOX6
-    let box6 = "";
+   // BOX6
+   let box6 = "";
     
-    const onImageChange6 = (event) => {
-        if (event.target.files && event.target.files[0]) {
-            setImage6(URL.createObjectURL(event.target.files[0]));
-        }
-    }
-    if(!image6) {
-        box6 = 
-        <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px dashed', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
-            <label for='image6' style={{ cursor: 'pointer' }}>
-                <AddIcon></AddIcon>
-            </label>
-            <input type='file' name='image6' id='image6' value='' onChange={onImageChange6} style={{ display: 'none', visibility: 'none' }}></input>
-        </div>
-    } else {
-        box6 = <img src={image6} alt="preview image6" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px' }}/>
-    }
-
+   const onImageChange6 = (event) => {
+       if (event.target.files && event.target.files[0]) {
+           setImage6(URL.createObjectURL(event.target.files[0]));
+       }
+   }
+   if(!image6) {
+       box6 = 
+       <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px dashed', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
+           <label for='image6' style={{ cursor: 'pointer' }}>
+               <AddIcon></AddIcon>
+           </label>
+           <input type='file' name='image6' id='image6' onChange={onImageChange6} style={{ display: 'none', visibility: 'none' }}></input>
+       </div>
+   } else {
+       box6 = 
+       <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
+          <label for='image6' style={{ cursor: 'pointer' }}>
+              <img src={image6} alt="preview image6" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
+          </label>
+          <input type='file' name='image6' id='image6' onChange={onImageChange6} style={{ display: 'none', visibility: 'none' }}></input>
+      </div>
+   }
     // BOX7
     let box7 = "";
+    
     const onImageChange7 = (event) => {
         if (event.target.files && event.target.files[0]) {
             setImage7(URL.createObjectURL(event.target.files[0]));
@@ -207,10 +243,16 @@ export default function ListItem(){
             <label for='image7' style={{ cursor: 'pointer' }}>
                 <AddIcon></AddIcon>
             </label>
-            <input type='file' name='image7' id='image7' value='' onChange={onImageChange7} style={{ display: 'none', visibility: 'none' }}></input>
+            <input type='file' name='image7' id='image7' onChange={onImageChange7} style={{ display: 'none', visibility: 'none' }}></input>
         </div>
     } else {
-        box7 = <img src={image7} alt="preview image7" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px' }}/>
+        box7 = 
+        <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
+           <label for='image7' style={{ cursor: 'pointer' }}>
+               <img src={image7} alt="preview image7" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
+           </label>
+           <input type='file' name='image7' id='image7' onChange={onImageChange7} style={{ display: 'none', visibility: 'none' }}></input>
+       </div>
     }
 
     const handleListItem = async function() {
