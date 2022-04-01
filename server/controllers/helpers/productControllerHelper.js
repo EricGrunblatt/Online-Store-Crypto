@@ -33,10 +33,16 @@ updateProductImageFields = async (images, oldImageIds, productId) => {
 
 getProductImages = async (product) => {
 	let images = []
+	const imageSelect = {
+		_id: 0,
+		data: 1,
+		contentType: 1
+	}
+
 	try {
 		for (let imageId of product.imageIds) {
 			if (imageId) {
-				const image = await Image.findById(imageId);
+				const image = await Image.findById(imageId).select(imageSelect);
 				images.push(image)
 			}
 			else {

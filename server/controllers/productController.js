@@ -3,18 +3,27 @@ const Product = require("../models/productModel")
 const User = require('../models/userModel')
 const Review = require('../models/reviewModel')
 const constants = require('./constants.json')
-const {productImageMiddleware, updateProductImageFields, getProductImages} = require('./helpers/productControllerHelper')
+const {productImageMiddleware, updateProductImageFields, getProductImages, generateQuery} = require('./helpers/productControllerHelper')
 
 // TODO
 getCatalog = async (req, res) => {
-	console.log("getCatalog")
-	const search = req.body.search
-	const category = req.body.category
-	const condition = req.body.condition
-	const minPrice = req.body.minPrice
-	const maxPrice = req.body.maxPrice
-	const sortBy = req.body.sortBy
-	
+	console.log("getCatalog", req.body)
+
+	const {search, category, condition, minPrice, maxPrice, sortBy} = req.body
+
+	// let json = {}
+	// let query = {}
+
+	// let searchQuery = [];
+	// for (let searchWord of search.split(' ')) {
+	// 	searchQuery.push({searchWord})
+	// }
+
+	// try {
+	// 	if () {
+
+	// 	}
+	// }
 }
 
 getProduct = async (req, res) => {
@@ -107,7 +116,45 @@ getCartProductsForUser = async (req, res) => {
 
 // TODO
 getListingProductsForUser = async (req, res) => {
-	console.log("getListingProductsForUser")
+	console.log("getListingProductsForUser", req.body)
+
+	const userId = req.userId
+
+	let json = {}
+	let user = null
+	try {
+		if (!userId) {
+			throw constants.error.didNotGetUserId
+		}
+		else if (!(user = await User.findById(userId))) {
+			json = {status: constants.status.ERROR, errorMessage: constants.product.userDoesNotExist}
+		}
+		else {
+			const listingsSelect = {
+				_id: 0, 
+				name: 1, 
+				price: 1, 
+				shippingPrice: 1, 
+				sellerUsername: 1,
+				imageIds: 1,
+				dateListed: 1
+			}
+
+			let listings = await Product.find({sellerUsername: user.username}).lean().select(listingsSelect)
+			
+			let newListings = await Promise.all(listings.map(async (listing) => {
+				let images = await getProductImages(listing);
+				listing.images = images
+				delete listing.imageIds
+				return listing;
+			}))
+
+			json = {status: constants.status.OK, products: newListings}
+		}
+		res.status(200).send(json)
+	} catch (err) {
+		
+	}
 	// status: 'OK'
 	// products: [{
 	// 	_id: ObjectId
@@ -152,7 +199,7 @@ addListingProduct = async (req, res) => {
 		let user = null
 		try {
 			if (!userId) {
-				throw "did not get a userId"
+				throw constants.error.didNotGetUserId
 			}
 			else if (!name || !description || !condition || !category) {
 				json = {status: constants.status.ERROR, errorMessage: constants.product.missingRequiredField}
@@ -226,7 +273,7 @@ updateListingProduct = async (req, res) => {
 		let product = null
 		try {
 			if (!userId) {
-				throw "did not get a userId"
+				throw constants.error.didNotGetUserId
 			}
 			else if (!_id || !name || !description || !condition || !category) {
 				json = {status: constants.status.ERROR, errorMessage: constants.product.missingRequiredField}

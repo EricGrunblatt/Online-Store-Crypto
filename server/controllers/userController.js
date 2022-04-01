@@ -63,7 +63,7 @@ getAccount = async (req, res) => {
 	let json = {}
 	try {
 		if (!userId) {
-			throw "did not get a userId"
+			throw constants.error.didNotGetUserId
 		}
 
 		else if (!(user = await User.findOne({ "_id": userId }))) {
@@ -105,7 +105,7 @@ updateAccount = async (req, res) => {
 	let passwordHash = null
 	try {
 		if (!userId) {
-			throw "did not get a userId"
+			throw constants.error.didNotGetUserId
 		}
 		else if (!(user = await User.findOne({ "_id": userId }))) {
 			json = { status: constants.status.ERROR, errorMessage: constants.user.userDoesNotExist };
@@ -176,7 +176,7 @@ updateProfileImage = async (req, res) => {
 			}
 			// CHECK USERID DEFINED
 			else if (!userId) {
-				throw "did not get a userId"
+				throw constants.error.didNotGetUserId
 			}
 			// CHECK USER EXISTS
 			else if (!(user = await User.findById(userId))) {
@@ -208,7 +208,7 @@ writeReview = async (req, res) => {
 	let product = null;
 	try {
 		if (!userId) {
-			throw "did not get a userId"
+			throw constants.error.didNotGetUserId
 		}
 		else if (!(user = await User.findById(userId))) {
 			json = { status: constants.status.ERROR, errorMessage: constants.user.userDoesNotExist };

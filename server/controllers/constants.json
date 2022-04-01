@@ -4,6 +4,9 @@
 		"ERROR": "ERROR",
 		"FATAL_ERROR": "FATAL ERROR"
 	},
+	"error": {
+		"didNotGetUserId": "did not get a userId"
+	},
 	"auth": {
 		"missingRequiredField": "MISSING REQUIRED FIELD",
 		"passwordTooShort": "PASSWORD TOO SHORT",
