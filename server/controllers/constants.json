@@ -26,7 +26,8 @@
 		"productDoesNotExist": "PRODUCT DOES NOT EXIST",
 		"userDidNotPurchaseThisProduct": "USER DID NOT PURCHASE THIS PRODUCT",
 		"reviewAlreadyExists":"REVIEW ALREADY EXISTS",
-		"oldPasswordNotProvided": "OLD PASSWORD NOT PROVIDED"
+		"oldPasswordNotProvided": "OLD PASSWORD NOT PROVIDED",
+		"invalidEmail": "INVALID EMAIL"
 	},
 	"product": {
 		"missingRequiredField": "MISSING REQUIRED FIELD",
