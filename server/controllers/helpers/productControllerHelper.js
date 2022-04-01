@@ -1,5 +1,6 @@
 const {createAndSaveImage, upload} = require('../../handlers/imageHandler')
 const Image = require('../../models/imageModel')
+const Review = require('../../models/reviewModel')
 
 const productImageFields = [
 	{name: 'image0', maxCount: 1},
@@ -70,9 +71,31 @@ getProductFirstImage = async (product) => {
 		return image
 	}
 	catch (err) {
-		console.log("FAILED TO GET IMAGES")
+		console.log(err)
 		return []
 	}
 }
 
-module.exports = {productImageMiddleware, updateProductImageFields, getProductImages, getProductFirstImage}
+getProductReview = async (product) => {
+	const reviewSelect = {
+		_id: 0,
+		stars: 1,
+		comment: 1
+	}
+
+	try {
+		return await Review.findById(product.reviewId).select(reviewSelect);
+	}
+	catch (err) {
+		console.log(err)
+		return null
+	}
+}
+
+module.exports = {
+	productImageMiddleware, 
+	updateProductImageFields, 
+	getProductImages, 
+	getProductFirstImage,
+	getProductReview
+}

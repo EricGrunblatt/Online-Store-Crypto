@@ -3,7 +3,12 @@ const Product = require("../models/productModel")
 const User = require('../models/userModel')
 const Review = require('../models/reviewModel')
 const constants = require('./constants.json')
-const {productImageMiddleware, updateProductImageFields, getProductImages, getProductFirstImage} = require('./helpers/productControllerHelper')
+const {
+	productImageMiddleware,
+	updateProductImageFields,
+	getProductImages,
+	getProductFirstImage
+} = require('./helpers/productControllerHelper')
 
 // TODO
 getCatalog = async (req, res) => {
@@ -77,9 +82,53 @@ getProduct = async (req, res) => {
 	}
 }
 
-// TODO
 getOrderedProductsForUser = async (req, res) => {
-	console.log("getOrderedProductsForUser")
+	console.log("getOrderedProductsForUser", req.body)
+
+	const userId = req.userId
+
+	let json = {}
+	let user = null
+	try {
+		if (!userId) {
+			throw constants.error.didNotGetUserId
+		}
+		else if (!(user = await User.findById(userId))) {
+			json = {status: constants.status.ERROR, errorMessage: constants.product.userDoesNotExist}
+		}
+		else {
+			const selectOptions = {
+				_id: 1, 
+				name: 1, 
+				price: 1, 
+				shippingPrice: 1, 
+				sellerUsername: 1,
+				imageIds: 1,
+				dateSold: 1,
+				reviewId: 1
+			}
+
+			let products = await Product.find({buyerUsername: user.username}).lean().select(selectOptions)
+			
+			products = await Promise.all(products.map(async (product) => {
+				const image = await getProductFirstImage(product);
+				product.image = image
+				delete product.imageIds
+
+				const review = await getProductReview(product)
+				product.review = review
+				delete product.reviewId
+
+				return product;
+			}))
+
+			json = {status: constants.status.OK, products: products}
+		}
+		res.status(200).send(json)
+	} catch (err) {
+		console.log(err)
+		res.status(500).send(constants.status.FATAL_ERROR)
+	}
 	// status: 'OK'
 	// products: [{
 	// 	_id: ObjectId
@@ -131,7 +180,7 @@ getListingProductsForUser = async (req, res) => {
 			json = {status: constants.status.ERROR, errorMessage: constants.product.userDoesNotExist}
 		}
 		else {
-			const listingsSelect = {
+			const selectOptions = {
 				_id: 1, 
 				name: 1, 
 				price: 1, 
@@ -141,16 +190,16 @@ getListingProductsForUser = async (req, res) => {
 				dateListed: "$createdAt"
 			}
 
-			let listings = await Product.find({sellerUsername: user.username}).lean().select(listingsSelect)
+			let products = await Product.find({sellerUsername: user.username}).lean().select(selectOptions)
 			
-			let newListings = await Promise.all(listings.map(async (listing) => {
-				let image = await getProductFirstImage(listing);
-				listing.image = image
-				delete listing.imageIds
-				return listing;
+			products = await Promise.all(products.map(async (product) => {
+				const image = await getProductFirstImage(product);
+				product.image = image
+				delete product.imageIds
+				return product;
 			}))
 
-			json = {status: constants.status.OK, products: newListings}
+			json = {status: constants.status.OK, products: products}
 		}
 		res.status(200).send(json)
 	} catch (err) {
