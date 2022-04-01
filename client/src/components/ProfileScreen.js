@@ -40,37 +40,29 @@ export default function ProfileScreen() {
         }  catch (err) {
             console.log(err);
         }
-    }, [auth])
+    }, [auth, store])
 
 
     const handleChangeInfo = async function() {
         var formData = new FormData();
+        formData.append("email", email);
+        formData.append("firstName", firstName);
+        formData.append("lastName", lastName);
+        formData.append("addressFirstLine", addressFirstLine);
+        formData.append("addressSecondLine", addressSecondLine);
+        formData.append("city", city);
+        formData.append("state", state);
+        formData.append("zipcode", zipcode);
+        formData.append("phoneNumber", phoneNumber);
         if(oldPassword !== "" && newPassword !== "" && confirmNewPassword !== "") {
             formData.append("oldPassword", oldPassword);
             formData.append("newPassword", newPassword);
             formData.append("confirmPassword", confirmNewPassword);
-            formData.append("email", email);
-            formData.append("firstName", firstName);
-            formData.append("lastName", lastName);
-            formData.append("addressFirstLine", addressFirstLine);
-            formData.append("addressSecondLine", addressSecondLine);
-            formData.append("city", city);
-            formData.append("state", state);
-            formData.append("zipcode", zipcode);
-            formData.append("phoneNumber", phoneNumber);
             updateAccount(formData);
         } else if(oldPassword !== "" || newPassword !== "" || confirmNewPassword !== "") {
             console.log("Fill in all fields for password");
         } else {
-            formData.append("email", email);
-            formData.append("firstName", firstName);
-            formData.append("lastName", lastName);
-            formData.append("addressFirstLine", addressFirstLine);
-            formData.append("addressSecondLine", addressSecondLine);
-            formData.append("city", city);
-            formData.append("state", state);
-            formData.append("zipcode", zipcode);
-            formData.append("phoneNumber", phoneNumber);
+            console.log(formData);
             updateAccount(formData);
         }
         history.push("/");
@@ -225,7 +217,7 @@ export default function ProfileScreen() {
                         </div>
                         <div className="account-buttons" style={{ margin: '-60px 0px 0px 0px', float: 'right'}}>
                             <Button onClick={() => { handleBackToOriginal() }} style={{ margin: '100px 4vw 0px 0px', width: '15vw', height: '40px', border: 'black 1px solid', borderRadius: '10px', color: 'black' }}>Cancel</Button>
-                            <Button onClick={() => { handleChangeInfo() }} style={{ margin: '100px 0px 0px 0px', width: '15vw', height: '40px', border: 'black 1px solid', borderRadius: '10px', color: 'black' }}>Save</Button>
+                            <Button type="submit" onClick={() => { handleChangeInfo() }} style={{ margin: '100px 0px 0px 0px', width: '15vw', height: '40px', border: 'black 1px solid', borderRadius: '10px', color: 'black' }}>Save</Button>
                         </div>
                     </div>
                 </div>
