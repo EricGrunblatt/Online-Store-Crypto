@@ -60,7 +60,10 @@ export default function NavigationBar() {
 
     function handleProfile() {
         handleMenuClose();
-        history.push("/profile");
+        store.getAccount(auth.user.id).then(() => {
+            history.push("/profile")
+        });
+        
     }
 
     function handleWallet() {

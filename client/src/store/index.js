@@ -21,6 +21,7 @@ export const GlobalStoreActionType = {
     UNMARK_CART_REMOVE: "MARK_CART_REMOVE",
     MARK_LISTING_DELETION: "MARK_LISTING_DELETION",
     UNMARK_LISTING_DELETION: "UNMARK_LISTING_DELETION",
+    GET_ACCOUNT: "GET_ACCOUNT",
     STORE_SEARCH_BAR: "STORE_SEARCH_BAR",
 }
 
@@ -34,6 +35,7 @@ function GlobalStoreContextProvider(props) {
         registerModal: false,
         cartItemRemove: null,
         listingItemDelete: null,
+        userAccount: null,
         searchBar: null
     });
 
@@ -48,6 +50,7 @@ function GlobalStoreContextProvider(props) {
                     registerModal: store.registerModal,
                     cartItemRemove: null,
                     listingItemDelete: null,
+                    userAccount: null,
                     searchBar: store.searchBar,
                 });
             }
@@ -59,6 +62,7 @@ function GlobalStoreContextProvider(props) {
                     registerModal: false,
                     cartItemRemove: null,
                     listingItemDelete: null,
+                    userAccount: null,
                     searchBar: null,
                 });
             }
@@ -70,6 +74,7 @@ function GlobalStoreContextProvider(props) {
                     registerModal: false,
                     cartItemRemove: null,
                     listingItemDelete: null,
+                    userAccount: null,
                     searchBar: null,
                 });
             }
@@ -80,6 +85,8 @@ function GlobalStoreContextProvider(props) {
                     loginModal: false,
                     registerModal: true,
                     cartItemRemove: null,
+
+                    userAccount: null,
                     listingItemDelete: null,
                     searchBar: null,
                 });
@@ -92,6 +99,7 @@ function GlobalStoreContextProvider(props) {
                     registerModal: false,
                     cartItemRemove: null,
                     listingItemDelete: null,
+                    userAccount: null,
                     searchBar: null,
                 });
             }
@@ -103,6 +111,7 @@ function GlobalStoreContextProvider(props) {
                     registerModal: false,
                     cartItemRemove: payload,
                     listingItemDelete: null,
+                    userAccount: null,
                     searchBar: null,
                 });
             }
@@ -114,6 +123,7 @@ function GlobalStoreContextProvider(props) {
                     registerModal: false,
                     cartItemRemove: null,
                     listingItemDelete: null,
+                    userAccount: null,
                     searchBar: null,
                 });
             }
@@ -125,6 +135,7 @@ function GlobalStoreContextProvider(props) {
                     registerModal: false,
                     cartItemRemove: null,
                     listingItemDelete: payload,
+                    userAccount: null,
                     searchBar: null,
                 });
             }
@@ -136,6 +147,7 @@ function GlobalStoreContextProvider(props) {
                     registerModal: false,
                     cartItemRemove: null,
                     listingItemDelete: null,
+                    userAccount: null,
                     searchBar: null,
                 });
             }
@@ -147,7 +159,20 @@ function GlobalStoreContextProvider(props) {
                     registerModal: store.registerModal,
                     cartItemRemove: null,
                     listingItemDelete: null,
+                    userAccount: null,
                     searchBar: payload,
+                });
+            }
+            // SET SEARCH BAR
+            case GlobalStoreActionType.GET_ACCOUNT: {
+                return setStore({
+                    catalogItems: store.catalogItems,
+                    loginModal: store.loginModal,
+                    registerModal: store.registerModal,
+                    cartItemRemove: null,
+                    listingItemDelete: null,
+                    userAccount: payload,
+                    searchBar: null,
                 });
             }
             
@@ -157,7 +182,7 @@ function GlobalStoreContextProvider(props) {
     }
 
     // LOADS ALL ITEMS IN THE CATALOG
-    store.loadCatalogItems = async function () {
+    store.loadItems = async function () {
 
     }
 
@@ -186,6 +211,21 @@ function GlobalStoreContextProvider(props) {
             type: GlobalStoreActionType.UNMARK_LISTING_DELETION,
             payload: null
         });
+    }
+
+    // GETS ACCOUNT FROM USER ID
+    store.getAccount = async function (id) {
+        let response = await api.getAccount(id);
+        if(response.data.status === "OK") {
+            let account = response.data.user;
+            storeReducer({
+                type: GlobalStoreActionType.GET_ACCOUNT,
+                payload: account
+            });
+        }
+        else {
+            console.log("API FAILED TO GET ACCOUNT");
+        }
     }
 
 

@@ -2,40 +2,146 @@ import React from "react";
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import { useContext, useState, useEffect } from "react";
+import AuthContext from '../auth'
+import { GlobalStoreContext } from '../store'
+import { updateAccount } from "../api"
+import { useHistory } from "react-router-dom";
 
 export default function ProfileScreen() {
+    const { auth } = useContext(AuthContext);
+    const { store } = useContext(GlobalStoreContext);
+    const history = useHistory();
+    const [email, setEmail] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [addressFirstLine, setAddressFirstLine] = useState("");
+    const [addressSecondLine, setAddressSecondLine] = useState("");
+    const [city, setCity] = useState("");
+    const [state, setState] = useState("");
+    const [zipcode, setZipcode] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
+    const [oldPassword, setOldPassword] = useState("");
+    const [newPassword, setNewPassword] = useState("");
+    const [confirmNewPassword, setConfirmNewPassword] = useState("");
+
+    useEffect(() => {
+        try {
+            setEmail(auth.user.email);
+            setFirstName(store.userAccount.firstName);
+            setLastName(store.userAccount.lastName);
+            setAddressFirstLine(store.userAccount.addressFirstLine);
+            setAddressSecondLine(store.userAccount.addressSecondLine);
+            setCity(store.userAccount.city);
+            setState(store.userAccount.state);
+            setZipcode(store.userAccount.zipcode);
+            setPhoneNumber(store.userAccount.phoneNumber);
+
+        }  catch (err) {
+            console.log(err);
+        }
+    }, [auth])
+
+
+    const handleChangeInfo = async function() {
+        var formData = new FormData();
+        if(oldPassword !== "" && newPassword !== "" && confirmNewPassword !== "") {
+            formData.append("oldPassword", oldPassword);
+            formData.append("newPassword", newPassword);
+            formData.append("confirmPassword", confirmNewPassword);
+            formData.append("email", email);
+            formData.append("firstName", firstName);
+            formData.append("lastName", lastName);
+            formData.append("addressFirstLine", addressFirstLine);
+            formData.append("addressSecondLine", addressSecondLine);
+            formData.append("city", city);
+            formData.append("state", state);
+            formData.append("zipcode", zipcode);
+            formData.append("phoneNumber", phoneNumber);
+            updateAccount(formData);
+        } else if(oldPassword !== "" || newPassword !== "" || confirmNewPassword !== "") {
+            console.log("Fill in all fields for password");
+        } else {
+            formData.append("email", email);
+            formData.append("firstName", firstName);
+            formData.append("lastName", lastName);
+            formData.append("addressFirstLine", addressFirstLine);
+            formData.append("addressSecondLine", addressSecondLine);
+            formData.append("city", city);
+            formData.append("state", state);
+            formData.append("zipcode", zipcode);
+            formData.append("phoneNumber", phoneNumber);
+            updateAccount(formData);
+        }
+        history.push("/");
+    }
+
+    const handleBackToOriginal = () => {
+        setEmail(auth.user.email);
+        setFirstName(store.userAccount.firstName);
+        setLastName(store.userAccount.lastName);
+        setAddressFirstLine(store.userAccount.addressFirstLine);
+        setAddressSecondLine(store.userAccount.addressSecondLine);
+        setCity(store.userAccount.city);
+        setState(store.userAccount.state);
+        setZipcode(store.userAccount.zipcode);
+        setPhoneNumber(store.userAccount.phoneNumber);
+    }
+
     return (
         <div className="profile-account">
             <div className="profile" style={{ margin: '50px 0% 0px 10%', width: '80%', height: '450px', border: 'black 2px solid', borderRadius: '20px' }}>
                 <div className="profile-left-side" style={{ float: 'left' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', margin: '0px 0px 0px 3vw' }}>
                         <div className="display-name-profile" style={{ display: 'flex', margin: '20px 0% 0px 0%', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '65px', color: 'black' }}>
-                            <u> Profile </u>
+                            <u> My Profile </u>
                         </div>
                         <div style={{ display: 'flex' }}>
                             <AccountCircleRoundedIcon style={{ margin: '20px 0px 0px 0', fontSize: '200px' }} />
                         </div>
                         <div style={{ display: 'flex', margin: '30px 0px 0px 0px' }}>
-                            <a href style={{ cursor: 'pointer', fontSize: '30px', color: '#879ED9' }}>
+                            <div style={{ cursor: 'pointer', fontSize: '30px', color: '#879ED9' }}>
                                 Change Image
-                            </a>
+                            </div>
                         </div>
                     </div>   
                 </div> 
-                <div className="profile-right-side" style={{ float: 'right' }}>
-                    <div className="username-textfield">
-                        <TextField placeholder="Username" style={{ margin: '120px 2vw 0px 0px', width: '45vw', height: '30px'}}></TextField>
-                    </div>
+                <div className="profile-right-side" style={{ position: 'absolute', margin: '120px 0px 0px 30vw', float: 'right' }}>
                     <div className="email-address-textfield">
-                        <TextField placeholder="Email Address" style={{ margin: '80px 0vw 0px 0px', width: '45vw', height: '30px'}}></TextField>
+                        <TextField
+                            value={email} 
+                            label='Email'
+                            placeholder="Email Address" 
+                            onChange={(event) => { setEmail(event.target.value) }}
+                            style={{ margin: '0px 2vw 0px 0px', width: '45vw', height: '30px'}}></TextField>
                     </div>
-                    <div className="cancel-save-buttons" style={{ margin: '100px 10px 0px px' }}>
-                        <Button style={{ margin: '100px 4vw 0px 0px', width: '15vw', height: '40px', border: 'black 1px solid', borderRadius: '10px', color: 'black' }}>Cancel</Button>
-                        <Button style={{ margin: '100px 0px 0px 0px', width: '15vw', height: '40px', border: 'black 1px solid', borderRadius: '10px', color: 'black' }}>Save</Button>
+                    <div className="old-password-textfield">
+                        <TextField 
+                            value={oldPassword} 
+                            label='Old Password'
+                            placeholder="Old Password" 
+                            onChange={(event) => { setOldPassword(event.target.value) }}
+                            style={{ margin: '40px 2vw 0px 0px', width: '45vw', height: '30px'}}></TextField>
+                    </div>
+                    <div className="new-password-textfield">
+                        <TextField 
+                            value={newPassword} 
+                            label='New Password'
+                            placeholder="New Password" 
+                            onChange={(event) => { setNewPassword(event.target.value) }}
+                            style={{ margin: '40px 2vw 0px 0px', width: '45vw', height: '30px'}}></TextField>
+                    </div>
+                    <div className="new-password-confirm-textfield">
+                        <TextField 
+                            value={confirmNewPassword} 
+                            label='Confirm New Password'
+                            placeholder="Confirm New Password" 
+                            onChange={(event) => { setConfirmNewPassword(event.target.value) }}
+                            style={{ margin: '40px 2vw 0px 0px', width: '45vw', height: '30px'}}></TextField>
                     </div>
                 </div>        
             </div>
-            <div className="account" style={{ margin: '50px 0% 50px 10%', width: '80%', height: '650px', border: 'black 2px solid', borderRadius: '20px' }}>
+            <div className="account" style={{ margin: '50px 0% 50px 10%', width: '80%', height: '575px', border: 'black 2px solid', borderRadius: '20px' }}>
                 <div className="account-left-side" style={{ float: 'left' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', margin: '0px 0px 0px 3vw' }}>
                         <div className="display-name-profile" style={{ display: 'flex', margin: '20px 0% 0px 0%', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '65px', color: 'black' }}>
@@ -50,45 +156,76 @@ export default function ProfileScreen() {
                             </div>
                         </div>
                         <div className="first-name-textfield" style={{ margin: '20px 0px 0px 0px' }}>
-                            <TextField placeholder="First Name" style={{ width: '30vw' }}></TextField>
+                            <TextField 
+                                value={firstName} 
+                                label='First Name'
+                                placeholder="First Name" 
+                                onChange={(event) => { setFirstName(event.target.value) }}
+                                style={{ width: '35vw' }}></TextField>
                         </div>
-                        <div className="last-name-textfield" style={{ margin: '20px 0px 0px 0px' }}>
-                            <TextField placeholder="Last Name" style={{ width: '30vw' }}></TextField>
+                        <div className="address-line-one-textfield" style={{ margin: '20px 0px 0px 0px' }}>
+                            <TextField 
+                                value={addressFirstLine} 
+                                label='Address Line 1'
+                                placeholder="Address Line 1" 
+                                onChange={(event) => { setAddressFirstLine(event.target.value) }} 
+                                style={{ width: '35vw' }}></TextField>
                         </div>
                         <div className="city-textfield" style={{ margin: '20px 0px 0px 0px' }}>
-                            <TextField placeholder="City" style={{ width: '30vw' }}></TextField>
+                            <TextField 
+                                value={city} 
+                                label='City'
+                                placeholder="City" 
+                                onChange={(event) => { setCity(event.target.value) }}
+                                style={{ width: '35vw' }}></TextField>
                         </div>
-                        <div className="state-textfield" style={{ margin: '20px 0px 0px 0px' }}>
-                            <TextField placeholder="State" style={{ width: '30vw' }}></TextField>
-                        </div>
-                        <div className="zip-code-textfield" style={{ margin: '20px 0px 0px 0px' }}>
-                            <TextField placeholder="Zip Code" style={{ width: '30vw' }}></TextField>
+                        <div className="zipcode-textfield" style={{ margin: '20px 0px 0px 0px' }}>
+                            <TextField 
+                                value={zipcode} 
+                                label='Zip Code'
+                                placeholder="Zip Code" 
+                                onChange={(event) => { setZipcode(event.target.value) }}
+                                style={{ width: '35vw' }}></TextField>
                         </div>
                     </div>
                 </div>
-                <div className="account-right-side" style={{ margin: '75px 3vw 0px 0vw', float: 'right' }}>
+                <div className="account-right-side" style={{ position: 'absolute', margin: '152px 3vw 0px 37.5vw', float: 'right' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', margin: '0px 0px 0px 3vw' }}>
-                        <div className="old-password-textfield" style={{ margin: '20px 0px 0px 0px' }}>
-                            <TextField placeholder="Old Password" style={{ width: '35vw' }}></TextField>
-                        </div>
-                        <div className="new-password-textfield" style={{ margin: '20px 0px 0px 0px' }}>
-                            <TextField placeholder="New Password" style={{ width: '35vw' }}></TextField>
-                        </div>
-                        <div className="confirm-password-textfield" style={{ margin: '20px 0px 0px 0px' }}>
-                            <TextField placeholder="Confirm Password" style={{ width: '35vw' }}></TextField>
-                        </div>
-                        <div className="address-line-one-textfield" style={{ margin: '20px 0px 0px 0px' }}>
-                            <TextField placeholder="Address Line 1" style={{ width: '35vw' }}></TextField>
+                        <div className="last-name-textfield" style={{ margin: '20px 0px 0px 0px' }}>
+                            <TextField 
+                                value={lastName} 
+                                label='Last Name'
+                                placeholder="Last Name" 
+                                onChange={(event) => { setLastName(event.target.value) }} 
+                                style={{ width: '35vw' }}></TextField>
                         </div>
                         <div className="address-line-two-textfield" style={{ margin: '20px 0px 0px 0px' }}>
-                            <TextField placeholder="Address Line 2" style={{ width: '35vw' }}></TextField>
+                            <TextField 
+                                value={addressSecondLine} 
+                                label='Address Line 2'
+                                placeholder="Address Line 2" 
+                                onChange={(event) => { setAddressSecondLine(event.target.value) }} 
+                                style={{ width: '35vw' }}></TextField>
+                        </div>
+                        <div className="state-textfield" style={{ margin: '20px 0px 0px 0px' }}>
+                            <TextField 
+                                value={state} 
+                                label='State'
+                                placeholder="State" 
+                                onChange={(event) => { setState(event.target.value) }}
+                                style={{ width: '35vw' }}></TextField>
                         </div>
                         <div className="phone-number-textfield" style={{ margin: '20px 0px 0px 0px' }}>
-                            <TextField placeholder="Phone Number" style={{ width: '35vw' }}></TextField>
+                            <TextField 
+                                value={phoneNumber} 
+                                label='Phone Number'
+                                placeholder="Phone Number" 
+                                onChange={(event) => { setPhoneNumber(event.target.value) }}
+                                style={{ width: '35vw' }}></TextField>
                         </div>
                         <div className="account-buttons" style={{ margin: '-60px 0px 0px 0px', float: 'right'}}>
-                            <Button style={{ margin: '100px 4vw 0px 0px', width: '15vw', height: '40px', border: 'black 1px solid', borderRadius: '10px', color: 'black' }}>Cancel</Button>
-                            <Button style={{ margin: '100px 0px 0px 0px', width: '15vw', height: '40px', border: 'black 1px solid', borderRadius: '10px', color: 'black' }}>Save</Button>
+                            <Button onClick={() => { handleBackToOriginal() }} style={{ margin: '100px 4vw 0px 0px', width: '15vw', height: '40px', border: 'black 1px solid', borderRadius: '10px', color: 'black' }}>Cancel</Button>
+                            <Button onClick={() => { handleChangeInfo() }} style={{ margin: '100px 0px 0px 0px', width: '15vw', height: '40px', border: 'black 1px solid', borderRadius: '10px', color: 'black' }}>Save</Button>
                         </div>
                     </div>
                 </div>

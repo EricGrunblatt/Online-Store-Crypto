@@ -11,17 +11,25 @@ const api = axios.create({
 
 // ALL REQUESTS FOR LOGIN/REGISTER/LOGOUT
 export const getLoggedIn = () => api.post('/auth/getLoggedIn');
-export const registerUser = (payload) => api.post(`/auth/register`, payload)
-export const loginUser = (payload) => api.post(`/auth/login`, payload)
+export const registerUser = (payload) => api.post(`/auth/register`, payload);
+export const loginUser = (payload) => api.post(`/auth/login`, payload);
 export const logoutUser = () => api.post(`/auth/logout`);
 
-export const addListingProduct = (payload) => api.post('/product/addListingProduct', payload)
+// ALL REQUESTS FOR ACCOUNT
+export const getAccount = (payload) => api.post('/user/getAccount', payload);
+export const updateAccount = (payload) => api.post('/user/updateAccount', payload);
+
+export const addListingProduct = (payload) => api.post('/product/addListingProduct', payload);
 
 const apis = {
     getLoggedIn,
     registerUser,
     loginUser,
     logoutUser,
+
+    getAccount,
+    updateAccount,
+
     addListingProduct
 }
 
