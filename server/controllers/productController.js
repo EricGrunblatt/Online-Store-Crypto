@@ -84,7 +84,8 @@ getOrderedProductsForUser = async (req, res) => {
 	// products: [{
 	// 	_id: ObjectId
 	// 	name: String
-	// 	cost: Number
+	// 	price: Number
+	//  shippingPrice: Number
 	// 	sellerUsername: String
 	// 	image: {
 	// 		data: Buffer,
@@ -105,7 +106,8 @@ getCartProductsForUser = async (req, res) => {
 	// products: [{
 	// 	_id: ObjectId
 	// 	name: String
-	// 	cost: Number
+	// 	price: Number
+	//  shippingPrice: Number
 	// 	sellerUsername: String
 	// 	image: {
 	// 		data: Buffer,
@@ -114,7 +116,6 @@ getCartProductsForUser = async (req, res) => {
 	// }]
 }
 
-// TODO
 getListingProductsForUser = async (req, res) => {
 	console.log("getListingProductsForUser", req.body)
 
@@ -160,7 +161,8 @@ getListingProductsForUser = async (req, res) => {
 	// products: [{
 	// 	_id: ObjectId
 	// 	name: String
-	// 	cost: Number
+	// 	price: Number
+	//  shippingPrice: Number
 	// 	sellerUsername: String
 	// 	image: {
 	// 		data: Buffer,
@@ -177,7 +179,8 @@ getSellingProductsForUser = async (req, res) => {
 	// products: [{
 	// 	_id: ObjectId
 	// 	name: String
-	// 	cost: Number
+	// 	price: Number
+	//  shippingPrice: Number
 	// 	sellerUsername: String
 	// 	image: {
 	// 		data: Buffer,
