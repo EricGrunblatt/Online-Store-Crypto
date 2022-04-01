@@ -3,7 +3,7 @@ const Product = require("../models/productModel")
 const User = require('../models/userModel')
 const Review = require('../models/reviewModel')
 const constants = require('./constants.json')
-const {productImageMiddleware, updateProductImageFields, getProductImages, generateQuery} = require('./helpers/productControllerHelper')
+const {productImageMiddleware, updateProductImageFields, getProductImages, getProductFirstImage} = require('./helpers/productControllerHelper')
 
 // TODO
 getCatalog = async (req, res) => {
@@ -131,20 +131,20 @@ getListingProductsForUser = async (req, res) => {
 		}
 		else {
 			const listingsSelect = {
-				_id: 0, 
+				_id: 1, 
 				name: 1, 
 				price: 1, 
 				shippingPrice: 1, 
 				sellerUsername: 1,
 				imageIds: 1,
-				dateListed: 1
+				dateListed: "$createdAt"
 			}
 
 			let listings = await Product.find({sellerUsername: user.username}).lean().select(listingsSelect)
 			
 			let newListings = await Promise.all(listings.map(async (listing) => {
-				let images = await getProductImages(listing);
-				listing.images = images
+				let image = await getProductFirstImage(listing);
+				listing.image = image
 				delete listing.imageIds
 				return listing;
 			}))
@@ -153,7 +153,8 @@ getListingProductsForUser = async (req, res) => {
 		}
 		res.status(200).send(json)
 	} catch (err) {
-		
+		console.log(err)
+		res.status(500).send(constants.status.FATAL_ERROR)
 	}
 	// status: 'OK'
 	// products: [{

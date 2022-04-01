@@ -57,4 +57,22 @@ getProductImages = async (product) => {
 	}
 }
 
-module.exports = {productImageMiddleware, updateProductImageFields, getProductImages}
+getProductFirstImage = async (product) => {
+	const imageSelect = {
+		_id: 0,
+		data: 1,
+		contentType: 1
+	}
+
+	try {
+		const firstImageId = product.imageIds.find(imageId => imageId !== null)
+		const image = await Image.findById(firstImageId).select(imageSelect);
+		return image
+	}
+	catch (err) {
+		console.log("FAILED TO GET IMAGES")
+		return []
+	}
+}
+
+module.exports = {productImageMiddleware, updateProductImageFields, getProductImages, getProductFirstImage}
