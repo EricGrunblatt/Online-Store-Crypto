@@ -1,5 +1,7 @@
-import { createContext, useState } from 'react'
+import { createContext, useState, useContext } from 'react'
 import api from '../api';
+import AuthContext from '../auth';
+import { useHistory } from 'react-router-dom';
 /*
     This is our global data store.
     
@@ -40,6 +42,9 @@ function GlobalStoreContextProvider(props) {
         userProfile: null,
         searchBar: null
     });
+
+    const history = useHistory();
+    const { auth } = useContext(AuthContext);
 
     const storeReducer = (action) => {
         const { type, payload } = action;
@@ -182,8 +187,8 @@ function GlobalStoreContextProvider(props) {
                     registerModal: store.registerModal,
                     cartItemRemove: null,
                     listingItemDelete: null,
-                    userAccount: payload,
-                    userProfile: store.userProfile,
+                    userAccount: payload.account,
+                    userProfile: payload.profile,
                     searchBar: null,
                 });
             }
@@ -241,14 +246,28 @@ function GlobalStoreContextProvider(props) {
     }
 
     // GETS ACCOUNT FROM USER ID
-    store.getAccount = async function (id) {
-        let response = await api.getAccount(id);
+    store.getAccount = async function () {
+        let response = await api.getAccount();
         if(response.data.status === "OK") {
-            let account = response.data.user;
-            storeReducer({
-                type: GlobalStoreActionType.GET_ACCOUNT,
-                payload: account
-            });
+            let myAccount = response.data.user;
+            async function getProfile() {
+                let jsonProfile = {
+                    "username": auth.user.username
+                }
+                response = await api.getProfileByUsername(jsonProfile);
+                if(response.data.status === "OK") {
+                    let myProfile = response.data;
+                    storeReducer({
+                        type: GlobalStoreActionType.GET_ACCOUNT,
+                        payload: {
+                            account: myAccount,
+                            profile: myProfile
+                        }
+                    });
+                    history.push("/profile");
+                }
+            }
+            getProfile();
         }
         else {
             console.log("API FAILED TO GET ACCOUNT");

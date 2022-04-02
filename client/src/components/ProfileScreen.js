@@ -44,9 +44,51 @@ export default function ProfileScreen() {
         }  catch (err) {
             console.log(err);
         }
-    }, [auth, store])
+    }, [auth, store.userAccount, store.userProfile])
 
-    console.log(profileImage);
+
+    
+
+    const handleBackToOriginal = () => {
+        setEmail(auth.user.email);
+        setFirstName(store.userAccount.firstName);
+        setLastName(store.userAccount.lastName);
+        setAddressFirstLine(store.userAccount.addressFirstLine);
+        setAddressSecondLine(store.userAccount.addressSecondLine);
+        setCity(store.userAccount.city);
+        setState(store.userAccount.state);
+        setZipcode(store.userAccount.zipcode);
+        setPhoneNumber(store.userAccount.phoneNumber);
+        setOldPassword("");
+        setNewPassword("");
+        setConfirmNewPassword("");
+    }
+
+    // CHANGING PROFILE PICTURE
+    let profilePicture = "";
+
+    // FUNCTION CHANGES IT FOR USER TO SEE
+    const handleChangeImage = (event) => {
+        if (event.target.files && event.target.files[0]) {
+            setProfileImage(URL.createObjectURL(event.target.files[0]));
+        }
+        console.log(profileImage);
+        //handleChangeProfilePicture();
+    }
+
+    // USES DEFAULT ACCOUNT ICON IF USER DOES NOT HAVE AN IMAGE         
+    if(profileImage === null) {
+        profilePicture = 
+            <div style={{ position: 'absolute' }}>
+                <AccountCircleRoundedIcon style={{ margin: '20px 0px 0px 0px', fontSize: '200px' }} />
+            </div>
+    }
+    else {
+        profilePicture = 
+            <div style={{ position: 'absolute' }}>
+                <img src={profileImage} alt={<AccountCircleRoundedIcon style={{ margin: '20px 0px 0px 0px', fontSize: '200px' }}></AccountCircleRoundedIcon>} style={{ margin: '32px 0px 0px 15px', width: '165px', height: '165px', border: 'black 1px solid', borderRadius: '50%'}}/>
+            </div>
+    }
 
     const handleChangeInfo = async function() {
         let jsonAccountData = {
@@ -79,7 +121,7 @@ export default function ProfileScreen() {
             if(response.data.status === "ERROR") {
                 alert(response.data.errorMessage);
             }
-            history.push("/");
+
         } else if(oldPassword !== "" || newPassword !== "" || confirmNewPassword !== "") {
             alert("Fill in all password fields if you're changing the password to your account");
         } else {
@@ -87,27 +129,18 @@ export default function ProfileScreen() {
             if(response.data.status === "ERROR") {
                 alert(response.data.errorMessage);
             }
-            history.push("/");
         }
-    }
+        var formData = new FormData();
+        const element = document.getElementById('profilePicture');
+        const file = element.files[0];
+        formData.append('image', file);
+        let newResponse = await api.updateProfilePicture(formData);
+        if(newResponse.data.status === "ERROR") {
+            alert(newResponse.data.errorMessage);
+        }
 
-    const handleChangeImage = () => {
 
-    }
-
-    const handleBackToOriginal = () => {
-        setEmail(auth.user.email);
-        setFirstName(store.userAccount.firstName);
-        setLastName(store.userAccount.lastName);
-        setAddressFirstLine(store.userAccount.addressFirstLine);
-        setAddressSecondLine(store.userAccount.addressSecondLine);
-        setCity(store.userAccount.city);
-        setState(store.userAccount.state);
-        setZipcode(store.userAccount.zipcode);
-        setPhoneNumber(store.userAccount.phoneNumber);
-        setOldPassword("");
-        setNewPassword("");
-        setConfirmNewPassword("");
+        history.push("/");
     }
 
     return (
@@ -119,11 +152,15 @@ export default function ProfileScreen() {
                             <u> My Profile </u>
                         </div>
                         <div style={{ display: 'flex' }}>
-                            <AccountCircleRoundedIcon style={{ margin: '20px 0px 0px 0', fontSize: '200px' }} />
+                            {profilePicture}
                         </div>
-                        <div style={{ display: 'flex', margin: '30px 0px 0px 0px' }}>
-                            <div onClick={() => { handleChangeImage() }} style={{ cursor: 'pointer', fontSize: '30px', color: '#879ED9' }}>
-                                <u>Change Image</u>
+                        <div style={{ display: 'flex', margin: '250px 0px 0px 0px' }}>
+                            <div style={{ fontSize: '30px', color: '#879ED9' }}>
+                                <label for="profilePicture">
+                                    <div style={{ cursor: 'pointer' }}><u>Change Image</u></div>
+                                </label>
+                                <input type='file' name='profilePicture' id='profilePicture' onChange={handleChangeImage} style={{ display: 'none', visibility: 'none' }}></input>  
+                        
                             </div>
                         </div>
                     </div>   

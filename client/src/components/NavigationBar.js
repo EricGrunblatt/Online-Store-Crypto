@@ -60,14 +60,7 @@ export default function NavigationBar() {
 
     function handleProfile() {
         handleMenuClose();
-        store.getAccount(auth.user.id).then(() => {
-            let jsonProfile = {
-                "username": auth.user.username
-            }
-            store.getProfile(jsonProfile).then(() => {
-                history.push("/profile")
-            });
-        });   
+        store.getAccount();     
     }
 
     function handleWallet() {
