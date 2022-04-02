@@ -147,7 +147,8 @@ getLoggedIn = async (req, res) => {
 	console.log("getLoggedIn")
 	const userId = req.userId
 
-	const userSelect = {"_id": 0, "firstName": 1, "lastName": 1, "username": 1, "email": 1}
+	const userSelect = {"_id": 0, "firstName": 1, "lastName": 1, "username": 1, "email": 1, "profileImageId": 1}
+	const imageSelect = { "_id": 0, "data": 1, "contentType": 1 }
 
 	let json = {}
 	let user = null
@@ -155,10 +156,15 @@ getLoggedIn = async (req, res) => {
 		if (! userId) {
 			throw constants.error.didNotGetUserId
 		}
-		else if (! (user = await User.findById(userId).select(userSelect))) {
+		else if (! (user = await User.findById(userId).lean().select(userSelect))) {
 			json = {status: constants.status.ERROR, errorMessage: constants.auth.userDoesNotExist}
 		}
 		else {
+			const profileImage = await Image.findById(user.profileImageId).select(imageSelect)
+
+			user.profileImage = profileImage
+			delete user.profileImageId
+
 			json = {status: constants.status.OK, user: user, loggedIn: true}
 		}
 		console.log("RESPONSE: ", json)
