@@ -201,7 +201,7 @@ function GlobalStoreContextProvider(props) {
                     searchBar: null,
                 });
             }
-            
+         
             default:
                 return store;
         }

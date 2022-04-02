@@ -177,7 +177,7 @@ export default function ProfileScreen() {
                                 Joined:
                             </div>
                             <div style={{ display: 'inline-block', margin: '0px 0px 0px 20px' }}>
-                                February 2022
+                                {store.userProfile.dateJoined.substring(0, 10)}
                             </div>
                         </div>
                         <div className="first-name-textfield" style={{ margin: '20px 0px 0px 0px' }}>

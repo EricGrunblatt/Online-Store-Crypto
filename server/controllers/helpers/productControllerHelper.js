@@ -1,5 +1,7 @@
 const {createAndSaveImage, upload} = require('../../handlers/imageHandler')
 const Image = require('../../models/imageModel')
+const Review = require('../../models/reviewModel')
+const Product = require('../../models/productModel')
 
 const productImageFields = [
 	{name: 'image0', maxCount: 1},
@@ -33,10 +35,16 @@ updateProductImageFields = async (images, oldImageIds, productId) => {
 
 getProductImages = async (product) => {
 	let images = []
+	const imageSelect = {
+		_id: 0,
+		data: 1,
+		contentType: 1
+	}
+
 	try {
 		for (let imageId of product.imageIds) {
 			if (imageId) {
-				const image = await Image.findById(imageId);
+				const image = await Image.findById(imageId).select(imageSelect);
 				images.push(image)
 			}
 			else {
@@ -51,4 +59,51 @@ getProductImages = async (product) => {
 	}
 }
 
-module.exports = {productImageMiddleware, updateProductImageFields, getProductImages}
+getProductFirstImage = async (product) => {
+	const imageSelect = {
+		_id: 0,
+		data: 1,
+		contentType: 1
+	}
+
+	try {
+		const firstImageId = product.imageIds.find(imageId => imageId !== null)
+		const image = await Image.findById(firstImageId).select(imageSelect);
+		return image
+	}
+	catch (err) {
+		console.log(err)
+		return []
+	}
+}
+
+getProductReview = async (product) => {
+	const reviewSelect = {
+		_id: 0,
+		stars: 1,
+		comment: 1
+	}
+
+	try {
+		return await Review.findById(product.reviewId).select(reviewSelect);
+	}
+	catch (err) {
+		console.log(err)
+		return null
+	}
+}
+
+getProducts = async (productIds, selectOptions) => {
+	return await Promise.all(productIds.map(async (productId) => {
+		return Product.findById(productId).lean().select(selectOptions)
+	}))
+}
+
+module.exports = {
+	productImageMiddleware, 
+	updateProductImageFields, 
+	getProductImages, 
+	getProductFirstImage,
+	getProductReview,
+	getProducts
+}

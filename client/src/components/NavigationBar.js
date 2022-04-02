@@ -59,7 +59,6 @@ export default function NavigationBar() {
     }
 
     function handleProfile() {
-        console.log(auth.user.username);
         handleMenuClose();
         store.getAccount(auth.user.id).then(() => {
             let jsonProfile = {
