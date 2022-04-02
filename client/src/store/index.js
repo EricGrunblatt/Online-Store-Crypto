@@ -22,6 +22,7 @@ export const GlobalStoreActionType = {
     MARK_LISTING_DELETION: "MARK_LISTING_DELETION",
     UNMARK_LISTING_DELETION: "UNMARK_LISTING_DELETION",
     GET_ACCOUNT: "GET_ACCOUNT",
+    GET_PROFILE: "GET_PROFILE",
     STORE_SEARCH_BAR: "STORE_SEARCH_BAR",
 }
 
@@ -36,6 +37,7 @@ function GlobalStoreContextProvider(props) {
         cartItemRemove: null,
         listingItemDelete: null,
         userAccount: null,
+        userProfile: null,
         searchBar: null
     });
 
@@ -51,6 +53,7 @@ function GlobalStoreContextProvider(props) {
                     cartItemRemove: null,
                     listingItemDelete: null,
                     userAccount: null,
+                    userProfile: store.userProfile,
                     searchBar: store.searchBar,
                 });
             }
@@ -63,6 +66,7 @@ function GlobalStoreContextProvider(props) {
                     cartItemRemove: null,
                     listingItemDelete: null,
                     userAccount: null,
+                    userProfile: null,
                     searchBar: null,
                 });
             }
@@ -75,6 +79,7 @@ function GlobalStoreContextProvider(props) {
                     cartItemRemove: null,
                     listingItemDelete: null,
                     userAccount: null,
+                    userProfile: null,
                     searchBar: null,
                 });
             }
@@ -85,9 +90,9 @@ function GlobalStoreContextProvider(props) {
                     loginModal: false,
                     registerModal: true,
                     cartItemRemove: null,
-
-                    userAccount: null,
                     listingItemDelete: null,
+                    userAccount: null,
+                    userProfile: null,
                     searchBar: null,
                 });
             }
@@ -100,6 +105,7 @@ function GlobalStoreContextProvider(props) {
                     cartItemRemove: null,
                     listingItemDelete: null,
                     userAccount: null,
+                    userProfile: null,
                     searchBar: null,
                 });
             }
@@ -112,6 +118,7 @@ function GlobalStoreContextProvider(props) {
                     cartItemRemove: payload,
                     listingItemDelete: null,
                     userAccount: null,
+                    userProfile: store.userProfile,
                     searchBar: null,
                 });
             }
@@ -124,6 +131,7 @@ function GlobalStoreContextProvider(props) {
                     cartItemRemove: null,
                     listingItemDelete: null,
                     userAccount: null,
+                    userProfile: store.userProfile,
                     searchBar: null,
                 });
             }
@@ -136,6 +144,7 @@ function GlobalStoreContextProvider(props) {
                     cartItemRemove: null,
                     listingItemDelete: payload,
                     userAccount: null,
+                    userProfile: store.userProfile,
                     searchBar: null,
                 });
             }
@@ -148,6 +157,7 @@ function GlobalStoreContextProvider(props) {
                     cartItemRemove: null,
                     listingItemDelete: null,
                     userAccount: null,
+                    userProfile: store.userProfile,
                     searchBar: null,
                 });
             }
@@ -160,10 +170,11 @@ function GlobalStoreContextProvider(props) {
                     cartItemRemove: null,
                     listingItemDelete: null,
                     userAccount: null,
+                    userProfile: store.userProfile,
                     searchBar: payload,
                 });
             }
-            // SET SEARCH BAR
+            // SET USER ACCOUNT
             case GlobalStoreActionType.GET_ACCOUNT: {
                 return setStore({
                     catalogItems: store.catalogItems,
@@ -172,6 +183,21 @@ function GlobalStoreContextProvider(props) {
                     cartItemRemove: null,
                     listingItemDelete: null,
                     userAccount: payload,
+                    userProfile: store.userProfile,
+                    searchBar: null,
+                });
+            }
+
+            // SET USER PROFILE
+            case GlobalStoreActionType.GET_PROFILE: {
+                return setStore({
+                    catalogItems: store.catalogItems,
+                    loginModal: store.loginModal,
+                    registerModal: store.registerModal,
+                    cartItemRemove: null,
+                    listingItemDelete: null,
+                    userAccount: store.userAccount,
+                    userProfile: payload,
                     searchBar: null,
                 });
             }
@@ -183,12 +209,13 @@ function GlobalStoreContextProvider(props) {
 
     // LOADS ALL ITEMS IN THE CATALOG
     store.loadItems = async function () {
-
+        // TODO
     }
 
     // SETS ID FOR CART ITEM BEING REMOVED
     store.markCartRemove = async function (id) {
         // Get item from database
+        // TODO
         
     }
 
@@ -228,7 +255,20 @@ function GlobalStoreContextProvider(props) {
         }
     }
 
-
+    // GETS PROFILE FROM USERNAME
+    store.getProfile = async function (username) {
+        let response = await api.getProfileByUsername(username);
+        if(response.data.status === "OK") {
+            let profile = response.data;
+            storeReducer({
+                type: GlobalStoreActionType.GET_PROFILE,
+                payload: profile
+            });
+        }
+        else {
+            console.log("API FAILED TO GET PROFILE");
+        }
+    }
 
     // THIS FUNCTION OPENS LOGIN MODAL
     store.setOpenLoginModal = function () {

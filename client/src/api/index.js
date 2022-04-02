@@ -18,6 +18,8 @@ export const logoutUser = () => api.post(`/auth/logout`);
 // ALL REQUESTS FOR ACCOUNT
 export const getAccount = (payload) => api.post('/user/getAccount', payload);
 export const updateAccount = (payload) => api.post('/user/updateAccount', payload);
+export const updateProfilePicture = (payload) => api.post('/user/updateProfileImage', payload);
+export const getProfileByUsername = (payload) => api.post('/user/getProfileByUsername', payload);
 
 export const addListingProduct = (payload) => api.post('/product/addListingProduct', payload);
 
@@ -29,6 +31,8 @@ const apis = {
 
     getAccount,
     updateAccount,
+    updateProfilePicture,
+    getProfileByUsername,
 
     addListingProduct
 }

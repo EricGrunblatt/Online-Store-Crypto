@@ -67,11 +67,11 @@ export default function ListItem(){
     } else {
         box0 = 
         <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
-        <label for='image0' style={{ cursor: 'pointer' }}>
-            <img src={image0} alt="preview image0" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
-        </label>
-        <input type='file' name='image0' id='image0' onChange={onImageChange0} style={{ display: 'none', visibility: 'none' }}></input>
-    </div>
+            <label for='image0' style={{ cursor: 'pointer' }}>
+                <img src={image0} alt="preview image0" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
+            </label>
+            <input type='file' name='image0' id='image0' onChange={onImageChange0} style={{ display: 'none', visibility: 'none' }}></input>
+        </div>
     }
 
     // BOX1

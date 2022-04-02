@@ -1,11 +1,10 @@
 import React from "react";
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
+import { Button, TextField } from '@mui/material';
 import { useContext, useState, useEffect } from "react";
 import AuthContext from '../auth'
 import { GlobalStoreContext } from '../store'
-import { updateAccount } from "../api"
+import api from "../api"
 import { useHistory } from "react-router-dom";
 
 export default function ProfileScreen() {
@@ -24,6 +23,7 @@ export default function ProfileScreen() {
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmNewPassword, setConfirmNewPassword] = useState("");
+    const [profileImage, setProfileImage] = useState(null);
 
     useEffect(() => {
         try {
@@ -36,36 +36,63 @@ export default function ProfileScreen() {
             setState(store.userAccount.state);
             setZipcode(store.userAccount.zipcode);
             setPhoneNumber(store.userAccount.phoneNumber);
+            setOldPassword("");
+            setNewPassword("");
+            setConfirmNewPassword("");
+            setProfileImage(store.userProfile.profileImage);
 
         }  catch (err) {
             console.log(err);
         }
     }, [auth, store])
 
+    console.log(profileImage);
 
     const handleChangeInfo = async function() {
-        var formData = new FormData();
-        formData.append("email", email);
-        formData.append("firstName", firstName);
-        formData.append("lastName", lastName);
-        formData.append("addressFirstLine", addressFirstLine);
-        formData.append("addressSecondLine", addressSecondLine);
-        formData.append("city", city);
-        formData.append("state", state);
-        formData.append("zipcode", zipcode);
-        formData.append("phoneNumber", phoneNumber);
-        if(oldPassword !== "" && newPassword !== "" && confirmNewPassword !== "") {
-            formData.append("oldPassword", oldPassword);
-            formData.append("newPassword", newPassword);
-            formData.append("confirmPassword", confirmNewPassword);
-            updateAccount(formData);
-        } else if(oldPassword !== "" || newPassword !== "" || confirmNewPassword !== "") {
-            console.log("Fill in all fields for password");
-        } else {
-            console.log(formData);
-            updateAccount(formData);
+        let jsonAccountData = {
+            "email": email,
+            "firstName": firstName,
+            "lastName": lastName,
+            "addressFirstLine": addressFirstLine,
+            "addressSecondLine": addressSecondLine,
+            "city": city,
+            "state": state,
+            "zipcode": zipcode,
+            "phoneNumber": phoneNumber
         }
-        history.push("/");
+        if(oldPassword !== "" && newPassword !== "" && confirmNewPassword !== "") {
+            jsonAccountData = {
+                "email": email,
+                "firstName": firstName,
+                "lastName": lastName,
+                "addressFirstLine": addressFirstLine,
+                "addressSecondLine": addressSecondLine,
+                "city": city,
+                "state": state,
+                "zipcode": zipcode,
+                "phoneNumber": phoneNumber,
+                "oldPassword": oldPassword,
+                "newPassword": newPassword,
+                "confirmPassword": confirmNewPassword
+            }
+            let response = await api.updateAccount(jsonAccountData);
+            if(response.data.status === "ERROR") {
+                alert(response.data.errorMessage);
+            }
+            history.push("/");
+        } else if(oldPassword !== "" || newPassword !== "" || confirmNewPassword !== "") {
+            alert("Fill in all password fields if you're changing the password to your account");
+        } else {
+            let response = await api.updateAccount(jsonAccountData);
+            if(response.data.status === "ERROR") {
+                alert(response.data.errorMessage);
+            }
+            history.push("/");
+        }
+    }
+
+    const handleChangeImage = () => {
+
     }
 
     const handleBackToOriginal = () => {
@@ -78,6 +105,9 @@ export default function ProfileScreen() {
         setState(store.userAccount.state);
         setZipcode(store.userAccount.zipcode);
         setPhoneNumber(store.userAccount.phoneNumber);
+        setOldPassword("");
+        setNewPassword("");
+        setConfirmNewPassword("");
     }
 
     return (
@@ -92,8 +122,8 @@ export default function ProfileScreen() {
                             <AccountCircleRoundedIcon style={{ margin: '20px 0px 0px 0', fontSize: '200px' }} />
                         </div>
                         <div style={{ display: 'flex', margin: '30px 0px 0px 0px' }}>
-                            <div style={{ cursor: 'pointer', fontSize: '30px', color: '#879ED9' }}>
-                                Change Image
+                            <div onClick={() => { handleChangeImage() }} style={{ cursor: 'pointer', fontSize: '30px', color: '#879ED9' }}>
+                                <u>Change Image</u>
                             </div>
                         </div>
                     </div>   
@@ -109,6 +139,7 @@ export default function ProfileScreen() {
                     </div>
                     <div className="old-password-textfield">
                         <TextField 
+                            type="password"
                             value={oldPassword} 
                             label='Old Password'
                             placeholder="Old Password" 
@@ -117,6 +148,7 @@ export default function ProfileScreen() {
                     </div>
                     <div className="new-password-textfield">
                         <TextField 
+                            type="password"
                             value={newPassword} 
                             label='New Password'
                             placeholder="New Password" 
@@ -125,6 +157,7 @@ export default function ProfileScreen() {
                     </div>
                     <div className="new-password-confirm-textfield">
                         <TextField 
+                            type="password"
                             value={confirmNewPassword} 
                             label='Confirm New Password'
                             placeholder="Confirm New Password" 
@@ -217,7 +250,7 @@ export default function ProfileScreen() {
                         </div>
                         <div className="account-buttons" style={{ margin: '-60px 0px 0px 0px', float: 'right'}}>
                             <Button onClick={() => { handleBackToOriginal() }} style={{ margin: '100px 4vw 0px 0px', width: '15vw', height: '40px', border: 'black 1px solid', borderRadius: '10px', color: 'black' }}>Cancel</Button>
-                            <Button type="submit" onClick={() => { handleChangeInfo() }} style={{ margin: '100px 0px 0px 0px', width: '15vw', height: '40px', border: 'black 1px solid', borderRadius: '10px', color: 'black' }}>Save</Button>
+                            <Button onClick={() => { handleChangeInfo() }} style={{ margin: '100px 0px 0px 0px', width: '15vw', height: '40px', border: 'black 1px solid', borderRadius: '10px', color: 'black' }}>Save</Button>
                         </div>
                     </div>
                 </div>

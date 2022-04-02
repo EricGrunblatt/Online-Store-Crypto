@@ -59,11 +59,16 @@ export default function NavigationBar() {
     }
 
     function handleProfile() {
+        console.log(auth.user.username);
         handleMenuClose();
         store.getAccount(auth.user.id).then(() => {
-            history.push("/profile")
-        });
-        
+            let jsonProfile = {
+                "username": auth.user.username
+            }
+            store.getProfile(jsonProfile).then(() => {
+                history.push("/profile")
+            });
+        });   
     }
 
     function handleWallet() {
