@@ -32,7 +32,7 @@ getProfileByUsername = async (req, res) => {
 			const profileImage = await Image.findById(user.profileImageId)
 				.select({ "_id": 0, "data": 1, "contentType": 1 })
 			// GET USER'S SELLING PRODUCTS
-			const sellingProducts = await Products.find({ sellerUsername: username, buyerUsername: null })
+			const sellingProducts = await Product.find({ sellerUsername: username, buyerUsername: null })
 				.select({ "_id": 1, "name": 1, "price": 1, "sellerUsername": 1, "dateListed": 1 })
 			// GET USER'S REVIEWS
 			const reviews = await Review.find({ forUsername: username })
