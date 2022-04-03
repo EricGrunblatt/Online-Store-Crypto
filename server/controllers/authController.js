@@ -1,4 +1,5 @@
 const User = require('../models/userModel')
+const Image = require('../models/imageModel')
 const constants = require('./constants.json')
 const bcryptjs = require('bcryptjs')
 const auth = require('../auth')
