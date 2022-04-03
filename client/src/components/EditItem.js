@@ -1,17 +1,19 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { TextareaAutosize, TextField, Box, Select, MenuItem } from '@mui/material';
 import { FormControl, InputLabel, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useHistory, generatePath } from "react-router-dom";
 import api from "../api"
-import axios, { post } from 'axios';
+import axios from 'axios';
 import qs from 'qs';
 
 export default function EditItem(){
 
     var categoryTxts = ["Clothing", "Electronics", "Fashion", "Furniture", "Hardware",
         "Home & Garden", "Music", "Office Supplies", "Other", "Photography & Video", "Sports Equipment", "Toys", "Video Games"];
+
+    const mintConButton = useRef(null);
 
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
@@ -23,11 +25,22 @@ export default function EditItem(){
     const [height, setHeight] = useState("");
     const [weight, setWeight] = useState("");
 
+    const [image0, setImage0] = useState(null);
+    const [image1, setImage1] = useState(null);
+    const [image2, setImage2] = useState(null);
+    const [image3, setImage3] = useState(null);
+    const [image4, setImage4] = useState(null);
+    const [image5, setImage5] = useState(null);
+    const [image6, setImage6] = useState(null);
+    const [image7, setImage7] = useState(null);
+
+    const pathname = window.location.pathname;
+    const productId = pathname.split("/").pop();
+
     useEffect(() => {
         async function fetchData() {
             try{
-                const pathname = window.location.pathname;
-                const productId = pathname.split("/").pop();
+                
                 // getProduct
                 const url = 'http://localhost:4000/api/product/getProduct';
                 // POST 
@@ -43,14 +56,56 @@ export default function EditItem(){
                     // SET PRODUCT 
                     setName(result.data.product.name);
                     setDescription(result.data.product.description);
-                    // setCondition(result.data.product.condition);
-                    handleDefaultConButton(result.data.product.condition);
+                    setCondition(result.data.product.condition);
+                    mintConButton.current.style.background = 'black';
+                    mintConButton.current.style.color = 'white';
                     setCategory(categoryTxts.indexOf(result.data.product.category) + 1);
                     setPrice(result.data.product.price);
                     setLength(result.data.product.boxLength);
                     setWidth(result.data.product.boxWidth);
                     setHeight(result.data.product.boxHeight);
                     setWeight(result.data.product.boxWeight);
+
+                    if(result.data.product.images[0]) {
+                    let image0 = result.data.product.images[0];
+                    let url0 = `data:${image0.mimetype};base64,${Buffer.from(image0.data).toString('base64')}`;
+                    setImage0(url0);
+                    }
+                    if(result.data.product.images[1]) {
+                        let image1 = result.data.product.images[1];
+                        let url1 = `data:${image1.mimetype};base64,${Buffer.from(image1.data).toString('base64')}`;
+                        setImage1(url1);
+                    }
+                    if(result.data.product.images[2]) {
+                        let image2 = result.data.product.images[2];
+                        let url2 = `data:${image2.mimetype};base64,${Buffer.from(image2.data).toString('base64')}`;
+                        setImage2(url2);
+                    }
+                    if(result.data.product.images[3]) {
+                        let image3 = result.data.product.images[3];
+                        let url3 = `data:${image3.mimetype};base64,${Buffer.from(image3.data).toString('base64')}`;
+                        setImage3(url3);
+                    }
+                    if(result.data.product.images[4]) {
+                        let image4 = result.data.product.images[4];
+                        let url4 = `data:${image4.mimetype};base64,${Buffer.from(image4.data).toString('base64')}`;
+                        setImage4(url4);
+                    }
+                    if(result.data.product.images[5]) {
+                        let image5 = result.data.product.images[5];
+                        let url5 = `data:${image5.mimetype};base64,${Buffer.from(image5.data).toString('base64')}`;
+                        setImage5(url5);
+                    }
+                    if(result.data.product.images[6]) {
+                        let image6 = result.data.product.images[6];
+                        let url6 = `data:${image6.mimetype};base64,${Buffer.from(image6.data).toString('base64')}`;
+                        setImage6(url6);
+                    }
+                    if(result.data.product.images[7]) {
+                        let image7 = result.data.product.images[7];
+                        let url7 = `data:${image7.mimetype};base64,${Buffer.from(image7.data).toString('base64')}`;
+                        setImage7(url7);
+                    }
                 });
             }
             catch{
@@ -58,16 +113,6 @@ export default function EditItem(){
         }
         fetchData()
     },[]);
-    
-    const [image0, setImage0] = useState(null);
-    const [image1, setImage1] = useState(null);
-    const [image2, setImage2] = useState(null);
-    const [image3, setImage3] = useState(null);
-    const [image4, setImage4] = useState(null);
-    const [image5, setImage5] = useState(null);
-    const [image6, setImage6] = useState(null);
-    const [image7, setImage7] = useState(null);
-
 
 
     const history = useHistory();
@@ -75,26 +120,8 @@ export default function EditItem(){
     let fontColor = "black";
     let regexp = /^[0-9\b]+$/;
 
-    /* OPEN/CLOSE CATEGORY MENU */
-    const handleCategory = (event) => {
-        setCategory(event.target.value);
-    };
-
-    /* CHANGE COLOR OF BUTTON DEFAULT */
-    const handleDefaultConButton = (aCondition) => {
-        var mintButton = document.querySelector('0');
-        console.log(conButtons)
-        conButtons.forEach(button => {
-            button.style.background = 'white';
-            button.style.color = 'black';
-        });
-        aCondition.style.background = 'black';
-        aCondition.style.color = 'white';
-        setCondition(aCondition);
-    }
-
-    /* CHANGE COLOR OF BUTTON WHEN SELECTED */
-    const handleConButton = (event) => {
+     /* CHANGE COLOR OF BUTTON WHEN SELECTED */
+     const handleConButton = (event) => {
         let conButtons = document.querySelectorAll('[data-con-button]');
         conButtons.forEach(button => {
             button.style.background = 'white';
@@ -104,7 +131,11 @@ export default function EditItem(){
         event.target.style.color = 'white';
         setCondition(event.target.value);
     }
-    
+
+    /* OPEN/CLOSE CATEGORY MENU */
+    const handleCategory = (event) => {
+        setCategory(event.target.value);
+    };
 
     // BOX0
     let box0 = "";
@@ -313,11 +344,11 @@ export default function EditItem(){
        </div>
     }
 
-    const handleListItem = async function() {
+    const handleEditItem = async function() {
 
         var categoryTxt = categoryTxts[category - 1]
         var formData = new FormData();
-
+        formData.append("_id", productId)
         formData.append("name", name);
         formData.append("description", description);
         formData.append("condition", condition);
@@ -362,9 +393,9 @@ export default function EditItem(){
         formData.append("image6", file6);
         formData.append("image7", file7);
 
-        const response = await api.addListingProduct(formData);
+        const response = await api.updateListingProduct(formData);
         const id = response.data.product._id;
-        history.push(generatePath("/listitem/:id", { id }));
+        history.push(generatePath("/edititem/:id", { id }));
     }
 
     return (
@@ -420,7 +451,7 @@ export default function EditItem(){
                     <div style={{ margin: '10px 0% 0px 1%', display: 'inline-block', fontFamily: 'Quicksand', fontWeight: 'bold', color: '#808080', fontSize: '25px' }}>{condition}</div>
                 </div>
                 <div className="condition-buttons" style={{ display: 'flex', flexDirection: 'row', margin: '20px 0px 0px 10%' }}>
-                    <Button data-con-button className="0" value="Mint" onClick={handleConButton} style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>Mint</Button>
+                    <Button data-con-button ref={mintConButton} value="Mint" onClick={handleConButton} style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>Mint</Button>
                     <Button data-con-button className="1" value="New" onClick={handleConButton} style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>New</Button>
                     <Button data-con-button className="2" value="Lightly Used" onClick={handleConButton} style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>Lightly Used</Button>
                     <Button data-con-button className="3" value="Used" onClick={handleConButton} style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>Used</Button>
@@ -470,7 +501,7 @@ export default function EditItem(){
                     </div>
                 </div>
                 <div className="list-item-button" style={{ margin: '50px 0px 50px 0px', borderRadius: '10px', textAlign: 'center' }}>
-                    <Button type="submit" onClick={handleListItem} style={{ textAlign: 'center', background: 'black', color: 'white', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '20px', width: '150px' }}>List Item</Button>
+                    <Button type="submit" onClick={handleEditItem} style={{ textAlign: 'center', background: 'black', color: 'white', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '20px', width: '150px' }}>Save Item</Button>
                 </div> 
         </div>
     )

@@ -1,56 +1,3 @@
-<<<<<<< HEAD
-{
-	"status": {
-		"OK": "OK",
-		"ERROR": "ERROR",
-		"FATAL_ERROR": "FATAL ERROR"
-	},
-	"auth": {
-		"missingRequiredField": "MISSING REQUIRED FIELD",
-		"passwordTooShort": "PASSWORD TOO SHORT",
-		"userAlreadyExists": "USER ALREADY EXISTS",
-		"emailAlreadyExists": "EMAIL ALREADY EXISTS",
-		"invalidEmail": "INVALID EMAIL",
-		"invalidUsername": "INVALID USERNAME",
-		"userDoesNotExist": "USER DOES NOT EXIST",
-		"passwordsDoNotMatch": "PASSWORDS DO NOT MATCH"
-	},
-	"user": {
-		"missingRequiredField": "MISSING REQUIRED FIELD",
-		"userDoesNotExist": "USER DOES NOT EXIST",
-		"newPasswordNotProvided": "NEW PASSWORD NOT PROVIDED",
-		"newPasswordDoesNotMatchConfirmPassword": "NEW PASSWORD DOES NOT MATCH CONFIRM PASSWORD",
-		"incorrectPassword": "INCORRECT PASSWORD",
-		"productDoesNotExist": "PRODUCT DOES NOT EXIST",
-		"userDidNotPurchaseThisProduct": "USER DID NOT PURCHASE THIS PRODUCT",
-		"reviewAlreadyExists":"REVIEW ALREADY EXISTS",
-		"oldPasswordNotProvided": "OLD PASSWORD NOT PROVIDED"
-	},
-	"product": {
-		"missingRequiredField": "MISSING REQUIRED FIELD",
-		"missingImages": "MISSING IMAGES",
-		"userDoesNotExist": "USER DOES NOT EXIST",
-		"productDoesNotExist": "PRODUCT DOES NOT EXIST",
-		"youAreNotTheSeller": "YOU ARE NOT THE SELLER",
-		"productIsSold": "PRODUCT IS SOLD",
-		"reviewSpecifiedButNotFound": "REVIEW SPECIFIED BUT NOT FOUND",
-		"failedToGetImages": "FAILED TO GET IMAGES"
-	},
-	"purchase": {
-		"missingRequiredField": "MISSING REQUIRED FIELD",
-		"userDoesNotExist": "USER DOES NOT EXIST",
-		"productDoesNotExist": "PRODUCT DOES NOT EXIST",
-		"cartDoesNotIncludeProduct": "CART DOES NOT INCLUDE PRODUCT",
-		"cartAlreadyIncludesProduct": "CART ALREADY INCLUDES PRODUCT",
-		"userOwnsThisItem": "USER OWNS THIS ITEM",
-		"cartIsEmpty": "CART IS EMPTY"
-	},
-	"review":{
-		"missingRequiredField": "MISSING REQUIRED FIELD",
-		"starsNotInRange":"PLEASE RATE IT 1-5"
-	}
-
-=======
 {
 	"status": {
 		"OK": "OK",
@@ -106,5 +53,4 @@
 		"starsNotInRange":"PLEASE RATE IT 1-5"
 	}
 
->>>>>>> f9999189bea372a95cebe5716a305a326ab7414e
 }

@@ -1,5 +1,7 @@
-import { createContext, useState } from 'react'
+import { createContext, useState, useContext } from 'react'
 import api from '../api';
+import AuthContext from '../auth';
+import { useHistory } from 'react-router-dom';
 /*
     This is our global data store.
     
@@ -21,6 +23,8 @@ export const GlobalStoreActionType = {
     UNMARK_CART_REMOVE: "MARK_CART_REMOVE",
     MARK_LISTING_DELETION: "MARK_LISTING_DELETION",
     UNMARK_LISTING_DELETION: "UNMARK_LISTING_DELETION",
+    GET_ACCOUNT: "GET_ACCOUNT",
+    GET_PROFILE: "GET_PROFILE",
     STORE_SEARCH_BAR: "STORE_SEARCH_BAR",
 }
 
@@ -34,8 +38,13 @@ function GlobalStoreContextProvider(props) {
         registerModal: false,
         cartItemRemove: null,
         listingItemDelete: null,
+        userAccount: null,
+        userProfile: null,
         searchBar: null
     });
+
+    const history = useHistory();
+    const { auth } = useContext(AuthContext);
 
     const storeReducer = (action) => {
         const { type, payload } = action;
@@ -48,6 +57,8 @@ function GlobalStoreContextProvider(props) {
                     registerModal: store.registerModal,
                     cartItemRemove: null,
                     listingItemDelete: null,
+                    userAccount: null,
+                    userProfile: store.userProfile,
                     searchBar: store.searchBar,
                 });
             }
@@ -59,6 +70,8 @@ function GlobalStoreContextProvider(props) {
                     registerModal: false,
                     cartItemRemove: null,
                     listingItemDelete: null,
+                    userAccount: null,
+                    userProfile: null,
                     searchBar: null,
                 });
             }
@@ -70,6 +83,8 @@ function GlobalStoreContextProvider(props) {
                     registerModal: false,
                     cartItemRemove: null,
                     listingItemDelete: null,
+                    userAccount: null,
+                    userProfile: null,
                     searchBar: null,
                 });
             }
@@ -81,6 +96,8 @@ function GlobalStoreContextProvider(props) {
                     registerModal: true,
                     cartItemRemove: null,
                     listingItemDelete: null,
+                    userAccount: null,
+                    userProfile: null,
                     searchBar: null,
                 });
             }
@@ -92,6 +109,8 @@ function GlobalStoreContextProvider(props) {
                     registerModal: false,
                     cartItemRemove: null,
                     listingItemDelete: null,
+                    userAccount: null,
+                    userProfile: null,
                     searchBar: null,
                 });
             }
@@ -103,6 +122,8 @@ function GlobalStoreContextProvider(props) {
                     registerModal: false,
                     cartItemRemove: payload,
                     listingItemDelete: null,
+                    userAccount: null,
+                    userProfile: store.userProfile,
                     searchBar: null,
                 });
             }
@@ -114,6 +135,8 @@ function GlobalStoreContextProvider(props) {
                     registerModal: false,
                     cartItemRemove: null,
                     listingItemDelete: null,
+                    userAccount: null,
+                    userProfile: store.userProfile,
                     searchBar: null,
                 });
             }
@@ -125,6 +148,8 @@ function GlobalStoreContextProvider(props) {
                     registerModal: false,
                     cartItemRemove: null,
                     listingItemDelete: payload,
+                    userAccount: null,
+                    userProfile: store.userProfile,
                     searchBar: null,
                 });
             }
@@ -136,6 +161,8 @@ function GlobalStoreContextProvider(props) {
                     registerModal: false,
                     cartItemRemove: null,
                     listingItemDelete: null,
+                    userAccount: null,
+                    userProfile: store.userProfile,
                     searchBar: null,
                 });
             }
@@ -147,23 +174,53 @@ function GlobalStoreContextProvider(props) {
                     registerModal: store.registerModal,
                     cartItemRemove: null,
                     listingItemDelete: null,
+                    userAccount: null,
+                    userProfile: store.userProfile,
                     searchBar: payload,
                 });
             }
-            
+            // SET USER ACCOUNT
+            case GlobalStoreActionType.GET_ACCOUNT: {
+                return setStore({
+                    catalogItems: store.catalogItems,
+                    loginModal: store.loginModal,
+                    registerModal: store.registerModal,
+                    cartItemRemove: null,
+                    listingItemDelete: null,
+                    userAccount: payload.account,
+                    userProfile: payload.profile,
+                    searchBar: null,
+                });
+            }
+
+            // SET USER PROFILE
+            case GlobalStoreActionType.GET_PROFILE: {
+                return setStore({
+                    catalogItems: store.catalogItems,
+                    loginModal: store.loginModal,
+                    registerModal: store.registerModal,
+                    cartItemRemove: null,
+                    listingItemDelete: null,
+                    userAccount: store.userAccount,
+                    userProfile: payload,
+                    searchBar: null,
+                });
+            }
+         
             default:
                 return store;
         }
     }
 
     // LOADS ALL ITEMS IN THE CATALOG
-    store.loadCatalogItems = async function () {
-
+    store.loadItems = async function () {
+        // TODO
     }
 
     // SETS ID FOR CART ITEM BEING REMOVED
     store.markCartRemove = async function (id) {
         // Get item from database
+        // TODO
         
     }
 
@@ -188,7 +245,49 @@ function GlobalStoreContextProvider(props) {
         });
     }
 
+    // GETS ACCOUNT FROM USER ID
+    store.getAccount = async function () {
+        let response = await api.getAccount();
+        if(response.data.status === "OK") {
+            let myAccount = response.data.user;
+            async function getProfile() {
+                let jsonProfile = {
+                    "username": auth.user.username
+                }
+                response = await api.getProfileByUsername(jsonProfile);
+                if(response.data.status === "OK") {
+                    let myProfile = response.data;
+                    storeReducer({
+                        type: GlobalStoreActionType.GET_ACCOUNT,
+                        payload: {
+                            account: myAccount,
+                            profile: myProfile
+                        }
+                    });
+                    history.push("/profile");
+                }
+            }
+            getProfile();
+        }
+        else {
+            console.log("API FAILED TO GET ACCOUNT");
+        }
+    }
 
+    // GETS PROFILE FROM USERNAME
+    store.getProfile = async function (username) {
+        let response = await api.getProfileByUsername(username);
+        if(response.data.status === "OK") {
+            let profile = response.data;
+            storeReducer({
+                type: GlobalStoreActionType.GET_PROFILE,
+                payload: profile
+            });
+        }
+        else {
+            console.log("API FAILED TO GET PROFILE");
+        }
+    }
 
     // THIS FUNCTION OPENS LOGIN MODAL
     store.setOpenLoginModal = function () {
