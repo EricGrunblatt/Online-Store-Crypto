@@ -39,15 +39,16 @@ export default function ProfileScreen() {
             setOldPassword("");
             setNewPassword("");
             setConfirmNewPassword("");
-            setProfileImage(store.userProfile.profileImage);
 
+            let image = store.userProfile.profileImage;
+            let url = `data:${image.mimetype};base64,${Buffer.from(image.data).toString('base64')}`;
+
+            setProfileImage(url);
         }  catch (err) {
             console.log(err);
         }
     }, [auth, store.userAccount, store.userProfile])
 
-
-    
 
     const handleBackToOriginal = () => {
         setEmail(auth.user.email);
@@ -72,8 +73,6 @@ export default function ProfileScreen() {
         if (event.target.files && event.target.files[0]) {
             setProfileImage(URL.createObjectURL(event.target.files[0]));
         }
-        console.log(profileImage);
-        //handleChangeProfilePicture();
     }
 
     // USES DEFAULT ACCOUNT ICON IF USER DOES NOT HAVE AN IMAGE         
@@ -143,6 +142,7 @@ export default function ProfileScreen() {
         history.push("/");
     }
 
+    console.log(profileImage);
     return (
         <div className="profile-account">
             <div className="profile" style={{ margin: '50px 0% 0px 10%', width: '80%', height: '450px', border: 'black 2px solid', borderRadius: '20px' }}>
@@ -150,13 +150,13 @@ export default function ProfileScreen() {
                     <div style={{ display: 'flex', flexDirection: 'column', margin: '0px 0px 0px 3vw' }}>
                         <div className="display-name-profile" style={{ display: 'flex', margin: '20px 0% 0px 0%', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '65px', color: 'black' }}>
                             <u> My Profile </u>
-                        </div>
+                        </div> 
                         <div style={{ display: 'flex' }}>
                             {profilePicture}
                         </div>
                         <div style={{ display: 'flex', margin: '250px 0px 0px 0px' }}>
                             <div style={{ fontSize: '30px', color: '#879ED9' }}>
-                                <label for="profilePicture">
+                                <label htmlFor="profilePicture">
                                     <div style={{ cursor: 'pointer' }}><u>Change Image</u></div>
                                 </label>
                                 <input type='file' name='profilePicture' id='profilePicture' onChange={handleChangeImage} style={{ display: 'none', visibility: 'none' }}></input>  
