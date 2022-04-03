@@ -7,6 +7,7 @@ import ListingsDeleteModal from "./ListingsDeleteModal";
 export default function Listings() {
     const history = useHistory();
     
+    
     let items = [
 		{itemName: "Hoodie", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", listed: ""},
 		{itemName: "Hoodie", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", listed: ""},

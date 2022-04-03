@@ -16,13 +16,17 @@ export const loginUser = (payload) => api.post(`/auth/login`, payload)
 export const logoutUser = () => api.post(`/auth/logout`);
 
 export const addListingProduct = (payload) => api.post('/product/addListingProduct', payload)
+export const getProduct = (payload) => api.post('/product/getProduct', payload)
+export const updateListingProduct = (payload) => api.post('/product/updateListingProduct', payload)
 
 const apis = {
     getLoggedIn,
     registerUser,
     loginUser,
     logoutUser,
-    addListingProduct
+    addListingProduct,
+    getProduct,
+    updateListingProduct
 }
 
 export default apis

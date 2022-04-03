@@ -14,7 +14,8 @@ import {
     ProductPage,
     ProfileScreen,
     ViewProfile,
-    Wallet
+    Wallet,
+    EditItem
 } from './components'
 /*
     This is our application's top-level component and entry-point
@@ -37,6 +38,7 @@ export default function App() {
                         <Route path="/listings" exact component={Listings} />
                         <Route path="/cart" exact component={Cart} />
                         <Route path="/listitem" exact component={ListItem} />
+                        <Route path="/edititem/:id" exact component={EditItem} />
                         <Route path="/checkout" exact component={Checkout} />
                         <Route path="/product" exact component={ProductPage} />
 						<Route path="/viewprofile" exact component={ViewProfile} />

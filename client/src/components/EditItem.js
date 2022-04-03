@@ -1,12 +1,17 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TextareaAutosize, TextField, Box, Select, MenuItem } from '@mui/material';
 import { FormControl, InputLabel, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useHistory, generatePath } from "react-router-dom";
 import api from "../api"
+import axios, { post } from 'axios';
+import qs from 'qs';
 
-export default function ListItem(){
+export default function EditItem(){
+
+    var categoryTxts = ["Clothing", "Electronics", "Fashion", "Furniture", "Hardware",
+        "Home & Garden", "Music", "Office Supplies", "Other", "Photography & Video", "Sports Equipment", "Toys", "Video Games"];
 
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
@@ -18,6 +23,42 @@ export default function ListItem(){
     const [height, setHeight] = useState("");
     const [weight, setWeight] = useState("");
 
+    useEffect(() => {
+        async function fetchData() {
+            try{
+                const pathname = window.location.pathname;
+                const productId = pathname.split("/").pop();
+                // getProduct
+                const url = 'http://localhost:4000/api/product/getProduct';
+                // POST 
+                const data = { '_id': productId };
+                const options = {
+                    method: 'POST',
+                    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+                    data: qs.stringify(data),
+                    url
+                };
+                axios(options).then(function(result) {
+                    console.log("RESPONSE: ", result.data.product);
+                    // SET PRODUCT 
+                    setName(result.data.product.name);
+                    setDescription(result.data.product.description);
+                    // setCondition(result.data.product.condition);
+                    handleDefaultConButton(result.data.product.condition);
+                    setCategory(categoryTxts.indexOf(result.data.product.category) + 1);
+                    setPrice(result.data.product.price);
+                    setLength(result.data.product.boxLength);
+                    setWidth(result.data.product.boxWidth);
+                    setHeight(result.data.product.boxHeight);
+                    setWeight(result.data.product.boxWeight);
+                });
+            }
+            catch{
+            }
+        }
+        fetchData()
+    },[]);
+    
     const [image0, setImage0] = useState(null);
     const [image1, setImage1] = useState(null);
     const [image2, setImage2] = useState(null);
@@ -26,6 +67,8 @@ export default function ListItem(){
     const [image5, setImage5] = useState(null);
     const [image6, setImage6] = useState(null);
     const [image7, setImage7] = useState(null);
+
+
 
     const history = useHistory();
     let bgColor = "white";
@@ -36,6 +79,19 @@ export default function ListItem(){
     const handleCategory = (event) => {
         setCategory(event.target.value);
     };
+
+    /* CHANGE COLOR OF BUTTON DEFAULT */
+    const handleDefaultConButton = (aCondition) => {
+        var mintButton = document.querySelector('0');
+        console.log(conButtons)
+        conButtons.forEach(button => {
+            button.style.background = 'white';
+            button.style.color = 'black';
+        });
+        aCondition.style.background = 'black';
+        aCondition.style.color = 'white';
+        setCondition(aCondition);
+    }
 
     /* CHANGE COLOR OF BUTTON WHEN SELECTED */
     const handleConButton = (event) => {
@@ -48,6 +104,7 @@ export default function ListItem(){
         event.target.style.color = 'white';
         setCondition(event.target.value);
     }
+    
 
     // BOX0
     let box0 = "";
@@ -61,7 +118,7 @@ export default function ListItem(){
         box0 = 
         <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px dashed', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
             <label for='image0' style={{ cursor: 'pointer' }}>
-                <AddIcon></AddIcon>
+            <img src={image0} alt="preview image0" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
             </label>
             <input type='file' name='image0' id='image0' onChange={onImageChange0} style={{ display: 'none', visibility: 'none' }}></input>
         </div>
@@ -258,8 +315,6 @@ export default function ListItem(){
 
     const handleListItem = async function() {
 
-        var categoryTxts = ["Clothing", "Electronics", "Fashion", "Furniture", "Hardware",
-        "Home & Garden", "Music", "Office Supplies", "Other", "Photography & Video", "Sports Equipment", "Toys", "Video Games"]
         var categoryTxt = categoryTxts[category - 1]
         var formData = new FormData();
 
@@ -306,9 +361,10 @@ export default function ListItem(){
         formData.append("image5", file5);
         formData.append("image6", file6);
         formData.append("image7", file7);
+
         const response = await api.addListingProduct(formData);
         const id = response.data.product._id;
-        history.push(generatePath("/edititem/:id", { id }));
+        history.push(generatePath("/listitem/:id", { id }));
     }
 
     return (
@@ -364,10 +420,10 @@ export default function ListItem(){
                     <div style={{ margin: '10px 0% 0px 1%', display: 'inline-block', fontFamily: 'Quicksand', fontWeight: 'bold', color: '#808080', fontSize: '25px' }}>{condition}</div>
                 </div>
                 <div className="condition-buttons" style={{ display: 'flex', flexDirection: 'row', margin: '20px 0px 0px 10%' }}>
-                    <Button data-con-button value="Mint" onClick={handleConButton} style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>Mint</Button>
-                    <Button data-con-button value="New" onClick={handleConButton} style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>New</Button>
-                    <Button data-con-button value="Lightly Used" onClick={handleConButton} style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>Lightly Used</Button>
-                    <Button data-con-button value="Used" onClick={handleConButton} style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>Used</Button>
+                    <Button data-con-button className="0" value="Mint" onClick={handleConButton} style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>Mint</Button>
+                    <Button data-con-button className="1" value="New" onClick={handleConButton} style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>New</Button>
+                    <Button data-con-button className="2" value="Lightly Used" onClick={handleConButton} style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>Lightly Used</Button>
+                    <Button data-con-button className="3" value="Used" onClick={handleConButton} style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>Used</Button>
                 </div>
                 <div className="description" style={{ margin: '40px 0px 0px 10%'}}>
                     <div style={{ margin: '10px 0% 0px 0%', fontFamily: 'Quicksand', fontWeight: 'bold', color: '#808080', fontSize: '25px' }}>Description:</div>
