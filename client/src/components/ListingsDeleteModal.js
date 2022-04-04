@@ -35,14 +35,17 @@ function ListingsDeleteModal() {
     let isOpen = false;
 
     if(store.listingItemDelete) {
-        
+        isOpen = true;
     }
 
     function handleDeleteListing() {
-        
+        console.log("the product id: ", store.listingItemDelete)
+        store.unmarkListingDelete();
+        isOpen=false;
     }
 
     function handleCloseModal() {
+        store.unmarkListingDelete();
         isOpen=false;
     }
     

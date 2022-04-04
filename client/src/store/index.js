@@ -234,7 +234,10 @@ function GlobalStoreContextProvider(props) {
 
     // SETS ID FOR LISTING ITEM BEING DELETED
     store.markListingDelete = async function (id) {
-        
+        storeReducer({
+            type: GlobalStoreActionType.MARK_LISTING_DELETION,
+            payload: id
+        });
     }
 
     // NO LISTING ITEM WANTING TO BE DELETED

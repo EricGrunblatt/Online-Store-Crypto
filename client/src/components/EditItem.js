@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import { TextareaAutosize, TextField, Box, Select, MenuItem } from '@mui/material';
 import { FormControl, InputLabel, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -7,13 +7,20 @@ import { useHistory, generatePath } from "react-router-dom";
 import api from "../api"
 import axios from 'axios';
 import qs from 'qs';
+import ListingsDeleteModal from "./ListingsDeleteModal";
+import { GlobalStoreContext } from '../store'
 
 export default function EditItem(){
 
     var categoryTxts = ["Clothing", "Electronics", "Fashion", "Furniture", "Hardware",
         "Home & Garden", "Music", "Office Supplies", "Other", "Photography & Video", "Sports Equipment", "Toys", "Video Games"];
 
+    const { store } = useContext(GlobalStoreContext);
+
     const mintConButton = useRef(null);
+    const newConButton = useRef(null);
+    const litNewConButton = useRef(null);
+    const usedConButton = useRef(null);
 
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
@@ -37,10 +44,10 @@ export default function EditItem(){
     const pathname = window.location.pathname;
     const productId = pathname.split("/").pop();
 
+    /* GET PRODUCT BY ID */
     useEffect(() => {
         async function fetchData() {
             try{
-                
                 // getProduct
                 const url = 'http://localhost:4000/api/product/getProduct';
                 // POST 
@@ -57,8 +64,24 @@ export default function EditItem(){
                     setName(result.data.product.name);
                     setDescription(result.data.product.description);
                     setCondition(result.data.product.condition);
-                    mintConButton.current.style.background = 'black';
-                    mintConButton.current.style.color = 'white';
+
+                    if (mintConButton.current.value === result.data.product.condition){
+                        mintConButton.current.style.background = 'black';
+                        mintConButton.current.style.color = 'white';
+                    }
+                    else if (newConButton.current.value === result.data.product.condition){
+                        newConButton.current.style.background = 'black';
+                        newConButton.current.style.color = 'white';
+                    }
+                    else if (litNewConButton.current.value === result.data.product.condition){
+                        litNewConButton.current.style.background = 'black';
+                        litNewConButton.current.style.color = 'white';
+                    }
+                    else if (usedConButton.current.value === result.data.product.condition){
+                        usedConButton.current.style.background = 'black';
+                        usedConButton.current.style.color = 'white';
+                    }
+                    
                     setCategory(categoryTxts.indexOf(result.data.product.category) + 1);
                     setPrice(result.data.product.price);
                     setLength(result.data.product.boxLength);
@@ -120,8 +143,8 @@ export default function EditItem(){
     let fontColor = "black";
     let regexp = /^[0-9\b]+$/;
 
-     /* CHANGE COLOR OF BUTTON WHEN SELECTED */
-     const handleConButton = (event) => {
+    /* CHANGE COLOR OF BUTTON WHEN SELECTED */
+    const handleConButton = (event) => {
         let conButtons = document.querySelectorAll('[data-con-button]');
         conButtons.forEach(button => {
             button.style.background = 'white';
@@ -149,7 +172,7 @@ export default function EditItem(){
         box0 = 
         <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px dashed', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
             <label for='image0' style={{ cursor: 'pointer' }}>
-            <img src={image0} alt="preview image0" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
+                <AddIcon></AddIcon>
             </label>
             <input type='file' name='image0' id='image0' onChange={onImageChange0} style={{ display: 'none', visibility: 'none' }}></input>
         </div>
@@ -293,31 +316,31 @@ export default function EditItem(){
        </div>
     }
 
-   // BOX6
-   let box6 = "";
-    
-   const onImageChange6 = (event) => {
-       if (event.target.files && event.target.files[0]) {
-           setImage6(URL.createObjectURL(event.target.files[0]));
-       }
-   }
-   if(!image6) {
-       box6 = 
-       <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px dashed', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
-           <label for='image6' style={{ cursor: 'pointer' }}>
-               <AddIcon></AddIcon>
-           </label>
-           <input type='file' name='image6' id='image6' onChange={onImageChange6} style={{ display: 'none', visibility: 'none' }}></input>
-       </div>
-   } else {
-       box6 = 
-       <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
-          <label for='image6' style={{ cursor: 'pointer' }}>
-              <img src={image6} alt="preview image6" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
-          </label>
-          <input type='file' name='image6' id='image6' onChange={onImageChange6} style={{ display: 'none', visibility: 'none' }}></input>
-      </div>
-   }
+    // BOX6
+    let box6 = "";
+        
+    const onImageChange6 = (event) => {
+        if (event.target.files && event.target.files[0]) {
+            setImage6(URL.createObjectURL(event.target.files[0]));
+        }
+    }
+    if(!image6) {
+        box6 = 
+        <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px dashed', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
+            <label for='image6' style={{ cursor: 'pointer' }}>
+                <AddIcon></AddIcon>
+            </label>
+            <input type='file' name='image6' id='image6' onChange={onImageChange6} style={{ display: 'none', visibility: 'none' }}></input>
+        </div>
+    } else {
+        box6 = 
+        <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
+            <label for='image6' style={{ cursor: 'pointer' }}>
+                <img src={image6} alt="preview image6" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
+            </label>
+            <input type='file' name='image6' id='image6' onChange={onImageChange6} style={{ display: 'none', visibility: 'none' }}></input>
+        </div>
+    }
     // BOX7
     let box7 = "";
     
@@ -344,6 +367,12 @@ export default function EditItem(){
        </div>
     }
 
+    /* OPENS DELETE ITEM MODAL IF PRESSED */
+    function handleDeleteItem() {
+        store.markListingDelete(productId);
+    }
+
+    /* POST EDIT ITEM */
     const handleEditItem = async function() {
 
         var categoryTxt = categoryTxts[category - 1]
@@ -452,9 +481,9 @@ export default function EditItem(){
                 </div>
                 <div className="condition-buttons" style={{ display: 'flex', flexDirection: 'row', margin: '20px 0px 0px 10%' }}>
                     <Button data-con-button ref={mintConButton} value="Mint" onClick={handleConButton} style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>Mint</Button>
-                    <Button data-con-button className="1" value="New" onClick={handleConButton} style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>New</Button>
-                    <Button data-con-button className="2" value="Lightly Used" onClick={handleConButton} style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>Lightly Used</Button>
-                    <Button data-con-button className="3" value="Used" onClick={handleConButton} style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>Used</Button>
+                    <Button data-con-button ref={newConButton} value="New" onClick={handleConButton} style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>New</Button>
+                    <Button data-con-button ref={litNewConButton} value="Lightly Used" onClick={handleConButton} style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>Lightly Used</Button>
+                    <Button data-con-button ref={usedConButton} value="Used" onClick={handleConButton} style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>Used</Button>
                 </div>
                 <div className="description" style={{ margin: '40px 0px 0px 10%'}}>
                     <div style={{ margin: '10px 0% 0px 0%', fontFamily: 'Quicksand', fontWeight: 'bold', color: '#808080', fontSize: '25px' }}>Description:</div>
@@ -500,9 +529,15 @@ export default function EditItem(){
                         }} className="weight" placeholder="Weight (lbs)" style={{ margin: '-40px 41.5vw 0px 0px', float: 'right', width: '20vw' }}></TextField>
                     </div>
                 </div>
-                <div className="list-item-button" style={{ margin: '50px 0px 50px 0px', borderRadius: '10px', textAlign: 'center' }}>
-                    <Button type="submit" onClick={handleEditItem} style={{ textAlign: 'center', background: 'black', color: 'white', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '20px', width: '150px' }}>Save Item</Button>
-                </div> 
+                <div style={{ display: 'flex', flexDirection: 'row', margin: '8% 20% 10% 20%' }}>
+                    <div className="delete-item-button" style={{ margin: '20px', borderRadius: '10px', textAlign: 'center' }}>
+                        <Button type="submit" onClick={handleDeleteItem} style={{ textAlign: 'center', background: 'white', color: 'red', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '20px', width: '180px', border: 'black 1px solid' }}>Delete Listing</Button>
+                    </div> 
+                    <div className="list-item-button" style={{ margin: 'auto', borderRadius: '10px', textAlign: 'center' }}>
+                        <Button type="submit" onClick={handleEditItem} style={{ textAlign: 'center', background: 'white', color: 'black', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '20px', width: '150px', border: 'black 1px solid' }}>Save</Button>
+                    </div> 
+                </div>
+            <ListingsDeleteModal></ListingsDeleteModal>
         </div>
     )
 }
