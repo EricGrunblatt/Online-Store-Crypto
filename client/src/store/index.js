@@ -199,14 +199,7 @@ function GlobalStoreContextProvider(props) {
 
     // LOADS ALL ITEMS IN THE CATALOG AFTER LOGIN/REGISTER
     store.initialLoad = async function () {
-        let jsonCatalog = {
-            "search": null,
-            "category": null,
-            "condition": null, 
-            "minPrice": undefined, 
-            "maxPrice": undefined, 
-            "sortBy": null
-        }
+        let jsonCatalog = {};
         let response = api.getCatalog(jsonCatalog);
         if(response.data.status === "OK") {
             console.log("Items loaded");
@@ -216,6 +209,13 @@ function GlobalStoreContextProvider(props) {
 
     // LOADS ALL ITEMS IN THE CATALOG
     store.loadItems = async function () {
+        //catalog json
+        /* Sort By:
+        "DATE_DESCENDING"
+        "DATE_ASCENDING"
+        "PRICE_ASCENDING"
+        "PRICE_DESCENDING"
+        */
         //let response = api.getCatalog()
     }
 
