@@ -90,9 +90,9 @@ export default function EditItem(){
                     setWeight(result.data.product.boxWeight);
 
                     if(result.data.product.images[0]) {
-                    let image0 = result.data.product.images[0];
-                    let url0 = `data:${image0.mimetype};base64,${Buffer.from(image0.data).toString('base64')}`;
-                    setImage0(url0);
+                        let image0 = result.data.product.images[0];
+                        let url0 = `data:${image0.mimetype};base64,${Buffer.from(image0.data).toString('base64')}`;
+                        setImage0(url0);
                     }
                     if(result.data.product.images[1]) {
                         let image1 = result.data.product.images[1];

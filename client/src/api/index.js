@@ -24,7 +24,7 @@ export const getProfileByUsername = (payload) => api.post('/user/getProfileByUse
 export const addListingProduct = (payload) => api.post('/product/addListingProduct', payload);
 export const getProduct = (payload) => api.post('/product/getProduct', payload)
 export const updateListingProduct = (payload) => api.post('/product/updateListingProduct', payload)
-export const getListingProductsForUser = (payload) => api.post('/product/getListingProductsForUser', payload)
+export const getListingProductsForUser = () => api.post('/product/getListingProductsForUser')
 
 const apis = {
     getLoggedIn,
