@@ -56,13 +56,14 @@ getCatalog = async (req, res) => {
 		productQuery.price.$lte = maxPrice
 	}
 
-	console.log(productQuery)
+	// console.log(productQuery)
 
 	let json = {}
 	let products = {}
 	try {
 		products = await Product.find(productQuery)
 		json = {status: constants.status.OK, products: products}
+		console.log("RESPONSE: ", json)
 		res.status(200).json(json)
 	}
 	catch (err) {
