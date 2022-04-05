@@ -1,2 +1,16 @@
-node_modules
-uploads
+/*
+!.gitignore
+
+# Track everything under client except node_modules 
+!/client
+
+/client/node_modules/*
+
+# Track everything under server except node_modules and uploads (except for uploads/placeholder.txt)
+!/server
+
+/server/node_modules/*
+
+/server/uploads/*
+
+!/server/uploads/placeholder.txt

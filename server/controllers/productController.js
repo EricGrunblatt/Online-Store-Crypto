@@ -58,10 +58,26 @@ getCatalog = async (req, res) => {
 
 	console.log("PRODUCT QUERY: ", productQuery)
 
+
+	sortQuery = {}
+	if (sortBy === "DATE_DESCENDING") { // NEWEST TO OLDEST
+		sortQuery = {createdAt: -1}
+	}
+	else if (sortBy === "DATE_ASCENDING") { // OLDEST TO NEWEST
+		sortQuery = {createdAt: 1}
+	}
+	else if (sortBy === "PRICE_ASCENDING") {
+		sortQuery = {price: 1}
+	}
+	else if (sortBy === "PRICE_DESCENDING") {
+		sortQuery = {price: -1}
+	}
+	console.log("SORT QUERY: ", sortQuery)
+
 	let json = {}
 	let products = {}
 	try {
-		products = await Product.find(productQuery)
+		products = await Product.find(productQuery).sort(sortQuery)
 		json = {status: constants.status.OK, products: products}
 		console.log("RESPONSE: ", json)
 		res.status(200).json(json)
