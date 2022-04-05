@@ -56,7 +56,7 @@ getCatalog = async (req, res) => {
 		productQuery.price.$lte = maxPrice
 	}
 
-	// console.log(productQuery)
+	console.log("PRODUCT QUERY: ", productQuery)
 
 	let json = {}
 	let products = {}
