@@ -78,9 +78,13 @@ function AuthContextProvider(props) {
                 });
             }
             else if (response.data.status === "ERROR") {
-                return setAuth({
-                    errorMessage: response.body.errorMessage
-                }) 
+                authReducer({
+                    type: AuthActionType.GET_LOGGED_IN,
+                    payload: {
+                        loggedIn: false,
+                        user: null
+                    }
+                });
             }
             else {
                 alert("ERROR: response.status=200, but response.body.status not recognized")
@@ -103,6 +107,7 @@ function AuthContextProvider(props) {
                         user: response.data.user
                     }
                 })
+                store.initalLoad();
                 history.push("/");
             }
             else if (response.data.status === "ERROR") {
@@ -132,7 +137,9 @@ function AuthContextProvider(props) {
                         user: response.data.user
                     }
                 })
-                history.push("/");
+                auth.getLoggedIn();
+                store.initialLoad();
+                
             }
             else if (response.data.status === "ERROR") {
                 return setAuth({
@@ -145,7 +152,6 @@ function AuthContextProvider(props) {
         } catch (err) {
             alert("ERROR: something went really wrong")
         }
-        
     }
 
     auth.logoutUser = async function() {

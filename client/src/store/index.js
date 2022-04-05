@@ -25,7 +25,6 @@ export const GlobalStoreActionType = {
     UNMARK_LISTING_DELETION: "UNMARK_LISTING_DELETION",
     GET_ACCOUNT: "GET_ACCOUNT",
     GET_PROFILE: "GET_PROFILE",
-    STORE_SEARCH_BAR: "STORE_SEARCH_BAR",
 }
 
 // WITH THIS WE'RE MAKING OUR GLOBAL DATA STORE
@@ -39,8 +38,7 @@ function GlobalStoreContextProvider(props) {
         cartItemRemove: null,
         listingItemDelete: null,
         userAccount: null,
-        userProfile: null,
-        searchBar: null
+        userProfile: null
     });
 
     const history = useHistory();
@@ -166,19 +164,6 @@ function GlobalStoreContextProvider(props) {
                     searchBar: null,
                 });
             }
-            // SET SEARCH BAR
-            case GlobalStoreActionType.STORE_SEARCH_BAR: {
-                return setStore({
-                    catalogItems: store.catalogItems,
-                    loginModal: store.loginModal,
-                    registerModal: store.registerModal,
-                    cartItemRemove: null,
-                    listingItemDelete: null,
-                    userAccount: null,
-                    userProfile: store.userProfile,
-                    searchBar: payload,
-                });
-            }
             // SET USER ACCOUNT
             case GlobalStoreActionType.GET_ACCOUNT: {
                 return setStore({
@@ -212,9 +197,26 @@ function GlobalStoreContextProvider(props) {
         }
     }
 
+    // LOADS ALL ITEMS IN THE CATALOG AFTER LOGIN/REGISTER
+    store.initialLoad = async function () {
+        let jsonCatalog = {
+            "search": null,
+            "category": null,
+            "condition": null, 
+            "minPrice": undefined, 
+            "maxPrice": undefined, 
+            "sortBy": null
+        }
+        let response = api.getCatalog(jsonCatalog);
+        if(response.data.status === "OK") {
+            console.log("Items loaded");
+            history.push("/");
+        }
+    }
+
     // LOADS ALL ITEMS IN THE CATALOG
     store.loadItems = async function () {
-        // TODO
+        //let response = api.getCatalog()
     }
 
     // SETS ID FOR CART ITEM BEING REMOVED
@@ -318,14 +320,6 @@ function GlobalStoreContextProvider(props) {
         storeReducer({
             type: GlobalStoreActionType.CLOSE_REGISTER_MODAL,
             payload: null
-        });
-    }
-
-    // THIS FUNCTION SETS SEARCH BAR
-    store.setSearchBar = function (search) {
-        storeReducer({
-            type: GlobalStoreActionType.STORE_SEARCH_BAR,
-            payload: search
         });
     }
 

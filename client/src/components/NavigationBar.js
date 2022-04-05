@@ -31,7 +31,6 @@ export default function NavigationBar() {
         setAnchorEl(null);
     };
 
-
     /* cHECKS IF USER IS LOGGED IN TO DECIDE WHAT GOES ON BANNER */
     if(!auth.loggedIn) {
         navBarLoggedIn = 
@@ -40,11 +39,18 @@ export default function NavigationBar() {
         </div>
     }
     else {
+        let profilePicture = "";
+        if(auth.user.profileImage === null || auth.user.profileImage === undefined) {
+            profilePicture = <AccountCircleRoundedIcon onClick={handleProfileMenuOpen} style={{ cursor: 'pointer', color: 'white', fontSize: '45px' }}></AccountCircleRoundedIcon>; 
+        } else {
+            let image = auth.user.profileImage;
+            let url = `data:${image.mimetype};base64,${Buffer.from(image.data).toString('base64')}`;
+            profilePicture = <img src={url} alt={<AccountCircleRoundedIcon style={{ cursor: 'pointer', color: 'white', fontSize: '45px' }}></AccountCircleRoundedIcon>} onClick={handleProfileMenuOpen} style={{ cursor: 'pointer', width: '45px', height: '45px', border: 'white 1px solid', borderRadius: '50%'}}/>
+        }
         navBarLoggedIn = 
         <Box style={{ display: 'flex', float: 'right', margin: '60px 1vw 0px 7vw' }}>
             <ShoppingCartRoundedIcon onClick={() => { history.push("/cart") }} style={{ cursor: 'pointer', fontSize: '45px', marginRight: '5vw' }}></ShoppingCartRoundedIcon>
-            <AccountCircleRoundedIcon onClick={handleProfileMenuOpen} 
-            style={{ cursor: 'pointer', color: 'white', fontSize: '45px' }}></AccountCircleRoundedIcon>
+            {profilePicture}
         </Box>   
     }
 

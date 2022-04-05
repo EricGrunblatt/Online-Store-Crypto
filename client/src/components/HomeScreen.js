@@ -236,7 +236,7 @@ export default function HomeScreen() {
                     <hr style={{ float: 'left', color: 'black', width: '16vw' }} />
                 </div>
             </div>
-            <Box style={{ border: 'black 1px solid', borderRadius: '10px', width: '200px', height: '50px', display: 'inline-block', float: 'right', margin: '15px 10px 0px 0px' }}>
+            <Box style={{ border: 'black 1px solid', borderRadius: '10px', width: '200px', height: '50px', display: 'inline-block', float: 'right', margin: '15px 60px 0px 0px' }}>
                 <FormControl fullWidth>
                     <InputLabel style={{ color: 'black', margin: '-2px 0px 0px 0px' }} id="sort-by-menu">Sort By</InputLabel>
                     <Select style={{ borderRadius: '10px', height: '50px' }} 
@@ -254,7 +254,7 @@ export default function HomeScreen() {
                 </FormControl>
             </Box>
             <Box style={{ position: 'absolute', margin: '-30px 0px 50px 20vw', background: 'white', top: '450px', width: '79%', minHeight: '1010px' }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 20.5vw)', gridTemplateRows: 'repeat(4, 25.5vw)' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 19vw)', gridTemplateRows: 'repeat(4, 25.5vw)' }}>
                         <HomeProduct></HomeProduct>
                         <HomeProduct></HomeProduct>
                         <HomeProduct></HomeProduct>
