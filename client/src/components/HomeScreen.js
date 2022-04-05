@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
@@ -12,9 +12,12 @@ import RegisterModal from './RegisterModal';
 import AccountErrorModal from "./AccountErrorModal";
 import HomeProduct from "./HomeProduct";
 import TextField from "@mui/material/TextField";
+import { GlobalStoreContext } from '../store'
 
 
 export default function HomeScreen() {
+    const { store } = useContext(GlobalStoreContext);
+
     const [openCat, setOpenCat] = useState("");
     const [openPrice, setOpenPrice] = useState("");
     const [openCon, setOpenCon] = useState("");
@@ -196,6 +199,19 @@ export default function HomeScreen() {
         setSort(event.target.value);
     };
 
+    let allProducts = store.catalogItems;
+    let productCard = 
+        <div>
+        {
+            allProducts.map((index) => (
+                <HomeProduct
+                    key={index._id}
+                    product={index}
+                />
+            ))
+        }    
+        </div>;
+
 
     return (
         <Box className="homescreen" style={{ maxWidth: '99vw' }}>
@@ -255,22 +271,9 @@ export default function HomeScreen() {
             </Box>
             <Box style={{ position: 'absolute', margin: '-30px 0px 50px 20vw', background: 'white', top: '450px', width: '79%', minHeight: '1010px' }}>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 19vw)', gridTemplateRows: 'repeat(4, 25.5vw)' }}>
-                        <HomeProduct></HomeProduct>
-                        <HomeProduct></HomeProduct>
-                        <HomeProduct></HomeProduct>
-                        <HomeProduct></HomeProduct>
-                        <HomeProduct></HomeProduct>
-                        <HomeProduct></HomeProduct>
-                        <HomeProduct></HomeProduct>
-                        <HomeProduct></HomeProduct>
-                        <HomeProduct></HomeProduct>
-                        <HomeProduct></HomeProduct>
-                        <HomeProduct></HomeProduct>
-                        <HomeProduct></HomeProduct>
-                        <HomeProduct></HomeProduct>
-                        <HomeProduct></HomeProduct>
-                        <HomeProduct></HomeProduct>
-                        <HomeProduct></HomeProduct>
+                    {
+                        productCard
+                    }
                     </div>
             </Box>
             <Box style={{ position: 'absolute', margin: '100vw 0px 5vw 0vw', textAlign: 'center', alignContent: 'center', fontSize: '35px', width: '99%' }}>

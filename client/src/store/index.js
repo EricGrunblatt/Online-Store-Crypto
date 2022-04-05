@@ -51,8 +51,8 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.LOAD_CATALOG_ITEMS: {
                 return setStore({
                     catalogItems: payload,
-                    loginModal: store.loginModal,
-                    registerModal: store.registerModal,
+                    loginModal: false,
+                    registerModal: false,
                     cartItemRemove: null,
                     listingItemDelete: null,
                     userAccount: null,
@@ -200,9 +200,14 @@ function GlobalStoreContextProvider(props) {
     // LOADS ALL ITEMS IN THE CATALOG AFTER LOGIN/REGISTER
     store.initialLoad = async function () {
         let jsonCatalog = {};
-        let response = api.getCatalog(jsonCatalog);
+        let response = await api.getCatalog(jsonCatalog);
         if(response.data.status === "OK") {
+            storeReducer({
+                type: GlobalStoreActionType.LOAD_CATALOG_ITEMS,
+                payload: response.data.products
+            });
             console.log("Items loaded");
+            console.log(response.data.products);
             history.push("/");
         }
     }
@@ -216,7 +221,10 @@ function GlobalStoreContextProvider(props) {
         "PRICE_ASCENDING"
         "PRICE_DESCENDING"
         */
-        //let response = api.getCatalog()
+        //let response = await api.getCatalog();
+        //if(response.data.status === "OK") {
+
+        //}
     }
 
     // SETS ID FOR CART ITEM BEING REMOVED
