@@ -22,7 +22,9 @@ getCatalog = async (req, res) => {
 
 	// TODO: allow search through product descriptions
 
-	let searchQuery = [];
+	let productQuery = {}
+
+	let searchQuery = []
 	const searchKeys = [
 		"name", "description"
 	]
@@ -32,8 +34,10 @@ getCatalog = async (req, res) => {
 			searchQuery.push({[searchKey]: new RegExp(searchWord, searchOptions)})
 		}
 	}
+	if (searchQuery.length > 0) {
+		productQuery.$or = searchQuery
+	}
 
-	let productQuery = {$or: searchQuery}
 	if (category) {
 		productQuery.category = category
 	}
