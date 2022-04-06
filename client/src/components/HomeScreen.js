@@ -25,6 +25,13 @@ export default function HomeScreen() {
     const [checkedCon, setCheckedCon] = useState([]);
     const [sort, setSort] = useState("");
 
+    // Makes an array to show the 3 newest items
+    let newItems = store.catalogItems;
+    if(newItems.length > 3) {
+        newItems = store.catalogItems.slice(newItems.length-3, newItems.length);
+        console.log(newItems);
+    }
+
     /* FILTER BY CATEGORIES AND CHECK BOX FUNCTION */
     const categories = ["Clothing", "Electronics", "Fashion", "Furniture", "Hardware", "Home & Garden", "Music", "Office Supplies", "Other", "Photography & Video", "Sports Equipment", "Toys", "Video Games"];
     const conditions = ["Mint", "New", "Lightly Used", "Used"];
@@ -32,6 +39,7 @@ export default function HomeScreen() {
     let isCheckedCat = (item) => checkedCat.includes(item) ? "checked-item" : "not-checked-item";
     let isCheckedCon = (item) => checkedCon.includes(item) ? "checked-item" : "not-checked-item";
 
+    // Looks at all filters for category
     const handleCatCheck = (event) => {
         let updatedList = [...checkedCat];
         if(event.target.checked) {
@@ -42,6 +50,7 @@ export default function HomeScreen() {
         setCheckedCat(updatedList);
     };
 
+    // Looks at all checked filters for condition
     const handleConCheck = (event) => {
         let updatedList = [...checkedCon];
         if(event.target.checked) {
@@ -134,7 +143,7 @@ export default function HomeScreen() {
         </div>
     }
 
-    /* FUNCTIONS TO OPEN FILTERING SECTIONS */
+    /* FUNCTION TO OPEN CATEGORY FILTERING SECTION */
     function handleOpenCategory() {
         if(!openCat) {
             setOpenCat(
@@ -152,6 +161,7 @@ export default function HomeScreen() {
         }
     }
 
+    /* FUNCTIONS TO OPEN PRICE FILTERING SECTION */
     function handleOpenPrice() {
         if(!openPrice) {
             setOpenPrice(
@@ -175,6 +185,7 @@ export default function HomeScreen() {
         }
     }
 
+    /* FUNCTION TO OPEN CONDITION FILTERING SECTION */
     function handleOpenCondition() {
         if(!openCon) {
             setOpenCon(
@@ -226,8 +237,15 @@ export default function HomeScreen() {
             <div className="homescreen-new-items" style={{ paddingTop: '5px', textAlign: 'center', height: '150px', backgroundColor: '#FFBD59', fontSize: '30px' }}>
                 New Items
                 <div style={{ paddingTop: '25px'}}>
-                    <ArrowBackIosIcon style={{ marginLeft: '5%', float: 'left' }}></ArrowBackIosIcon>
-                    <ArrowForwardIosIcon style={{marginRight: '5%', float: 'right' }}></ArrowForwardIosIcon>
+                    <ArrowBackIosIcon style={{ margin: '0px 0vw 0px 6vw', display: 'flex', position: 'absolute' }}></ArrowBackIosIcon>
+                    <div style={{ position: 'absolute', display: 'flex', margin: '0px 0vw 0px 1.75vw' }}>
+                        {newItems.map((index) => (
+                            <div style={{ display: 'inline-block', margin: '-20px 0vw 0px 20vw' }}>
+                                <img src={`data:${index.image.mimetype};base64,${Buffer.from(index.image.data).toString('base64')}`} style={{ width: '100px', height: '100px', border: 'black 1px solid', borderRadius: '10px' }}></img>
+                            </div>
+                        ))}    
+                    </div>
+                    <ArrowForwardIosIcon style={{ margin: '0px 0px 0px 92vw', display: 'flex', position: 'absolute' }}></ArrowForwardIosIcon>
                 </div>
                 
             </div>
