@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
@@ -31,7 +31,6 @@ export default function HomeScreen() {
 
     let isCheckedCat = (item) => checkedCat.includes(item) ? "checked-item" : "not-checked-item";
     let isCheckedCon = (item) => checkedCon.includes(item) ? "checked-item" : "not-checked-item";
-    
 
     const handleCatCheck = (event) => {
         let updatedList = [...checkedCat];
@@ -201,10 +200,11 @@ export default function HomeScreen() {
 
     let allProducts = store.catalogItems;
     let productCard = 
-        <div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 19vw)', gridTemplateRows: 'repeat(4, 25.5vw)' }}>
         {
             allProducts.map((index) => (
                 <HomeProduct
+                    style={{ position: 'absolute' }}
                     key={index._id}
                     product={index}
                 />
@@ -270,7 +270,7 @@ export default function HomeScreen() {
                 </FormControl>
             </Box>
             <Box style={{ position: 'absolute', margin: '-30px 0px 50px 20vw', background: 'white', top: '450px', width: '79%', minHeight: '1010px' }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 19vw)', gridTemplateRows: 'repeat(4, 25.5vw)' }}>
+                    <div>
                     {
                         productCard
                     }

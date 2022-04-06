@@ -1,5 +1,5 @@
 import React from "react";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { GlobalStoreContext } from '../store'
 import { useHistory} from 'react-router-dom';
 import TextField from '@mui/material/TextField';
@@ -20,6 +20,10 @@ export default function NavigationBar() {
 
     console.log(auth.user);
     console.log(auth.loggedIn);
+
+    useEffect(() => {
+        store.initialLoad();
+    }, []);
 
     /* OPENS MENU IF PRESSED */
     const handleProfileMenuOpen = (event) => {
@@ -84,6 +88,12 @@ export default function NavigationBar() {
         history.push("/listings");
     }
 
+    function handleHome() {
+        let json = {};
+        store.loadItems(json);
+        history.push("/");
+    }
+
     /* MENU DISPLAY */
     const loggedInMenu = 
         <Menu
@@ -115,7 +125,7 @@ export default function NavigationBar() {
             <AppBar position="static" style={{ height: '15%', background: 'black' }}>
                 <Toolbar>
                     <div sx={{ width: '25%' }} style={{ margin: '60px 5vw 0px 0px', justifyContent: 'center', float: 'left' }}>
-                        <img onClick={() => { history.push("/") }} src={logo} alt="" width="200" height="40" style={{ cursor: 'pointer', margin: '0px 0px 5px 1px' }}></img>
+                        <img onClick={() => { handleHome() }} src={logo} alt="" width="200" height="40" style={{ cursor: 'pointer', margin: '0px 0px 5px 1px' }}></img>
                         <div id="navigation-slogan" style={{ marginLeft: '3px' }}>
                             Buy and Sell Items with <br></br>
                             Cryptocurrency
