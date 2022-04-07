@@ -303,7 +303,7 @@ export default function ProfileScreen() {
                 </div>
             </div>
             <div className="back-to-profile" style={{ justifyContent: 'center', textAlign: 'center', margin: '-10px 0px 50px 0px' }}>
-                <Button className="back-to-profile-button" style={{ background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
+                <Button className="back-to-profile-button" onClick={() => { history.push("/myprofile") }} style={{ background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
                     Back to My Profile
                 </Button>
             </div>

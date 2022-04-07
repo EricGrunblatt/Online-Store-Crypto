@@ -276,7 +276,7 @@ function GlobalStoreContextProvider(props) {
                             profile: myProfile
                         }
                     });
-                    history.push("/profile");
+                    history.push("/editprofile");
                 }
             }
             getProfile();
@@ -284,6 +284,23 @@ function GlobalStoreContextProvider(props) {
         else {
             console.log("API FAILED TO GET ACCOUNT");
         }
+    }
+
+    // GETS MY PROFILE FROM USERNAME
+    store.getMyProfile = async function (username) {
+        let response = await api.getProfileByUsername(username);
+        if(response.data.status === "OK") {
+            let profile = response.data;
+            storeReducer({
+                type: GlobalStoreActionType.GET_PROFILE,
+                payload: profile
+            });
+            history.push("/myprofile");
+        }
+        else {
+            console.log("API FAILED TO GET PROFILE");
+        }
+    
     }
 
     // GETS PROFILE FROM USERNAME

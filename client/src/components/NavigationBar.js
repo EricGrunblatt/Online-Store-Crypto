@@ -70,7 +70,10 @@ export default function NavigationBar() {
 
     function handleProfile() {
         handleMenuClose();
-        store.getAccount();     
+        let json = {
+            username: auth.user.username
+        }
+        store.getMyProfile(json);     
     }
 
     function handleWallet() {
