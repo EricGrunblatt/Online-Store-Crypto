@@ -9,7 +9,7 @@ export default function Listings() {
     const history = useHistory();
     const [items, setItems] = useState([]);
 
-    /* GET PRODUCT BY ID */
+    /* GET PRODUCTS BY USER ID */
     useEffect(() => {
         async function fetchData() {
             try{
@@ -31,29 +31,16 @@ export default function Listings() {
         fetchData()
     },[]);
 
-    function editOrSold(listed) {
-        if(listed === "") {
-            return (
-                <div><a href="/listitem" style={{ color: 'red' }}>Edit</a></div>
-            )
-        }
-        else {
-            return (
-                <div>Listed:&nbsp;{listed}</div>
-            )
-        }
-    }
-
     let listings = 
         <div className="display-listings">
             {/* EACH ITEM CARDS */}
             <Grid item container xs >
                 {items.map((index) => (
-                    <Grid item xs={5} style={{ margin: '10px auto 10px auto'}}>
+                    <Grid onClick={() => { history.push("/product/" + index._id) }} item xs={5} style={{ margin: '10px auto 10px auto'}}>
                         <Grid item container xs style={{ margin: '10px auto 10px auto', width: '100%', height: '200px', border: 'black 2px solid', borderRadius: '20px' }}>
                             {/* ITEM IMAGE */}
                             <Grid item xs={3} style={{ margin: '20px'}}>
-                                <img src={`data:${index.image.mimetype};base64,${Buffer.from(index.image.data).toString('base64')}`} alt="" style={{ borderRadius: '10%' }} ></img>
+                                <img src={`data:${index.image.mimetype};base64,${Buffer.from(index.image.data).toString('base64')}`} alt="" width="150px" height="150px" style={{ borderRadius: '10%' }} ></img>
                             </Grid>
                             {/* ITEM INFO */}
                             <Grid item xs={5} style={{ margin: '10px auto auto 40px'}}>

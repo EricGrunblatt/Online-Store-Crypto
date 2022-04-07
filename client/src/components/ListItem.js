@@ -308,7 +308,7 @@ export default function ListItem(){
         formData.append("image7", file7);
         const response = await api.addListingProduct(formData);
         const id = response.data.product._id;
-        history.push(generatePath("/edititem/:id", { id }));
+        history.push(generatePath("/product/:id", { id }));
     }
 
     return (

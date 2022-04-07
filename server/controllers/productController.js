@@ -56,13 +56,49 @@ getCatalog = async (req, res) => {
 		productQuery.price.$lte = maxPrice
 	}
 
-	console.log(productQuery)
+	console.log("PRODUCT QUERY: ", productQuery)
+
+
+	sortQuery = {}
+	if (sortBy === "DATE_DESCENDING") { // NEWEST TO OLDEST
+		sortQuery = {createdAt: -1}
+	}
+	else if (sortBy === "DATE_ASCENDING") { // OLDEST TO NEWEST
+		sortQuery = {createdAt: 1}
+	}
+	else if (sortBy === "PRICE_ASCENDING") {
+		sortQuery = {price: 1}
+	}
+	else if (sortBy === "PRICE_DESCENDING") {
+		sortQuery = {price: -1}
+	}
+	console.log("SORT QUERY: ", sortQuery)
+
+	const productSelect = {
+		_id: 1,
+		name: 1,
+		price: 1,
+		shippingPrice: 1,
+		sellerUsername: 1,
+		imageIds: 1,
+		dateListed: "$createdAt"
+	}
 
 	let json = {}
 	let products = {}
 	try {
-		products = await Product.find(productQuery)
+		products = await Product.find(productQuery).lean().sort(sortQuery).select(productSelect)
+
+		products = await Promise.all(products.map(async (product) => {
+			const image = await getProductFirstImage(product);
+			product.image = image
+			delete product.imageIds
+
+			return product;
+		}))
+
 		json = {status: constants.status.OK, products: products}
+		console.log("RESPONSE: ", json)
 		res.status(200).json(json)
 	}
 	catch (err) {

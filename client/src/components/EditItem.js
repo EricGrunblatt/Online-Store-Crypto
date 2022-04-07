@@ -59,7 +59,7 @@ export default function EditItem(){
                     url
                 };
                 axios(options).then(function(result) {
-                    console.log("RESPONSE: ", result.data.product);
+                    // console.log("RESPONSE: ", result.data.product);
                     // SET PRODUCT 
                     setName(result.data.product.name);
                     setDescription(result.data.product.description);
@@ -424,7 +424,7 @@ export default function EditItem(){
 
         const response = await api.updateListingProduct(formData);
         const id = response.data.product._id;
-        history.push(generatePath("/edititem/:id", { id }));
+        history.push(generatePath("/product/:id", { id }));
     }
 
     return (

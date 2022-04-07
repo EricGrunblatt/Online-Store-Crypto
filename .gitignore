@@ -1,6 +1,25 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 node_modules
 =======
 node_modules
 >>>>>>> 72561517232582b8daed721ea0f485361341c326
 uploads
+=======
+/*
+!.gitignore
+
+# Track everything under client except node_modules 
+!/client
+
+/client/node_modules/*
+
+# Track everything under server except node_modules and uploads (except for uploads/placeholder.txt)
+!/server
+
+/server/node_modules/*
+
+/server/uploads/*
+
+!/server/uploads/placeholder.txt
+>>>>>>> 0185bb096fec3686ea7a47947165f1db8b340a9b

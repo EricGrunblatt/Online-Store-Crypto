@@ -40,7 +40,7 @@ export default function App() {
                         <Route path="/listitem" exact component={ListItem} />
                         <Route path="/edititem/:id" exact component={EditItem} />
                         <Route path="/checkout" exact component={Checkout} />
-                        <Route path="/product" exact component={ProductPage} />
+                        <Route path="/product/:id" exact component={ProductPage} />
 						<Route path="/viewprofile" exact component={ViewProfile} />
                     </Switch>   
                 </GlobalStoreContextProvider>
