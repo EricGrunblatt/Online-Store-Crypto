@@ -558,11 +558,30 @@ deleteListingProduct = async (req, res) => {
 // TODO
 getShippingPrice = async (req, res) => {
 	console.log("getShippingPrice", req.body)
-	const { zipOrigination, zipDestination, boxWeight,boxWidth,boxLength,boxHeight } = req.body;//weight is in pound unit
-	
+	const { zipOrigination, boxWeight,boxWidth,boxLength,boxHeight } = req.body;//weight is in pound unit
+	const userId = req.userId;
+
 	let json = {};
-	var xml =
-		`<RateV4Request USERID="726CRYPT0533">
+	let user = null;
+
+	try {
+		if (!userId) {
+			throw "did not get a userId"
+		}
+
+		else if (!(user = await User.findOne({ "_id": userId }))) {
+			json = { status: constants.status.ERROR, errorMessage: constants.product.userDoesNotExist };
+						console.log("RESPONSE: ", json);
+			return res.status(200).json(json).send();
+		}
+		else if (!zipOrigination || !boxWeight||!boxWidth||!boxLength||!boxHeight) {
+			json = { status: constants.status.ERROR, errorMessage: constants.product.missingRequiredField };
+			console.log("RESPONSE: ", json);
+			return res.status(200).json(json).send();
+
+		}
+		let zipDestination=user.zipcode;
+		var xml =`<RateV4Request USERID="726CRYPT0533">
         <Revision></Revision>
         <Package ID="0">
         <Service>PRIORITY</Service>
@@ -578,21 +597,13 @@ getShippingPrice = async (req, res) => {
         <Machinable>TRUE</Machinable>
         </Package>
         </RateV4Request>`;
-
-
-
-	try {
-		if (!zipOrigination || !zipDestination || !boxWeight) {
-			json = { status: constants.status.ERROR, errorMessage: constants.product.missingRequiredField };
-			console.log("RESPONSE: ", json);
-			return res.status(200).json(json).send();
-
-		}
+		
 		let response = await axios.get('https://secure.shippingapis.com/ShippingAPI.dll?API=RateV4&XML=' + xml, {
 			headers: {
 				'Content-Type': 'application/xml',
 			},
 		})
+		
 
 		if (!(response)) {
 			json = { status: constants.status.ERROR, errorMessage: constants.product.failedToGetShippingPrice };
