@@ -546,6 +546,12 @@ deleteListingProduct = async (req, res) => {
 	console.log("deleteListingProduct")
 }
 
+// TODO
+getShippingPrice = async (req, res) => {
+	console.log("getShippingPrice", req.body)
+	// SPECIFY PARAMETERS
+}
+
 module.exports = {
 	getCatalog,
 	getProduct,
