@@ -9,6 +9,9 @@ const fs = require('fs')
 const path = require('path')
 const { createAndSaveImage, upload } = require('../handlers/imageHandler')
 const { json } = require('body-parser')
+const {
+	getProductFirstImage
+} = require('./helpers/productControllerHelper')
 
 getProfileByUsername = async (req, res) => {
 	console.log("getProfile", req.body)
@@ -33,7 +36,17 @@ getProfileByUsername = async (req, res) => {
 				.select({ "_id": 0, "data": 1, "contentType": 1 })
 			// GET USER'S SELLING PRODUCTS
 			const sellingProducts = await Product.find({ sellerUsername: username, buyerUsername: null })
-				.select({ "_id": 1, "name": 1, "price": 1, "sellerUsername": 1, "dateListed": 1 })
+				.lean()
+				.select({ "_id": 1, "name": 1, "price": 1, "sellerUsername": 1, "dateListed": 1, "imageIds": 1})
+			
+			await Promise.all(sellingProducts.map(async (product) => {
+				const image = await getProductFirstImage(product);
+				product.image = image
+				delete product.imageIds
+
+				return product;
+			}))
+
 			// GET USER'S REVIEWS
 			const reviews = await Review.find({ forUsername: username })
 				.select({ "_id": 0, "byUsername": 1, "stars": 1, "comment": 1 })
