@@ -16,6 +16,8 @@ import RegisterModal from './RegisterModal.js';
 import ViewProfile from './ViewProfile.js';
 import ViewMyProfile from './ViewMyProfile.js';
 import Wallet from './Wallet.js';
+import EditItem from './EditItem.js';
+
 /*
     This serves as a module so that we can import
     all the other components as we wish.
@@ -40,4 +42,5 @@ export {
     RegisterModal,
     ViewProfile,
     ViewMyProfile,
-    Wallet, }
+    Wallet,
+    EditItem }

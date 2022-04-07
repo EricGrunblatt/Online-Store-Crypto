@@ -246,7 +246,10 @@ function GlobalStoreContextProvider(props) {
 
     // SETS ID FOR LISTING ITEM BEING DELETED
     store.markListingDelete = async function (id) {
-        
+        storeReducer({
+            type: GlobalStoreActionType.MARK_LISTING_DELETION,
+            payload: id
+        });
     }
 
     // NO LISTING ITEM WANTING TO BE DELETED
@@ -312,6 +315,7 @@ function GlobalStoreContextProvider(props) {
                 type: GlobalStoreActionType.GET_PROFILE,
                 payload: profile
             });
+            history.push("/viewprofile");
         }
         else {
             console.log("API FAILED TO GET PROFILE");

@@ -1,12 +1,26 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import { TextareaAutosize, TextField, Box, Select, MenuItem } from '@mui/material';
 import { FormControl, InputLabel, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useHistory, generatePath } from "react-router-dom";
 import api from "../api"
+import axios from 'axios';
+import qs from 'qs';
+import ListingsDeleteModal from "./ListingsDeleteModal";
+import { GlobalStoreContext } from '../store'
 
-export default function ListItem(){
+export default function EditItem(){
+
+    var categoryTxts = ["Clothing", "Electronics", "Fashion", "Furniture", "Hardware",
+        "Home & Garden", "Music", "Office Supplies", "Other", "Photography & Video", "Sports Equipment", "Toys", "Video Games"];
+
+    const { store } = useContext(GlobalStoreContext);
+
+    const mintConButton = useRef(null);
+    const newConButton = useRef(null);
+    const litNewConButton = useRef(null);
+    const usedConButton = useRef(null);
 
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
@@ -27,15 +41,107 @@ export default function ListItem(){
     const [image6, setImage6] = useState(null);
     const [image7, setImage7] = useState(null);
 
+    const pathname = window.location.pathname;
+    const productId = pathname.split("/").pop();
+
+    /* GET PRODUCT BY ID */
+    useEffect(() => {
+        async function fetchData() {
+            try{
+                // getProduct
+                const url = 'http://localhost:4000/api/product/getProduct';
+                // POST 
+                const data = { '_id': productId };
+                const options = {
+                    method: 'POST',
+                    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+                    data: qs.stringify(data),
+                    url
+                };
+                axios(options).then(function(result) {
+                    // console.log("RESPONSE: ", result.data.product);
+                    // SET PRODUCT 
+                    setName(result.data.product.name);
+                    setDescription(result.data.product.description);
+                    setCondition(result.data.product.condition);
+
+                    if (mintConButton.current.value === result.data.product.condition){
+                        mintConButton.current.style.background = 'black';
+                        mintConButton.current.style.color = 'white';
+                    }
+                    else if (newConButton.current.value === result.data.product.condition){
+                        newConButton.current.style.background = 'black';
+                        newConButton.current.style.color = 'white';
+                    }
+                    else if (litNewConButton.current.value === result.data.product.condition){
+                        litNewConButton.current.style.background = 'black';
+                        litNewConButton.current.style.color = 'white';
+                    }
+                    else if (usedConButton.current.value === result.data.product.condition){
+                        usedConButton.current.style.background = 'black';
+                        usedConButton.current.style.color = 'white';
+                    }
+                    
+                    setCategory(categoryTxts.indexOf(result.data.product.category) + 1);
+                    setPrice(result.data.product.price);
+                    setLength(result.data.product.boxLength);
+                    setWidth(result.data.product.boxWidth);
+                    setHeight(result.data.product.boxHeight);
+                    setWeight(result.data.product.boxWeight);
+
+                    if(result.data.product.images[0]) {
+                        let image0 = result.data.product.images[0];
+                        let url0 = `data:${image0.mimetype};base64,${Buffer.from(image0.data).toString('base64')}`;
+                        setImage0(url0);
+                    }
+                    if(result.data.product.images[1]) {
+                        let image1 = result.data.product.images[1];
+                        let url1 = `data:${image1.mimetype};base64,${Buffer.from(image1.data).toString('base64')}`;
+                        setImage1(url1);
+                    }
+                    if(result.data.product.images[2]) {
+                        let image2 = result.data.product.images[2];
+                        let url2 = `data:${image2.mimetype};base64,${Buffer.from(image2.data).toString('base64')}`;
+                        setImage2(url2);
+                    }
+                    if(result.data.product.images[3]) {
+                        let image3 = result.data.product.images[3];
+                        let url3 = `data:${image3.mimetype};base64,${Buffer.from(image3.data).toString('base64')}`;
+                        setImage3(url3);
+                    }
+                    if(result.data.product.images[4]) {
+                        let image4 = result.data.product.images[4];
+                        let url4 = `data:${image4.mimetype};base64,${Buffer.from(image4.data).toString('base64')}`;
+                        setImage4(url4);
+                    }
+                    if(result.data.product.images[5]) {
+                        let image5 = result.data.product.images[5];
+                        let url5 = `data:${image5.mimetype};base64,${Buffer.from(image5.data).toString('base64')}`;
+                        setImage5(url5);
+                    }
+                    if(result.data.product.images[6]) {
+                        let image6 = result.data.product.images[6];
+                        let url6 = `data:${image6.mimetype};base64,${Buffer.from(image6.data).toString('base64')}`;
+                        setImage6(url6);
+                    }
+                    if(result.data.product.images[7]) {
+                        let image7 = result.data.product.images[7];
+                        let url7 = `data:${image7.mimetype};base64,${Buffer.from(image7.data).toString('base64')}`;
+                        setImage7(url7);
+                    }
+                });
+            }
+            catch{
+            }
+        }
+        fetchData()
+    },[]);
+
+
     const history = useHistory();
     let bgColor = "white";
     let fontColor = "black";
     let regexp = /^[0-9\b]+$/;
-
-    /* OPEN/CLOSE CATEGORY MENU */
-    const handleCategory = (event) => {
-        setCategory(event.target.value);
-    };
 
     /* CHANGE COLOR OF BUTTON WHEN SELECTED */
     const handleConButton = (event) => {
@@ -48,6 +154,11 @@ export default function ListItem(){
         event.target.style.color = 'white';
         setCondition(event.target.value);
     }
+
+    /* OPEN/CLOSE CATEGORY MENU */
+    const handleCategory = (event) => {
+        setCategory(event.target.value);
+    };
 
     // BOX0
     let box0 = "";
@@ -68,11 +179,11 @@ export default function ListItem(){
     } else {
         box0 = 
         <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
-            <label for='image0' style={{ cursor: 'pointer' }}>
-                <img src={image0} alt="preview image0" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
-            </label>
-            <input type='file' name='image0' id='image0' onChange={onImageChange0} style={{ display: 'none', visibility: 'none' }}></input>
-        </div>
+        <label for='image0' style={{ cursor: 'pointer' }}>
+            <img src={image0} alt="preview image0" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
+        </label>
+        <input type='file' name='image0' id='image0' onChange={onImageChange0} style={{ display: 'none', visibility: 'none' }}></input>
+    </div>
     }
 
     // BOX1
@@ -94,11 +205,11 @@ export default function ListItem(){
     } else {
         box1 = 
         <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
-            <label for='image1' style={{ cursor: 'pointer' }}>
-                <img src={image1} alt="preview image1" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
-            </label>
-            <input type='file' name='image1' id='image1' onChange={onImageChange1} style={{ display: 'none', visibility: 'none' }}></input>
-        </div>
+        <label for='image1' style={{ cursor: 'pointer' }}>
+            <img src={image1} alt="preview image1" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
+        </label>
+        <input type='file' name='image1' id='image1' onChange={onImageChange1} style={{ display: 'none', visibility: 'none' }}></input>
+    </div>
     }
 
     // BOX2
@@ -120,11 +231,11 @@ export default function ListItem(){
     } else {
         box2 = 
         <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
-            <label for='image2' style={{ cursor: 'pointer' }}>
-                <img src={image2} alt="preview image2" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
-            </label>
-            <input type='file' name='image2' id='image2' onChange={onImageChange2} style={{ display: 'none', visibility: 'none' }}></input>
-        </div>
+           <label for='image2' style={{ cursor: 'pointer' }}>
+               <img src={image2} alt="preview image2" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
+           </label>
+           <input type='file' name='image2' id='image2' onChange={onImageChange2} style={{ display: 'none', visibility: 'none' }}></input>
+       </div>
     }
 
     // BOX3
@@ -146,11 +257,11 @@ export default function ListItem(){
     } else {
         box3 = 
         <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
-            <label for='image3' style={{ cursor: 'pointer' }}>
-                <img src={image3} alt="preview image3" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
-            </label>
-            <input type='file' name='image3' id='image3' onChange={onImageChange3} style={{ display: 'none', visibility: 'none' }}></input>
-        </div>
+           <label for='image3' style={{ cursor: 'pointer' }}>
+               <img src={image3} alt="preview image3" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
+           </label>
+           <input type='file' name='image3' id='image3' onChange={onImageChange3} style={{ display: 'none', visibility: 'none' }}></input>
+       </div>
     }
 
     // BOX4
@@ -172,11 +283,11 @@ export default function ListItem(){
     } else {
         box4 = 
         <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
-            <label for='image4' style={{ cursor: 'pointer' }}>
-                <img src={image4} alt="preview image4" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
-            </label>
-            <input type='file' name='image4' id='image4' onChange={onImageChange4} style={{ display: 'none', visibility: 'none' }}></input>
-        </div>
+           <label for='image4' style={{ cursor: 'pointer' }}>
+               <img src={image4} alt="preview image4" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
+           </label>
+           <input type='file' name='image4' id='image4' onChange={onImageChange4} style={{ display: 'none', visibility: 'none' }}></input>
+       </div>
     }
 
     // BOX5
@@ -198,38 +309,38 @@ export default function ListItem(){
     } else {
         box5 = 
         <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
-            <label for='image5' style={{ cursor: 'pointer' }}>
-                <img src={image5} alt="preview image5" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
-            </label>
-            <input type='file' name='image5' id='image5' onChange={onImageChange5} style={{ display: 'none', visibility: 'none' }}></input>
-        </div>
+           <label for='image5' style={{ cursor: 'pointer' }}>
+               <img src={image5} alt="preview image5" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
+           </label>
+           <input type='file' name='image5' id='image5' onChange={onImageChange5} style={{ display: 'none', visibility: 'none' }}></input>
+       </div>
     }
 
-   // BOX6
-   let box6 = "";
-    
-   const onImageChange6 = (event) => {
-       if (event.target.files && event.target.files[0]) {
-           setImage6(URL.createObjectURL(event.target.files[0]));
-       }
-   }
-   if(!image6) {
-       box6 = 
-       <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px dashed', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
-           <label for='image6' style={{ cursor: 'pointer' }}>
-               <AddIcon></AddIcon>
-           </label>
-           <input type='file' name='image6' id='image6' onChange={onImageChange6} style={{ display: 'none', visibility: 'none' }}></input>
-       </div>
-   } else {
-       box6 = 
-       <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
+    // BOX6
+    let box6 = "";
+        
+    const onImageChange6 = (event) => {
+        if (event.target.files && event.target.files[0]) {
+            setImage6(URL.createObjectURL(event.target.files[0]));
+        }
+    }
+    if(!image6) {
+        box6 = 
+        <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px dashed', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
+            <label for='image6' style={{ cursor: 'pointer' }}>
+                <AddIcon></AddIcon>
+            </label>
+            <input type='file' name='image6' id='image6' onChange={onImageChange6} style={{ display: 'none', visibility: 'none' }}></input>
+        </div>
+    } else {
+        box6 = 
+        <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
             <label for='image6' style={{ cursor: 'pointer' }}>
                 <img src={image6} alt="preview image6" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
             </label>
             <input type='file' name='image6' id='image6' onChange={onImageChange6} style={{ display: 'none', visibility: 'none' }}></input>
         </div>
-   }
+    }
     // BOX7
     let box7 = "";
     
@@ -249,20 +360,24 @@ export default function ListItem(){
     } else {
         box7 = 
         <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
-            <label for='image7' style={{ cursor: 'pointer' }}>
-                <img src={image7} alt="preview image7" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
-            </label>
-            <input type='file' name='image7' id='image7' onChange={onImageChange7} style={{ display: 'none', visibility: 'none' }}></input>
-        </div>
+           <label for='image7' style={{ cursor: 'pointer' }}>
+               <img src={image7} alt="preview image7" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
+           </label>
+           <input type='file' name='image7' id='image7' onChange={onImageChange7} style={{ display: 'none', visibility: 'none' }}></input>
+       </div>
     }
 
-    const handleListItem = async function() {
+    /* OPENS DELETE ITEM MODAL IF PRESSED */
+    function handleDeleteItem() {
+        store.markListingDelete(productId);
+    }
 
-        var categoryTxts = ["Clothing", "Electronics", "Fashion", "Furniture", "Hardware",
-        "Home & Garden", "Music", "Office Supplies", "Other", "Photography & Video", "Sports Equipment", "Toys", "Video Games"]
+    /* POST EDIT ITEM */
+    const handleEditItem = async function() {
+
         var categoryTxt = categoryTxts[category - 1]
         var formData = new FormData();
-
+        formData.append("_id", productId)
         formData.append("name", name);
         formData.append("description", description);
         formData.append("condition", condition);
@@ -306,7 +421,8 @@ export default function ListItem(){
         formData.append("image5", file5);
         formData.append("image6", file6);
         formData.append("image7", file7);
-        const response = await api.addListingProduct(formData);
+
+        const response = await api.updateListingProduct(formData);
         const id = response.data.product._id;
         history.push(generatePath("/product/:id", { id }));
     }
@@ -364,10 +480,10 @@ export default function ListItem(){
                     <div style={{ margin: '10px 0% 0px 1%', display: 'inline-block', fontFamily: 'Quicksand', fontWeight: 'bold', color: '#808080', fontSize: '25px' }}>{condition}</div>
                 </div>
                 <div className="condition-buttons" style={{ display: 'flex', flexDirection: 'row', margin: '20px 0px 0px 10%' }}>
-                    <Button data-con-button value="Mint" onClick={handleConButton} style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>Mint</Button>
-                    <Button data-con-button value="New" onClick={handleConButton} style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>New</Button>
-                    <Button data-con-button value="Lightly Used" onClick={handleConButton} style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>Lightly Used</Button>
-                    <Button data-con-button value="Used" onClick={handleConButton} style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>Used</Button>
+                    <Button data-con-button ref={mintConButton} value="Mint" onClick={handleConButton} style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>Mint</Button>
+                    <Button data-con-button ref={newConButton} value="New" onClick={handleConButton} style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>New</Button>
+                    <Button data-con-button ref={litNewConButton} value="Lightly Used" onClick={handleConButton} style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>Lightly Used</Button>
+                    <Button data-con-button ref={usedConButton} value="Used" onClick={handleConButton} style={{ margin: '0px 4vw 0px 0px', width: '17vw', height: '45px', color: fontColor, background: bgColor, border: 'black 1px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>Used</Button>
                 </div>
                 <div className="description" style={{ margin: '40px 0px 0px 10%'}}>
                     <div style={{ margin: '10px 0% 0px 0%', fontFamily: 'Quicksand', fontWeight: 'bold', color: '#808080', fontSize: '25px' }}>Description:</div>
@@ -413,9 +529,15 @@ export default function ListItem(){
                         }} className="weight" placeholder="Weight (lbs)" style={{ margin: '-40px 41.5vw 0px 0px', float: 'right', width: '20vw' }}></TextField>
                     </div>
                 </div>
-                <div className="list-item-button" style={{ margin: '50px 0px 50px 0px', borderRadius: '10px', textAlign: 'center' }}>
-                    <Button type="submit" onClick={() => { handleListItem() }} style={{ textAlign: 'center', background: 'black', color: 'white', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '20px', width: '150px' }}>List Item</Button>
-                </div> 
+                <div style={{ display: 'flex', flexDirection: 'row', margin: '8% 20% 10% 20%' }}>
+                    <div className="delete-item-button" style={{ margin: '20px', borderRadius: '10px', textAlign: 'center' }}>
+                        <Button type="submit" onClick={handleDeleteItem} style={{ textAlign: 'center', background: 'white', color: 'red', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '20px', width: '180px', border: 'black 1px solid' }}>Delete Listing</Button>
+                    </div> 
+                    <div className="list-item-button" style={{ margin: 'auto', borderRadius: '10px', textAlign: 'center' }}>
+                        <Button type="submit" onClick={handleEditItem} style={{ textAlign: 'center', background: 'white', color: 'black', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '20px', width: '150px', border: 'black 1px solid' }}>Save</Button>
+                    </div> 
+                </div>
+            <ListingsDeleteModal></ListingsDeleteModal>
         </div>
     )
 }
