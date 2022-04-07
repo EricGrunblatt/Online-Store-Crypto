@@ -37,7 +37,8 @@
 		"youAreNotTheSeller": "YOU ARE NOT THE SELLER",
 		"productIsSold": "PRODUCT IS SOLD",
 		"reviewSpecifiedButNotFound": "REVIEW SPECIFIED BUT NOT FOUND",
-		"failedToGetImages": "FAILED TO GET IMAGES"
+		"failedToGetImages": "FAILED TO GET IMAGES",
+		"failedToGetShippingPrice":"FAILED TO GET SHIPPING PRICE"
 	},
 	"purchase": {
 		"missingRequiredField": "MISSING REQUIRED FIELD",

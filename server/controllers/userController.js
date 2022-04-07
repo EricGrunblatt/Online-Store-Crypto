@@ -85,8 +85,8 @@ getAccount = async (req, res) => {
 				}
 			}
 		}
-		console.log("RESPONSE: ", json)
-		res.status(200).json(json)
+		console.log("RESPONSE: ", json);
+		res.status(200).json(json).send();
 	}
 	catch (err) {
 		console.log(err);
@@ -153,7 +153,7 @@ updateAccount = async (req, res) => {
 			json = { "status": constants.status.OK };
 		}
 		console.log("RESPONSE: ", json);
-		res.status(200).json(json)
+		res.status(200).json(json).send();
 	}
 	catch (err) {
 		console.log(err);
@@ -244,7 +244,7 @@ writeReview = async (req, res) => {
 			await product.save();
 			json = { "status": constants.status.OK};
 		}
-		console.log("RESPONSE: ", json);
+		console.log("RESPONSE: ", json).send();
 		res.status(200).json(json);
 	}
 	catch (err) {

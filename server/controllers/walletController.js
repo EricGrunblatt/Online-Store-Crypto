@@ -25,7 +25,7 @@ getWallets = async (req, res) => {
 			}
 		}
 		console.log("RESPONSE: ", json)
-		res.status(200).json(json)
+		res.status(200).json(json).send();
 	}
 	catch (err) {
 		console.log(err);
@@ -67,7 +67,7 @@ addWallet = async (req, res) => {
 			}
 		}
 		console.log("RESPONSE: ", json)
-		res.status(200).json(json)
+		res.status(200).json(json).send();
 	}
 	catch (err) {
 		console.log(err);
@@ -111,7 +111,7 @@ removeWallet = async (req, res) => {
 			}
 		}
 		console.log("RESPONSE: ", json);
-		res.status(200).json(json);
+		res.status(200).json(json).send();
 	}
 	catch (err) {
 		console.log(err);
