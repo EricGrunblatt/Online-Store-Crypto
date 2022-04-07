@@ -558,7 +558,7 @@ deleteListingProduct = async (req, res) => {
 // TODO
 getShippingPrice = async (req, res) => {
 	console.log("getShippingPrice", req.body)
-	const { zipOrigination, zipDestination, weight } = req.body;//weight is in ounce unit
+	const { zipOrigination, zipDestination, boxWeight,boxWidth,boxLength,boxHeight } = req.body;//weight is in pound unit
 	
 	let json = {};
 	var xml =
@@ -568,12 +568,12 @@ getShippingPrice = async (req, res) => {
         <Service>PRIORITY</Service>
         <ZipOrigination>${zipOrigination}</ZipOrigination>
         <ZipDestination>${zipDestination}</ZipDestination>
-        <Pounds>0</Pounds>
-        <Ounces>${weight}</Ounces>
+        <Pounds>${boxWeight}</Pounds>
+        <Ounces>0</Ounces>
         <Container></Container>
-        <Width></Width>
-        <Length></Length>
-        <Height></Height>
+        <Width>${boxWidth}</Width>
+        <Length>${boxLength}</Length>
+        <Height>${boxHeight}</Height>
         <Girth></Girth>
         <Machinable>TRUE</Machinable>
         </Package>
@@ -582,7 +582,7 @@ getShippingPrice = async (req, res) => {
 
 
 	try {
-		if (!zipOrigination || !zipDestination || !weight) {
+		if (!zipOrigination || !zipDestination || !boxWeight) {
 			json = { status: constants.status.ERROR, errorMessage: constants.product.missingRequiredField };
 			console.log("RESPONSE: ", json);
 			return res.status(200).json(json).send();
