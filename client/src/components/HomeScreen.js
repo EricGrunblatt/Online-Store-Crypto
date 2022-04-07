@@ -241,7 +241,7 @@ export default function HomeScreen() {
                     <div style={{ position: 'absolute', display: 'flex', margin: '0px 0vw 0px 1.75vw' }}>
                         {newItems.map((index) => (
                             <div style={{ display: 'inline-block', margin: '-20px 0vw 0px 20vw' }}>
-                                <img src={`data:${index.image.mimetype};base64,${Buffer.from(index.image.data).toString('base64')}`} style={{ width: '100px', height: '100px', border: 'black 1px solid', borderRadius: '10px' }}></img>
+                                <img src={`data:${index.image.mimetype};base64,${Buffer.from(index.image.data).toString('base64')}`} alt="" style={{ width: '100px', height: '100px', border: 'black 1px solid', borderRadius: '10px' }}></img>
                             </div>
                         ))}    
                     </div>

@@ -4,7 +4,6 @@ import { useHistory } from "react-router-dom";
 export default function HomeProduct(props) {
     const history = useHistory();
     const { product } = props;
-    console.log(product.image)
     let image = product.image;
     let url = `data:${image.mimetype};base64,${Buffer.from(image.data).toString('base64')}`;
     let width = "300px";

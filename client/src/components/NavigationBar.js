@@ -18,9 +18,6 @@ export default function NavigationBar() {
     let isMenuOpen = Boolean(anchorEl);
     let navBarLoggedIn = "";
 
-    console.log(auth.user);
-    console.log(auth.loggedIn);
-
     useEffect(() => {
         store.initialLoad();
     }, []);
