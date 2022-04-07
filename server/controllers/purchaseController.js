@@ -18,7 +18,7 @@ addToCart = async (req, res) => {
 	let product = null
 	try {
 		if (!userId) {
-			throw "did not get a userId"
+			throw constants.error.didNotGetUserId
 		}
 		else if (!_id) {
 			json = {status: constants.status.ERROR, errorMessage: constants.purchase.missingRequiredField}
@@ -58,7 +58,7 @@ removeFromCart = async (req, res) => {
 	let user = null
 	try {
 		if (!userId) {
-			throw "did not get a userId"
+			throw constants.error.didNotGetUserId
 		}
 		else if (!_id) {
 			json = {status: constants.status.ERROR, errorMessage: constants.purchase.missingRequiredField}
@@ -96,7 +96,7 @@ purchaseFromCart = async (req, res) => {
 	let user = null
 	try {
 		if (!userId) {
-			throw "did not get a userId"
+			throw constants.error.didNotGetUserId
 		}
 		else if (! (user = await User.findById(userId))) {
 			json = {status: constants.status.ERROR, errorMessage: constants.purchase.userDoesNotExist}

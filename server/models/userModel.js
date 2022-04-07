@@ -14,7 +14,7 @@ const UserSchema = new Schema(
 		addressSecondLine: 	{type: String, default: ""},
 		city: 				{type: String, required: true},
 		state: 				{type: String, required: true},
-		zipcode: 			{type: Number, required: true},
+		zipcode: 			{type: String, required: true},
 		profileImageId: 	{type: ObjectId, default: null},
 		cartProductIds:		{type: [ObjectId], default: []},
 		wallets: 			{type:[Object], default:[]}

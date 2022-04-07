@@ -32,7 +32,7 @@ getProfileByUsername = async (req, res) => {
 			const profileImage = await Image.findById(user.profileImageId)
 				.select({ "_id": 0, "data": 1, "contentType": 1 })
 			// GET USER'S SELLING PRODUCTS
-			const sellingProducts = await Products.find({ sellerUsername: username, buyerUsername: null })
+			const sellingProducts = await Product.find({ sellerUsername: username, buyerUsername: null })
 				.select({ "_id": 1, "name": 1, "price": 1, "sellerUsername": 1, "dateListed": 1 })
 			// GET USER'S REVIEWS
 			const reviews = await Review.find({ forUsername: username })
@@ -64,7 +64,7 @@ getAccount = async (req, res) => {
 	let user=null;
 	try {
 		if (!userId) {
-			throw "did not get a userId"
+			throw constants.error.didNotGetUserId
 		}
 
 		else if (!(user = await User.findOne({ "_id": userId }))) {
@@ -106,13 +106,16 @@ updateAccount = async (req, res) => {
 	let passwordHash = null
 	try {
 		if (!userId) {
-			throw "did not get a userId"
+			throw constants.error.didNotGetUserId
 		}
 		else if (!(user = await User.findOne({ "_id": userId }))) {
 			json = { status: constants.status.ERROR, errorMessage: constants.user.userDoesNotExist };
 		}
 		else if(!firstName|| !lastName || !email || !city || !state || !zipcode || !addressFirstLine || !phoneNumber){
 			json = { status: constants.status.ERROR, errorMessage: constants.user.missingRequiredField };
+		}
+		else if (!email.includes("@")) {
+			json = { status: constants.status.ERROR, errorMessage: constants.user.invalidEmail}
 		}
 		else if (newPassword && !oldPassword) {
 			json = { status: constants.status.ERROR, errorMessage: constants.user.oldPasswordNotProvided };
@@ -177,7 +180,7 @@ updateProfileImage = async (req, res) => {
 			}
 			// CHECK USERID DEFINED
 			else if (!userId) {
-				throw "did not get a userId"
+				throw constants.error.didNotGetUserId
 			}
 			// CHECK USER EXISTS
 			else if (!(user = await User.findById(userId))) {
@@ -209,7 +212,7 @@ writeReview = async (req, res) => {
 	let product = null;
 	try {
 		if (!userId) {
-			throw "did not get a userId"
+			throw constants.error.didNotGetUserId
 		}
 		else if (!(user = await User.findById(userId))) {
 			json = { status: constants.status.ERROR, errorMessage: constants.user.userDoesNotExist };
