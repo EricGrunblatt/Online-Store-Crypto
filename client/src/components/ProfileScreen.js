@@ -43,6 +43,8 @@ export default function ProfileScreen() {
             let image = store.userProfile.profileImage;
             let url = `data:${image.mimetype};base64,${Buffer.from(image.data).toString('base64')}`;
             setProfileImage(url);
+
+            console.log("ProfileScreen.js");
         }  catch (err) {
             console.log(err);
         }

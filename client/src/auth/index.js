@@ -90,12 +90,13 @@ function AuthContextProvider(props) {
                 alert("ERROR: response.status=200, but response.body.status not recognized")
             }
         } catch (err) {
-            alert("ERROR: something went really wrong");
+            //alert("ERROR: something went really wrong");
         }
     }
 
     auth.registerUser = async function(userData, store) {
         try {
+            console.log("user is now registering");
             const response = await api.registerUser(userData);  
             if (response.status !== 200) {
                 alert("ERROR: received response.status=" + response.status)
@@ -107,6 +108,7 @@ function AuthContextProvider(props) {
                         user: response.data.user
                     }
                 })
+                alert("Successfully Registered");
                 store.initalLoad();
                 history.push("/");
             }
@@ -120,7 +122,7 @@ function AuthContextProvider(props) {
             }
             
         } catch (err) {
-            alert("ERROR: something went really wrong");
+            //alert("ERROR: something went really wrong");
         }
     }
 

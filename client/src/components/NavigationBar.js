@@ -20,6 +20,7 @@ export default function NavigationBar() {
 
     useEffect(() => {
         store.initialLoad();
+        console.log("NavigationBar.js");
     }, []);
 
     /* OPENS MENU IF PRESSED */

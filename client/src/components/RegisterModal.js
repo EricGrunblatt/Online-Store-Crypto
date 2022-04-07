@@ -66,6 +66,7 @@ function RegisterModal() {
     const handleRegister = (event) => {
         store.setCloseRegisterModal();
         event.preventDefault();
+        console.log("registering");
         if(password === confirm) {
             auth.registerUser({
                 firstName: first,

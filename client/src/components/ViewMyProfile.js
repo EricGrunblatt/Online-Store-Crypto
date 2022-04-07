@@ -149,7 +149,7 @@ export default function ViewMyProfile() {
 							<Grid item container xs style={{ margin: '10px auto 10px auto', width: '100%', minHeight: '200px', border: 'black 2px solid', borderRadius: '20px' }}>
 								{/* ITEM IMAGE */}
 								<Grid item xs={3} style={{ margin: '20px'}}>
-									<img src={index.img} alt="" style={{ borderRadius: '10%' }} ></img>
+									<img src={`data:${index.image.mimetype};base64,${Buffer.from(index.image.data).toString('base64')}`} alt="" style={{ width: '200px', height: '200px', borderRadius: '10%' }} ></img>
 								</Grid>
 								{/* ITEM INFO */}
 								<Grid item xs={5} style={{ margin: '10px auto auto 40px'}}>
