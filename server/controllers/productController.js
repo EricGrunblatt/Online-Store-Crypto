@@ -621,8 +621,8 @@ getShippingPrice = async (req, res) => {
 				}
 				json = {
 					status: constants.status.OK,
-					price: price,
-					service: service
+					shippingPrice: price,
+					shippingService: service
 				}
 			}
 
