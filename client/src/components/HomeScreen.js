@@ -50,7 +50,7 @@ export default function HomeScreen() {
         setCheckedCat(updatedList);
     };
 
-    // Looks at all checked filters for condition
+    // LOOKS AT ALL CHECKED FILTERS FOR CONDITION
     const handleConCheck = (event) => {
         let updatedList = [...checkedCon];
         if(event.target.checked) {
@@ -203,10 +203,38 @@ export default function HomeScreen() {
         }
     }
 
+    const handleResetFilter = async function () {
+
+    }
+
+    const handleFilter = async function (json) {
+        store.loadItems(json);
+        console.log("Items loaded with filter");
+    }
+
 
     /* OPEN/CLOSE SORT MENU */
-    const handleSortChange = (event) => {
-        setSort(event.target.value);
+    const handleSortChange = (value) => {
+        setSort(value);
+        let sortBy = "";
+        if(value === 1) {
+            sortBy = "DATE_DESCENDING";
+        } else if (value === 2) {
+            sortBy = "DATE_ASCENDING";
+        } else if (value === 3) {
+            sortBy = "PRICE_ASCENDING";
+        } else {
+            sortBy = "PRICE_DESCENDING";
+        }
+        let json = {
+            search: null, 
+            category: null, 
+            condition: null, 
+            minPrice: undefined, 
+            maxPrice: undefined, 
+            sortBy: sortBy
+        }
+        handleFilter(json);
     };
 
     let allProducts = store.catalogItems;
@@ -268,6 +296,15 @@ export default function HomeScreen() {
                     {openCon}
 
                     <hr style={{ float: 'left', color: 'black', width: '16vw' }} />
+
+                    <div style={{ textAlign: 'center' }}>
+                        <Button onClick={() => { handleResetFilter() }} style={{ marginRight: '1vw', border: 'black 1px solid', borderRadius: '10px', color: 'black', fontFamily: 'Quicksand', width: '7vw' }}>
+                            Reset
+                        </Button>
+                        <Button onClick={() => { handleFilter() }} style={{ border: 'black 1px solid', borderRadius: '10px', color: 'black', fontFamily: 'Quicksand', width: '7vw' }}>
+                            Filter
+                        </Button>
+                    </div>
                 </div>
             </div>
             <Box style={{ border: 'black 1px solid', borderRadius: '10px', width: '200px', height: '50px', display: 'inline-block', float: 'right', margin: '15px 60px 0px 0px' }}>
@@ -277,13 +314,12 @@ export default function HomeScreen() {
                         labelId="sort-by-menu"
                         value={sort}
                         label="Sort By"
-                        onChange={handleSortChange}
+                        onChange={(event) => {handleSortChange(event.target.value)}}
                     >
-                        <MenuItem value={1}>Sort By</MenuItem>
-                        <MenuItem value={2}>Newest Listings</MenuItem>
-                        <MenuItem value={3}>Oldest Listings</MenuItem>
-                        <MenuItem value={4}>Price (low to high)</MenuItem>
-                        <MenuItem value={5}>Price (high to low)</MenuItem>
+                        <MenuItem value={1}>Newest Listings</MenuItem>
+                        <MenuItem value={2}>Oldest Listings</MenuItem>
+                        <MenuItem value={3}>Price (low to high)</MenuItem>
+                        <MenuItem value={4}>Price (high to low)</MenuItem>
                     </Select>
                 </FormControl>
             </Box>

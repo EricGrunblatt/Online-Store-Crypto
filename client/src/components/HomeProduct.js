@@ -6,7 +6,7 @@ export default function HomeProduct(props) {
     const { product } = props;
     let image = product.image;
     let url = `data:${image.mimetype};base64,${Buffer.from(image.data).toString('base64')}`;
-    let width = "300px";
+    let width = "17vw";
     let height = "120px";
 
     return (

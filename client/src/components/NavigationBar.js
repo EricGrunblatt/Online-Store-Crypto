@@ -95,6 +95,26 @@ export default function NavigationBar() {
         history.push("/");
     }
 
+    function handleSearch (event) {
+        if(event.code === "Enter") {
+            let searchBarValue = null;
+            if(event.target.value !== '') {
+                searchBarValue = event.target.value;
+            }
+            let json = {
+                search: searchBarValue, 
+                category: null, 
+                condition: null, 
+                minPrice: undefined, 
+                maxPrice: undefined, 
+                sortBy: null
+            }
+            store.loadItems(json);
+        }
+    }
+
+
+
     /* MENU DISPLAY */
     const loggedInMenu = 
         <Menu
@@ -132,9 +152,13 @@ export default function NavigationBar() {
                             Cryptocurrency
                         </div>
                     </div>
-                    <TextField className="search-bar" sx={{ width: '65vw', bgcolor:'white' }}
+                    <TextField className="search-bar" 
+                            sx={{ width: '65vw', bgcolor:'white' }}
                             style={{ margin: '70px 0px 0px 0px', float: 'right', borderRadius: '10px' }}
                             placeholder="Search..."
+                            onKeyPress={(event) => {
+                                handleSearch(event)
+                            }}
                     >
                     </TextField>
                     {navBarLoggedIn}

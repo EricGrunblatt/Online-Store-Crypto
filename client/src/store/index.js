@@ -206,19 +206,13 @@ function GlobalStoreContextProvider(props) {
                 type: GlobalStoreActionType.LOAD_CATALOG_ITEMS,
                 payload: response.data.products
             });
+            console.log("Initial Items");
             history.push("/");
         }
     }
 
     // LOADS ALL ITEMS IN THE CATALOG
     store.loadItems = async function (json) {
-        //catalog json
-        /* Sort By:
-        "DATE_DESCENDING"
-        "DATE_ASCENDING"
-        "PRICE_ASCENDING"
-        "PRICE_DESCENDING"
-        */
         let response = await api.getCatalog(json);
         if(response.data.status === "OK") {
             storeReducer({
@@ -226,7 +220,9 @@ function GlobalStoreContextProvider(props) {
                 payload: response.data.products
             });
             console.log("Catalog Items Loaded");
+            history.push("/");
         }
+        
     }
 
     // SETS ID FOR CART ITEM BEING REMOVED

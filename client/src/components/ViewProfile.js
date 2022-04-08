@@ -4,7 +4,6 @@ import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import StarRateIcon from '@mui/icons-material/StarRate';
 import { GlobalStoreContext } from '../store'
 import { useContext } from "react";
-import { Button } from '@mui/material';
 
 
 export default function ViewMyProfile() {
