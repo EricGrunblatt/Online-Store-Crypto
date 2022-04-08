@@ -558,29 +558,39 @@ deleteListingProduct = async (req, res) => {
 // TODO
 getShippingPrice = async (req, res) => {
 	console.log("getShippingPrice", req.body)
-	const { zipOrigination, boxWeight,boxWidth,boxLength,boxHeight } = req.body;//weight is in pound unit
+	const _id = req.body._id; //product id
 	const userId = req.userId;
 
 	let json = {};
-	let user = null;
+	let seller = null;
+	let buyer=null;
+	let product=null
 
 	try {
 		if (!userId) {
 			throw "did not get a userId"
 		}
 
-		else if (!(user = await User.findOne({ "_id": userId }))) {
+		else if (!(buyer = await User.findOne({ "_id": userId }))) {
 			json = { status: constants.status.ERROR, errorMessage: constants.product.userDoesNotExist };
 						console.log("RESPONSE: ", json);
 			return res.status(200).json(json).send();
 		}
-		else if (!zipOrigination || !boxWeight||!boxWidth||!boxLength||!boxHeight) {
-			json = { status: constants.status.ERROR, errorMessage: constants.product.missingRequiredField };
-			console.log("RESPONSE: ", json);
+		else if (!(product = await Product.findOne({ "_id": _id }))) {
+			json = { status: constants.status.ERROR, errorMessage: constants.product.productDoesNotExist }
 			return res.status(200).json(json).send();
-
 		}
-		let zipDestination=user.zipcode;
+		else if (!(seller = await User.findOne({ "username": product.sellerUsername }))) {
+			json = { status: constants.status.ERROR, errorMessage: constants.product.userDoesNotExist };
+			onsole.log("RESPONSE: ", json);
+			return res.status(200).json(json).send();
+		}
+		let zipDestination=buyer.zipcode;
+		let zipOrigination=seller.zipcode;
+		let boxWeight=product.boxWeight;
+		let boxWidth=product.boxWidth;
+		let boxLength=product.boxLength;
+		let boxHeight=product.boxHeight;
 		var xml =`<RateV4Request USERID="726CRYPT0533">
         <Revision></Revision>
         <Package ID="0">
