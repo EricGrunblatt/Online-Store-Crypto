@@ -103,8 +103,8 @@ export default function NavigationBar() {
             }
             let json = {
                 search: searchBarValue, 
-                category: null, 
-                condition: null, 
+                categories: null, 
+                conditions: null, 
                 minPrice: undefined, 
                 maxPrice: undefined, 
                 sortBy: null

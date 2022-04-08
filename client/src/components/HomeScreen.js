@@ -23,6 +23,8 @@ export default function HomeScreen() {
     const [openCon, setOpenCon] = useState("");
     const [checkedCat, setCheckedCat] = useState([]);
     const [checkedCon, setCheckedCon] = useState([]);
+    const [minPrice, setMinPrice] = useState("");
+    const [maxPrice, setMaxPrice] = useState("");
     const [sort, setSort] = useState("");
 
     // Makes an array to show the 3 newest items
@@ -41,9 +43,9 @@ export default function HomeScreen() {
 
     // Looks at all filters for category
     const handleCatCheck = (event) => {
-        let updatedList = [...checkedCat];
+        let updatedList = checkedCat;
         if(event.target.checked) {
-            updatedList = [...checkedCat, event.target.value];
+            updatedList.push(event.target.value);
         } else {
             updatedList.splice(checkedCat.indexOf(event.target.value), 1);
         }
@@ -52,9 +54,9 @@ export default function HomeScreen() {
 
     // LOOKS AT ALL CHECKED FILTERS FOR CONDITION
     const handleConCheck = (event) => {
-        let updatedList = [...checkedCon];
+        let updatedList = checkedCon;
         if(event.target.checked) {
-            updatedList = [...checkedCon, event.target.value];
+            updatedList.push(event.target.value);
         } else {
             updatedList.splice(checkedCon.indexOf(event.target.value), 1);
         }
@@ -170,13 +172,15 @@ export default function HomeScreen() {
 							inputProps={{style: {fontSize: 13}}}
 							size = 'small'
 							style={{ width: '6vw', float: 'left', borderRadius: '3px' }}
-							placeholder="$" >
+							placeholder="Min" 
+                            onChange={(event) => { setMinPrice(event.target.value) }}>
 					</TextField>
 					<TextField className="price_to" sx={{ bgcolor:'white' }}
 							inputProps={{style: {fontSize: 13}}}
 							size = 'small'
 							style={{ width: '6vw', float: 'right', borderRadius: '3px' }}
-							placeholder="$$$" >
+							placeholder="Max" 
+                            onChange={(event) => { setMaxPrice(event.target.value) }}>
 					</TextField>
 				</div>
             );
@@ -204,6 +208,8 @@ export default function HomeScreen() {
     }
 
     const handleResetFilter = async function () {
+        setCheckedCat([]);
+        setCheckedCon([]);
 
     }
 
@@ -228,14 +234,26 @@ export default function HomeScreen() {
         }
         let json = {
             search: null, 
-            category: null, 
-            condition: null, 
-            minPrice: undefined, 
-            maxPrice: undefined, 
+            categories: checkedCat, 
+            conditions: checkedCon, 
+            minPrice: minPrice, 
+            maxPrice: maxPrice, 
             sortBy: sortBy
         }
         handleFilter(json);
     };
+
+    const handleFilterSections = () => {
+        let json = {
+            search: null,
+            categories: checkedCat,
+            conditions: checkedCon,
+            minPrice: minPrice,
+            maxPrice: maxPrice,
+            sortBy: null
+        }
+        handleFilter(json);
+    }
 
     let allProducts = store.catalogItems;
     let productCard = 
@@ -301,7 +319,7 @@ export default function HomeScreen() {
                         <Button onClick={() => { handleResetFilter() }} style={{ marginRight: '1vw', border: 'black 1px solid', borderRadius: '10px', color: 'black', fontFamily: 'Quicksand', width: '7vw' }}>
                             Reset
                         </Button>
-                        <Button onClick={() => { handleFilter() }} style={{ border: 'black 1px solid', borderRadius: '10px', color: 'black', fontFamily: 'Quicksand', width: '7vw' }}>
+                        <Button onClick={() => { handleFilterSections() }} style={{ border: 'black 1px solid', borderRadius: '10px', color: 'black', fontFamily: 'Quicksand', width: '7vw' }}>
                             Filter
                         </Button>
                     </div>
