@@ -68,7 +68,8 @@ getCatalog = async (req, res) => {
 		productQueryArray.push({price: {$lte: maxPrice}})
 	}
 
-	productQuery.$and = productQueryArray
+	if (productQueryArray.length > 0)
+		productQuery.$and = productQueryArray
 
 	console.log("PRODUCT QUERY: ", productQuery)
 	console.dir(productQuery, {depth: null})
