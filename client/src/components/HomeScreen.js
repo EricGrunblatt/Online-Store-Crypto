@@ -233,24 +233,40 @@ export default function HomeScreen() {
         } else {
             sortBy = "PRICE_DESCENDING";
         }
+        let min = minPrice;
+        if(min === '') {
+            min = undefined;
+        }
+        let max = maxPrice;
+        if(max === '') {
+            max = undefined;
+        }
         let json = {
             search: null, 
             categories: checkedCat, 
             conditions: checkedCon, 
-            minPrice: minPrice, 
-            maxPrice: maxPrice, 
+            minPrice: min, 
+            maxPrice: max, 
             sortBy: sortBy
         }
         handleFilter(json);
     };
 
     const handleFilterSections = () => {
+        let min = minPrice;
+        if(min === '') {
+            min = undefined;
+        }
+        let max = maxPrice;
+        if(max === '') {
+            max = undefined;
+        }
         let json = {
             search: null,
             categories: checkedCat,
             conditions: checkedCon,
-            minPrice: minPrice,
-            maxPrice: maxPrice,
+            minPrice: min,
+            maxPrice: max,
             sortBy: null
         }
         handleFilter(json);
@@ -266,7 +282,7 @@ export default function HomeScreen() {
         const firstPageIndex = (currentPage - 1) * PageSize;
         const lastPageIndex = firstPageIndex + PageSize;
         return allProducts.slice(firstPageIndex, lastPageIndex);
-    }, [currentPage]);
+    }, [currentPage, allProducts]);
 
 
     let productCard = 
