@@ -14,10 +14,12 @@ import HomeProduct from "./HomeProduct";
 import TextField from "@mui/material/TextField";
 import { GlobalStoreContext } from '../store'
 import Pagination from './Pagination';
+import { useHistory } from "react-router-dom";
 
 
 export default function HomeScreen() {
     const { store } = useContext(GlobalStoreContext);
+    const history = useHistory();
 
     const [openCat, setOpenCat] = useState("");
     const [openPrice, setOpenPrice] = useState("");
@@ -28,11 +30,38 @@ export default function HomeScreen() {
     const [maxPrice, setMaxPrice] = useState("");
     const [sort, setSort] = useState("");
 
-    // Makes an array to show the 3 newest items
-    let newItems = store.catalogItems;
-    if(newItems.length > 3) {
-        newItems = store.catalogItems.slice(newItems.length-3, newItems.length);
-        console.log(newItems);
+    /* MAKES AN ARRAY TO SHOW THE 3 NEWEST ITEMS */
+    let fullNewItems = store.catalogItems;
+    
+    // Calculate number of pages and set length of newItems
+    let numPages = Math.ceil(fullNewItems.length/3);
+    if(numPages > 3) {
+        numPages = 3;
+        fullNewItems = fullNewItems.slice(0, 9);
+    } else if (numPages < 1) {
+        numPages = 1;
+    } 
+    const [index, setIndex] = useState(0);
+
+    const handleNewLeft = () => {
+        let newIndex = index - 1;
+        setIndex(newIndex);
+    }
+
+    const handleNewRight = () => {
+        let newIndex = index + 1;
+        setIndex(newIndex);
+    }
+
+    const newItems = useMemo(() => {
+        return fullNewItems.slice(3*(index), 3*(index+1));
+    }, [index, fullNewItems])
+
+
+    // CREATE THE DOTS FOR THE NUMBER OF PAGES
+    let dotsArray = [];
+    for(let i = 0; i < numPages; i++) {
+        dotsArray[i] = i;
     }
 
     /* FILTER BY CATEGORIES AND CHECK BOX FUNCTION */
@@ -42,7 +71,7 @@ export default function HomeScreen() {
     let isCheckedCat = (item) => checkedCat.includes(item) ? "checked-item" : "not-checked-item";
     let isCheckedCon = (item) => checkedCon.includes(item) ? "checked-item" : "not-checked-item";
 
-    // Looks at all filters for category
+    /* Looks at all filters for category */
     const handleCatCheck = (event) => {
         let updatedList = checkedCat;
         if(event.target.checked) {
@@ -53,7 +82,7 @@ export default function HomeScreen() {
         setCheckedCat(updatedList);
     };
 
-    // LOOKS AT ALL CHECKED FILTERS FOR CONDITION
+    /* LOOKS AT ALL CHECKED FILTERS FOR CONDITION */
     const handleConCheck = (event) => {
         let updatedList = checkedCon;
         if(event.target.checked) {
@@ -70,6 +99,7 @@ export default function HomeScreen() {
     let priceButton = "";
     let conButton = "";
 
+    /* OPEN/CLOSE FILTER BY CATEGORY SECTION */
     if(!openCat) {
         catButton = 
         <div style={{ height: '20px', display: 'flex', float: 'right' }}>
@@ -208,19 +238,20 @@ export default function HomeScreen() {
         }
     }
 
+    /* RESETS ALL VALUES IN FILTER */ 
     const handleResetFilter = async function () {
         setCheckedCat([]);
         setCheckedCon([]);
-
+        setMaxPrice("");
+        setMinPrice("");
     }
 
+    /* APPLIES FILTER OR SORT AFTER EITHER IS CHANGED */
     const handleFilter = async function (json) {
         store.loadItems(json);
-        console.log("Items loaded with filter");
     }
 
-
-    /* OPEN/CLOSE SORT MENU */
+    /* HANDLES CHANGE IN SORT MENU */
     const handleSortChange = (value) => {
         setSort(value);
         let sortBy = "";
@@ -252,6 +283,7 @@ export default function HomeScreen() {
         handleFilter(json);
     };
 
+    /* HANDLES FILTERING WHEN FILTER BUTTON IS PRESSED */
     const handleFilterSections = () => {
         let min = minPrice;
         if(min === '') {
@@ -272,10 +304,9 @@ export default function HomeScreen() {
         handleFilter(json);
     }
 
-    let allProducts = store.catalogItems;
-
     /* CUSTOM PAGINATION SETUP */
-    let PageSize = 1;
+    let allProducts = store.catalogItems;
+    let PageSize = 16;
     const [currentPage, setCurrentPage] = useState(1);
  
     let pageProductAll = useMemo(() => {
@@ -308,20 +339,29 @@ export default function HomeScreen() {
                 <span style={{ paddingRight: '10px' }}> Music </span>
                 <span style={{ paddingRight: '10px' }}> Fashion </span>
             </div>
-            <div className="homescreen-new-items" style={{ paddingTop: '5px', textAlign: 'center', height: '150px', backgroundColor: '#FFBD59', fontSize: '30px' }}>
+            <div className="homescreen-new-items" style={{ paddingTop: '5px', textAlign: 'center', height: '180px', backgroundColor: '#FFBD59', fontSize: '30px' }}>
                 New Items
                 <div style={{ paddingTop: '25px'}}>
-                    <ArrowBackIosIcon style={{ margin: '0px 0vw 0px 6vw', display: 'flex', position: 'absolute' }}></ArrowBackIosIcon>
-                    <div style={{ position: 'absolute', display: 'flex', margin: '0px 0vw 0px 1.75vw' }}>
+                    <Button data-left-new-arrow disabled={index===0} onClick={() => { handleNewLeft() }} style={{ cursor: 'pointer', margin: '10px 0px 0px 6vw', display: 'flex', position: 'absolute', minWidth: '30px', maxWidth: '30px' }}>
+                        <ArrowBackIosIcon style={{ margin: '0px 0px 0px 10px' }}></ArrowBackIosIcon>
+                    </Button>
+                    <div style={{ position: 'absolute', display: 'flex', margin: '0px 0vw 0px -8.5vw', left: '20vw', width: '70vw' }}>
                         {newItems.map((index) => (
-                            <div style={{ display: 'inline-block', margin: '-20px 0vw 0px 20vw' }}>
+                            <div onClick={() => {history.push("/product/"+index._id)}} style={{ cursor: 'pointer', display: 'inline-block', margin: '-20px 10vw 0px 10vw' }}>
                                 <img src={`data:${index.image.mimetype};base64,${Buffer.from(index.image.data).toString('base64')}`} alt="" style={{ width: '100px', height: '100px', border: 'black 1px solid', borderRadius: '10px' }}></img>
                             </div>
                         ))}    
                     </div>
-                    <ArrowForwardIosIcon style={{ margin: '0px 0px 0px 92vw', display: 'flex', position: 'absolute' }}></ArrowForwardIosIcon>
+                    <Button data-right-new-arrow disabled={index===2} onClick={() => { handleNewRight() }} style={{ cursor: 'pointer', margin: '10px 0px 0px 92vw', display: 'flex', position: 'absolute', minWidth: '30px', maxWidth: '30px' }}>
+                        <ArrowForwardIosIcon></ArrowForwardIosIcon>
+                    </Button>
+                      
                 </div>
-                
+                <div style={{ marginTop: '75px', textAlign: 'center', display: 'inline-block', position: 'absolute' }}>
+                    {dotsArray.map((dot) => (
+                        <div style={{ background: index === dot ? "black": "#FFBD59", width: '10px', height: '10px', border: 'black 1px solid', borderRadius: '50%', margin: '0px 10px 0px 10px', display: 'inline-block' }}></div>
+                    ))}
+                </div>
             </div>
             <div className="homescreen-item-display" style={{ display: 'inline-block', backgroundColor: 'white' }}>
                 <div className="homescreen-filter-by" style={{ padding: '10px 0px 0px 10px', fontSize: '25px', width: '16vw', display: 'grid', gridAutoColumns: 'auto' }}>
@@ -369,7 +409,7 @@ export default function HomeScreen() {
                     </Select>
                 </FormControl>
             </Box>
-            <Box style={{ position: 'absolute', margin: '-30px 0px 50px 20vw', background: 'white', top: '450px', width: '79%', minHeight: '1010px' }}>
+            <Box style={{ position: 'absolute', margin: '-10px 0px 50px 20vw', background: 'white', top: '450px', width: '79%', minHeight: '1010px' }}>
                     <div>
                     {
                         productCard
