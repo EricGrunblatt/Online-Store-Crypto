@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useContext } from "react";
+import { useState, useContext, useMemo } from "react";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
@@ -13,6 +13,7 @@ import AccountErrorModal from "./AccountErrorModal";
 import HomeProduct from "./HomeProduct";
 import TextField from "@mui/material/TextField";
 import { GlobalStoreContext } from '../store'
+import Pagination from './Pagination';
 
 
 export default function HomeScreen() {
@@ -256,10 +257,22 @@ export default function HomeScreen() {
     }
 
     let allProducts = store.catalogItems;
+
+    /* CUSTOM PAGINATION SETUP */
+    let PageSize = 1;
+    const [currentPage, setCurrentPage] = useState(1);
+ 
+    let pageProductAll = useMemo(() => {
+        const firstPageIndex = (currentPage - 1) * PageSize;
+        const lastPageIndex = firstPageIndex + PageSize;
+        return allProducts.slice(firstPageIndex, lastPageIndex);
+    }, [currentPage]);
+
+
     let productCard = 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 19vw)', gridTemplateRows: 'repeat(4, 25.5vw)' }}>
         {
-            allProducts.map((index) => (
+            pageProductAll.map((index) => (
                 <HomeProduct
                     style={{ position: 'absolute' }}
                     key={index._id}
@@ -268,7 +281,6 @@ export default function HomeScreen() {
             ))
         }    
         </div>;
-
 
     return (
         <Box className="homescreen" style={{ maxWidth: '99vw' }}>
@@ -348,10 +360,14 @@ export default function HomeScreen() {
                     }
                     </div>
             </Box>
-            <Box style={{ position: 'absolute', margin: '100vw 0px 5vw 0vw', textAlign: 'center', alignContent: 'center', fontSize: '35px', width: '99%' }}>
-                <ArrowBackIosIcon style={{ marginRight: '5vw' }}></ArrowBackIosIcon>
-                1 2 3 4
-                <ArrowForwardIosIcon style={{ marginLeft: '5vw' }}></ArrowForwardIosIcon>
+            <Box style={{ margin: '100vw 0px 5vw 0vw', textAlign: 'center', alignContent: 'center', fontSize: '35px', width: '99%' }}>
+                <Pagination
+                    className="pagination-bar"
+                    currentPage={currentPage}
+                    totalCount={allProducts.length}
+                    pageSize={PageSize}
+                    onPageChange={page => setCurrentPage(page)}
+                />
             </Box>
             <LoginModal />
             <RegisterModal />
