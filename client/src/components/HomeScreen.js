@@ -63,6 +63,15 @@ export default function HomeScreen() {
     for(let i = 0; i < numPages; i++) {
         dotsArray[i] = i;
     }
+    let margin = 0;
+    if(numPages === 3) {
+        margin = 50;
+    } else if (numPages === 2) {
+        margin = 37;
+    } else if (numPages === 1) {
+        margin = 20;
+    }
+    let dotMarginRight = "-" + margin.toString() + "px";
 
     /* FILTER BY CATEGORIES AND CHECK BOX FUNCTION */
     const categories = ["Clothing", "Electronics", "Fashion", "Furniture", "Hardware", "Home & Garden", "Music", "Office Supplies", "Other", "Photography & Video", "Sports Equipment", "Toys", "Video Games"];
@@ -342,7 +351,7 @@ export default function HomeScreen() {
             <div className="homescreen-new-items" style={{ paddingTop: '5px', textAlign: 'center', height: '180px', backgroundColor: '#FFBD59', fontSize: '30px' }}>
                 New Items
                 <div style={{ paddingTop: '25px'}}>
-                    <Button data-left-new-arrow disabled={index===0} onClick={() => { handleNewLeft() }} style={{ cursor: 'pointer', margin: '10px 0px 0px 6vw', display: 'flex', position: 'absolute', minWidth: '30px', maxWidth: '30px' }}>
+                    <Button data-left-new-arrow disabled={index===0} onClick={() => { handleNewLeft() }} style={{ color: index === 0 ? "rgba(0, 0, 0, 0.3)" : "black", cursor: 'pointer', margin: '10px 0px 0px 6vw', display: 'flex', position: 'absolute', minWidth: '30px', maxWidth: '30px' }}>
                         <ArrowBackIosIcon style={{ margin: '0px 0px 0px 10px' }}></ArrowBackIosIcon>
                     </Button>
                     <div style={{ position: 'absolute', display: 'flex', margin: '0px 0vw 0px -8.5vw', left: '20vw', width: '70vw' }}>
@@ -352,12 +361,12 @@ export default function HomeScreen() {
                             </div>
                         ))}    
                     </div>
-                    <Button data-right-new-arrow disabled={index===2} onClick={() => { handleNewRight() }} style={{ cursor: 'pointer', margin: '10px 0px 0px 92vw', display: 'flex', position: 'absolute', minWidth: '30px', maxWidth: '30px' }}>
+                    <Button data-right-new-arrow disabled={index===2} onClick={() => { handleNewRight() }} style={{ color: index === 2 ? "rgba(0, 0, 0, 0.3)" : "black", cursor: 'pointer', margin: '10px 0px 0px 92vw', display: 'flex', position: 'absolute', minWidth: '30px', maxWidth: '30px' }}>
                         <ArrowForwardIosIcon></ArrowForwardIosIcon>
                     </Button>
                       
                 </div>
-                <div style={{ marginTop: '75px', textAlign: 'center', display: 'inline-block', position: 'absolute' }}>
+                <div style={{ marginTop: '75px', marginLeft: dotMarginRight, textAlign: 'center', display: 'inline-block', position: 'absolute' }}>
                     {dotsArray.map((dot) => (
                         <div style={{ background: index === dot ? "black": "#FFBD59", width: '10px', height: '10px', border: 'black 1px solid', borderRadius: '50%', margin: '0px 10px 0px 10px', display: 'inline-block' }}></div>
                     ))}
