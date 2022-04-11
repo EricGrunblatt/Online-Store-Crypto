@@ -64,15 +64,33 @@ export default function ProductPage() {
         setItemImage0(itemImages[event.target.id]);
     };
 
+	// ADD TO CART BUTTON
+    const handleAddToCart = async function() {
+        const url = 'http://localhost:4000/api/purchase/addToCart';
+        // POST 
+        const data = { '_id': productId };
+        const options = {
+            method: 'POST',
+            headers: { 'content-type': 'application/x-www-form-urlencoded' },
+            data: qs.stringify(data),
+            url
+        };
+        axios(options);
+    };
+
+
+
 	let showImages = 
-		<Grid container spacing={4}>
-			{itemImages.map((index, indexNum) => (
-				index? 
-					<Grid item xs style={{cursor: "pointer"}}>
-						<img id={indexNum} src={`data:${index.mimetype};base64,${Buffer.from(index.data).toString('base64')}`} alt="" onClick={handleImage} title={index.title} width="90px" height="90px" style={{ borderRadius: '10%', border: "black 2px" }} ></img>
-					</Grid>:<div></div>
-			))}
-		</Grid>;
+        <Grid container spacing={4}>
+            {itemImages.map((index, indexNum) => (
+                index? 
+                    <Grid item xs style={{cursor: "pointer"}}>
+                        <img id={indexNum} src={`data:${index.mimetype};base64,${Buffer.from(index.data).toString('base64')}`} alt="" 
+                        onClick={handleImage} title={index.title} width="100px" height="100px" style={{ borderRadius: '10%', border: "black 2px" }} ></img>
+                    </Grid>:<div></div>
+            ))}
+        </Grid>;
+
 	
 	const handleViewProfile = (seller) => {
 		let json = {
@@ -118,7 +136,7 @@ export default function ProductPage() {
 					<div style={{ paddingTop: '60px', textDecoration: 'none', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '45px', color: 'black', textAlign: 'right' }}>
                     	{cost} Algo
 					</div>
-					<Button onClick={() => { history.push("/cart") }} className="add-to-cart-button" style={{ background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
+					<Button onClick={handleAddToCart} className="add-to-cart-button" style={{ background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
 						Add to Cart
 					</Button>
 					<div style={{ paddingTop: '40px', fontFamily: 'Quicksand', fontWeight: '500', fontSize: '25px', color: 'black' }}>
