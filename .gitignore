@@ -1,3 +1,11 @@
+<<<<<<< HEAD
+<<<<<<< HEAD
+node_modules
+=======
+node_modules
+>>>>>>> 72561517232582b8daed721ea0f485361341c326
+uploads
+=======
 /*
 !.gitignore
 
@@ -14,3 +22,4 @@
 /server/uploads/*
 
 !/server/uploads/placeholder.txt
+>>>>>>> 0185bb096fec3686ea7a47947165f1db8b340a9b

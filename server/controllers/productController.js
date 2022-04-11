@@ -316,7 +316,8 @@ getListingProductsForUser = async (req, res) => {
 				shippingPrice: 1, 
 				sellerUsername: 1,
 				imageIds: 1,
-				dateListed: "$createdAt"
+				dateListed: "$createdAt",
+				dateSold: 1
 			}
 
 			let products = await Product.find({sellerUsername: user.username}).lean().select(selectOptions)
