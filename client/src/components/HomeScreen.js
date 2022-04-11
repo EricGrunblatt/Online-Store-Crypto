@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useContext, useMemo } from "react";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
@@ -12,15 +12,66 @@ import RegisterModal from './RegisterModal';
 import AccountErrorModal from "./AccountErrorModal";
 import HomeProduct from "./HomeProduct";
 import TextField from "@mui/material/TextField";
+import { GlobalStoreContext } from '../store'
+import Pagination from './Pagination';
+import { useHistory } from "react-router-dom";
 
 
 export default function HomeScreen() {
+    const { store } = useContext(GlobalStoreContext);
+    const history = useHistory();
+
     const [openCat, setOpenCat] = useState("");
     const [openPrice, setOpenPrice] = useState("");
     const [openCon, setOpenCon] = useState("");
     const [checkedCat, setCheckedCat] = useState([]);
     const [checkedCon, setCheckedCon] = useState([]);
+    const [minPrice, setMinPrice] = useState("");
+    const [maxPrice, setMaxPrice] = useState("");
     const [sort, setSort] = useState("");
+
+    /* MAKES AN ARRAY TO SHOW THE 3 NEWEST ITEMS */
+    let fullNewItems = store.catalogItems;
+    
+    // Calculate number of pages and set length of newItems
+    let numPages = Math.ceil(fullNewItems.length/3);
+    if(numPages > 3) {
+        numPages = 3;
+        fullNewItems = fullNewItems.slice(0, 9);
+    } else if (numPages < 1) {
+        numPages = 1;
+    } 
+    const [index, setIndex] = useState(0);
+
+    const handleNewLeft = () => {
+        let newIndex = index - 1;
+        setIndex(newIndex);
+    }
+
+    const handleNewRight = () => {
+        let newIndex = index + 1;
+        setIndex(newIndex);
+    }
+
+    const newItems = useMemo(() => {
+        return fullNewItems.slice(3*(index), 3*(index+1));
+    }, [index, fullNewItems])
+
+
+    // CREATE THE DOTS FOR THE NUMBER OF PAGES
+    let dotsArray = [];
+    for(let i = 0; i < numPages; i++) {
+        dotsArray[i] = i;
+    }
+    let margin = 0;
+    if(numPages === 3) {
+        margin = 50;
+    } else if (numPages === 2) {
+        margin = 37;
+    } else if (numPages === 1) {
+        margin = 20;
+    }
+    let dotMarginRight = "-" + margin.toString() + "px";
 
     /* FILTER BY CATEGORIES AND CHECK BOX FUNCTION */
     const categories = ["Clothing", "Electronics", "Fashion", "Furniture", "Hardware", "Home & Garden", "Music", "Office Supplies", "Other", "Photography & Video", "Sports Equipment", "Toys", "Video Games"];
@@ -28,22 +79,23 @@ export default function HomeScreen() {
 
     let isCheckedCat = (item) => checkedCat.includes(item) ? "checked-item" : "not-checked-item";
     let isCheckedCon = (item) => checkedCon.includes(item) ? "checked-item" : "not-checked-item";
-    
 
+    /* Looks at all filters for category */
     const handleCatCheck = (event) => {
-        let updatedList = [...checkedCat];
+        let updatedList = checkedCat;
         if(event.target.checked) {
-            updatedList = [...checkedCat, event.target.value];
+            updatedList.push(event.target.value);
         } else {
             updatedList.splice(checkedCat.indexOf(event.target.value), 1);
         }
         setCheckedCat(updatedList);
     };
 
+    /* LOOKS AT ALL CHECKED FILTERS FOR CONDITION */
     const handleConCheck = (event) => {
-        let updatedList = [...checkedCon];
+        let updatedList = checkedCon;
         if(event.target.checked) {
-            updatedList = [...checkedCon, event.target.value];
+            updatedList.push(event.target.value);
         } else {
             updatedList.splice(checkedCon.indexOf(event.target.value), 1);
         }
@@ -56,6 +108,7 @@ export default function HomeScreen() {
     let priceButton = "";
     let conButton = "";
 
+    /* OPEN/CLOSE FILTER BY CATEGORY SECTION */
     if(!openCat) {
         catButton = 
         <div style={{ height: '20px', display: 'flex', float: 'right' }}>
@@ -132,7 +185,7 @@ export default function HomeScreen() {
         </div>
     }
 
-    /* FUNCTIONS TO OPEN FILTERING SECTIONS */
+    /* FUNCTION TO OPEN CATEGORY FILTERING SECTION */
     function handleOpenCategory() {
         if(!openCat) {
             setOpenCat(
@@ -150,6 +203,7 @@ export default function HomeScreen() {
         }
     }
 
+    /* FUNCTIONS TO OPEN PRICE FILTERING SECTION */
     function handleOpenPrice() {
         if(!openPrice) {
             setOpenPrice(
@@ -158,13 +212,15 @@ export default function HomeScreen() {
 							inputProps={{style: {fontSize: 13}}}
 							size = 'small'
 							style={{ width: '6vw', float: 'left', borderRadius: '3px' }}
-							placeholder="$" >
+							placeholder="Min" 
+                            onChange={(event) => { setMinPrice(event.target.value) }}>
 					</TextField>
 					<TextField className="price_to" sx={{ bgcolor:'white' }}
 							inputProps={{style: {fontSize: 13}}}
 							size = 'small'
 							style={{ width: '6vw', float: 'right', borderRadius: '3px' }}
-							placeholder="$$$" >
+							placeholder="Max" 
+                            onChange={(event) => { setMaxPrice(event.target.value) }}>
 					</TextField>
 				</div>
             );
@@ -173,6 +229,7 @@ export default function HomeScreen() {
         }
     }
 
+    /* FUNCTION TO OPEN CONDITION FILTERING SECTION */
     function handleOpenCondition() {
         if(!openCon) {
             setOpenCon(
@@ -190,12 +247,96 @@ export default function HomeScreen() {
         }
     }
 
+    /* RESETS ALL VALUES IN FILTER */ 
+    const handleResetFilter = async function () {
+        setCheckedCat([]);
+        setCheckedCon([]);
+        setMaxPrice("");
+        setMinPrice("");
+    }
 
-    /* OPEN/CLOSE SORT MENU */
-    const handleSortChange = (event) => {
-        setSort(event.target.value);
+    /* APPLIES FILTER OR SORT AFTER EITHER IS CHANGED */
+    const handleFilter = async function (json) {
+        store.loadItems(json);
+    }
+
+    /* HANDLES CHANGE IN SORT MENU */
+    const handleSortChange = (value) => {
+        setSort(value);
+        let sortBy = "";
+        if(value === 1) {
+            sortBy = "DATE_DESCENDING";
+        } else if (value === 2) {
+            sortBy = "DATE_ASCENDING";
+        } else if (value === 3) {
+            sortBy = "PRICE_ASCENDING";
+        } else {
+            sortBy = "PRICE_DESCENDING";
+        }
+        let min = minPrice;
+        if(min === '') {
+            min = undefined;
+        }
+        let max = maxPrice;
+        if(max === '') {
+            max = undefined;
+        }
+        let json = {
+            search: null, 
+            categories: checkedCat, 
+            conditions: checkedCon, 
+            minPrice: min, 
+            maxPrice: max, 
+            sortBy: sortBy
+        }
+        handleFilter(json);
     };
 
+    /* HANDLES FILTERING WHEN FILTER BUTTON IS PRESSED */
+    const handleFilterSections = () => {
+        let min = minPrice;
+        if(min === '') {
+            min = undefined;
+        }
+        let max = maxPrice;
+        if(max === '') {
+            max = undefined;
+        }
+        let json = {
+            search: null,
+            categories: checkedCat,
+            conditions: checkedCon,
+            minPrice: min,
+            maxPrice: max,
+            sortBy: null
+        }
+        handleFilter(json);
+    }
+
+    /* CUSTOM PAGINATION SETUP */
+    let allProducts = store.catalogItems;
+    let PageSize = 16;
+    const [currentPage, setCurrentPage] = useState(1);
+ 
+    let pageProductAll = useMemo(() => {
+        const firstPageIndex = (currentPage - 1) * PageSize;
+        const lastPageIndex = firstPageIndex + PageSize;
+        return allProducts.slice(firstPageIndex, lastPageIndex);
+    }, [currentPage, allProducts]);
+
+
+    let productCard = 
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 19vw)', gridTemplateRows: 'repeat(4, 25.5vw)' }}>
+        {
+            pageProductAll.map((index) => (
+                <HomeProduct
+                    style={{ position: 'absolute' }}
+                    key={index._id}
+                    product={index}
+                />
+            ))
+        }    
+        </div>;
 
     return (
         <Box className="homescreen" style={{ maxWidth: '99vw' }}>
@@ -207,13 +348,29 @@ export default function HomeScreen() {
                 <span style={{ paddingRight: '10px' }}> Music </span>
                 <span style={{ paddingRight: '10px' }}> Fashion </span>
             </div>
-            <div className="homescreen-new-items" style={{ paddingTop: '5px', textAlign: 'center', height: '150px', backgroundColor: '#FFBD59', fontSize: '30px' }}>
+            <div className="homescreen-new-items" style={{ paddingTop: '5px', textAlign: 'center', height: '180px', backgroundColor: '#FFBD59', fontSize: '30px' }}>
                 New Items
                 <div style={{ paddingTop: '25px'}}>
-                    <ArrowBackIosIcon style={{ marginLeft: '5%', float: 'left' }}></ArrowBackIosIcon>
-                    <ArrowForwardIosIcon style={{marginRight: '5%', float: 'right' }}></ArrowForwardIosIcon>
+                    <Button data-left-new-arrow disabled={index===0} onClick={() => { handleNewLeft() }} style={{ color: index === 0 ? "rgba(0, 0, 0, 0.3)" : "black", cursor: 'pointer', margin: '10px 0px 0px 6vw', display: 'flex', position: 'absolute', minWidth: '30px', maxWidth: '30px' }}>
+                        <ArrowBackIosIcon style={{ margin: '0px 0px 0px 10px' }}></ArrowBackIosIcon>
+                    </Button>
+                    <div style={{ position: 'absolute', display: 'flex', margin: '0px 0vw 0px -8.5vw', left: '20vw', width: '70vw' }}>
+                        {newItems.map((index) => (
+                            <div onClick={() => {history.push("/product/"+index._id)}} style={{ cursor: 'pointer', display: 'inline-block', margin: '-20px 10vw 0px 10vw' }}>
+                                <img src={`data:${index.image.mimetype};base64,${Buffer.from(index.image.data).toString('base64')}`} alt="" style={{ width: '100px', height: '100px', border: 'black 1px solid', borderRadius: '10px' }}></img>
+                            </div>
+                        ))}    
+                    </div>
+                    <Button data-right-new-arrow disabled={index===2} onClick={() => { handleNewRight() }} style={{ color: index === 2 ? "rgba(0, 0, 0, 0.3)" : "black", cursor: 'pointer', margin: '10px 0px 0px 92vw', display: 'flex', position: 'absolute', minWidth: '30px', maxWidth: '30px' }}>
+                        <ArrowForwardIosIcon></ArrowForwardIosIcon>
+                    </Button>
+                      
                 </div>
-                
+                <div style={{ marginTop: '75px', marginLeft: dotMarginRight, textAlign: 'center', display: 'inline-block', position: 'absolute' }}>
+                    {dotsArray.map((dot) => (
+                        <div style={{ background: index === dot ? "black": "#FFBD59", width: '10px', height: '10px', border: 'black 1px solid', borderRadius: '50%', margin: '0px 10px 0px 10px', display: 'inline-block' }}></div>
+                    ))}
+                </div>
             </div>
             <div className="homescreen-item-display" style={{ display: 'inline-block', backgroundColor: 'white' }}>
                 <div className="homescreen-filter-by" style={{ padding: '10px 0px 0px 10px', fontSize: '25px', width: '16vw', display: 'grid', gridAutoColumns: 'auto' }}>
@@ -234,49 +391,48 @@ export default function HomeScreen() {
                     {openCon}
 
                     <hr style={{ float: 'left', color: 'black', width: '16vw' }} />
+
+                    <div style={{ textAlign: 'center' }}>
+                        <Button onClick={() => { handleResetFilter() }} style={{ marginRight: '1vw', border: 'black 1px solid', borderRadius: '10px', color: 'black', fontFamily: 'Quicksand', width: '7vw' }}>
+                            Reset
+                        </Button>
+                        <Button onClick={() => { handleFilterSections() }} style={{ border: 'black 1px solid', borderRadius: '10px', color: 'black', fontFamily: 'Quicksand', width: '7vw' }}>
+                            Filter
+                        </Button>
+                    </div>
                 </div>
             </div>
-            <Box style={{ border: 'black 1px solid', borderRadius: '10px', width: '200px', height: '50px', display: 'inline-block', float: 'right', margin: '15px 10px 0px 0px' }}>
+            <Box style={{ border: 'black 1px solid', borderRadius: '10px', width: '200px', height: '50px', display: 'inline-block', float: 'right', margin: '15px 60px 0px 0px' }}>
                 <FormControl fullWidth>
                     <InputLabel style={{ color: 'black', margin: '-2px 0px 0px 0px' }} id="sort-by-menu">Sort By</InputLabel>
                     <Select style={{ borderRadius: '10px', height: '50px' }} 
                         labelId="sort-by-menu"
                         value={sort}
                         label="Sort By"
-                        onChange={handleSortChange}
+                        onChange={(event) => {handleSortChange(event.target.value)}}
                     >
-                        <MenuItem value={1}>Sort By</MenuItem>
-                        <MenuItem value={2}>Newest Listings</MenuItem>
-                        <MenuItem value={3}>Oldest Listings</MenuItem>
-                        <MenuItem value={4}>Price (low to high)</MenuItem>
-                        <MenuItem value={5}>Price (high to low)</MenuItem>
+                        <MenuItem value={1}>Newest Listings</MenuItem>
+                        <MenuItem value={2}>Oldest Listings</MenuItem>
+                        <MenuItem value={3}>Price (low to high)</MenuItem>
+                        <MenuItem value={4}>Price (high to low)</MenuItem>
                     </Select>
                 </FormControl>
             </Box>
-            <Box style={{ position: 'absolute', margin: '-30px 0px 50px 20vw', background: 'white', top: '450px', width: '79%', minHeight: '1010px' }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 20.5vw)', gridTemplateRows: 'repeat(4, 25.5vw)' }}>
-                        <HomeProduct></HomeProduct>
-                        <HomeProduct></HomeProduct>
-                        <HomeProduct></HomeProduct>
-                        <HomeProduct></HomeProduct>
-                        <HomeProduct></HomeProduct>
-                        <HomeProduct></HomeProduct>
-                        <HomeProduct></HomeProduct>
-                        <HomeProduct></HomeProduct>
-                        <HomeProduct></HomeProduct>
-                        <HomeProduct></HomeProduct>
-                        <HomeProduct></HomeProduct>
-                        <HomeProduct></HomeProduct>
-                        <HomeProduct></HomeProduct>
-                        <HomeProduct></HomeProduct>
-                        <HomeProduct></HomeProduct>
-                        <HomeProduct></HomeProduct>
+            <Box style={{ position: 'absolute', margin: '-10px 0px 50px 20vw', background: 'white', top: '450px', width: '79%', minHeight: '1010px' }}>
+                    <div>
+                    {
+                        productCard
+                    }
                     </div>
             </Box>
-            <Box style={{ position: 'absolute', margin: '100vw 0px 5vw 0vw', textAlign: 'center', alignContent: 'center', fontSize: '35px', width: '99%' }}>
-                <ArrowBackIosIcon style={{ marginRight: '5vw' }}></ArrowBackIosIcon>
-                1 2 3 4
-                <ArrowForwardIosIcon style={{ marginLeft: '5vw' }}></ArrowForwardIosIcon>
+            <Box style={{ margin: '100vw 0px 5vw 0vw', textAlign: 'center', alignContent: 'center', fontSize: '35px', width: '99%' }}>
+                <Pagination
+                    className="pagination-bar"
+                    currentPage={currentPage}
+                    totalCount={allProducts.length}
+                    pageSize={PageSize}
+                    onPageChange={page => setCurrentPage(page)}
+                />
             </Box>
             <LoginModal />
             <RegisterModal />

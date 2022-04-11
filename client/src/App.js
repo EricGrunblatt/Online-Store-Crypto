@@ -14,6 +14,7 @@ import {
     ProductPage,
     ProfileScreen,
     ViewProfile,
+    ViewMyProfile,
     Wallet,
     EditItem
 } from './components'
@@ -32,7 +33,7 @@ export default function App() {
                     <NavigationBar />
                     <Switch>
                         <Route path="/" exact component={HomeScreen} />
-                        <Route path="/profile" exact component={ProfileScreen} />
+                        <Route path="/editprofile" exact component={ProfileScreen} />
                         <Route path="/wallet" exact component={Wallet} />
                         <Route path="/orders" exact component={Orders} />
                         <Route path="/listings" exact component={Listings} />
@@ -42,6 +43,7 @@ export default function App() {
                         <Route path="/checkout" exact component={Checkout} />
                         <Route path="/product/:id" exact component={ProductPage} />
 						<Route path="/viewprofile" exact component={ViewProfile} />
+                        <Route path="/myprofile" exact component={ViewMyProfile} />
                     </Switch>   
                 </GlobalStoreContextProvider>
             </AuthContextProvider>

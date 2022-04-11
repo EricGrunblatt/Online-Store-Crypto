@@ -42,8 +42,9 @@ export default function ProfileScreen() {
 
             let image = store.userProfile.profileImage;
             let url = `data:${image.mimetype};base64,${Buffer.from(image.data).toString('base64')}`;
-
             setProfileImage(url);
+
+            console.log("ProfileScreen.js");
         }  catch (err) {
             console.log(err);
         }
@@ -90,6 +91,9 @@ export default function ProfileScreen() {
     }
 
     const handleChangeInfo = async function() {
+        console.log(oldPassword);
+        console.log(newPassword);
+        console.log(confirmNewPassword);
         let jsonAccountData = {
             "email": email,
             "firstName": firstName,
@@ -119,27 +123,35 @@ export default function ProfileScreen() {
             let response = await api.updateAccount(jsonAccountData);
             if(response.data.status === "ERROR") {
                 alert(response.data.errorMessage);
+                return;
             }
 
         } else if(oldPassword !== "" || newPassword !== "" || confirmNewPassword !== "") {
             alert("Fill in all password fields if you're changing the password to your account");
+            return;
         } else {
             let response = await api.updateAccount(jsonAccountData);
             if(response.data.status === "ERROR") {
                 alert(response.data.errorMessage);
+                return;
             }
         }
         var formData = new FormData();
         const element = document.getElementById('profilePicture');
         const file = element.files[0];
-        formData.append('image', file);
-        let newResponse = await api.updateProfilePicture(formData);
-        if(newResponse.data.status === "ERROR") {
-            alert(newResponse.data.errorMessage);
+        if(file !== undefined) {
+            formData.append('image', file);
+            let newResponse = await api.updateProfilePicture(formData);
+            if(newResponse.data.status === "ERROR") {
+                alert(newResponse.data.errorMessage);
+            }
         }
+        
+        alert("Your account has been updated");
 
-
+        auth.getLoggedIn();
         history.push("/");
+        window.scrollTo(0, 0);
     }
 
     console.log(profileImage);
@@ -293,7 +305,7 @@ export default function ProfileScreen() {
                 </div>
             </div>
             <div className="back-to-profile" style={{ justifyContent: 'center', textAlign: 'center', margin: '-10px 0px 50px 0px' }}>
-                <Button className="back-to-profile-button" style={{ background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
+                <Button className="back-to-profile-button" onClick={() => { history.push("/myprofile") }} style={{ background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
                     Back to My Profile
                 </Button>
             </div>

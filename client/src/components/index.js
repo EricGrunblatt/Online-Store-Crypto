@@ -14,6 +14,7 @@ import ProductPage from './ProductPage.js';
 import ProfileScreen from './ProfileScreen.js';
 import RegisterModal from './RegisterModal.js';
 import ViewProfile from './ViewProfile.js';
+import ViewMyProfile from './ViewMyProfile.js';
 import Wallet from './Wallet.js';
 import EditItem from './EditItem.js';
 
@@ -40,5 +41,6 @@ export {
     ProfileScreen,
     RegisterModal,
     ViewProfile,
+    ViewMyProfile,
     Wallet,
     EditItem }

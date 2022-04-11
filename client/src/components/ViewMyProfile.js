@@ -4,12 +4,12 @@ import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import StarRateIcon from '@mui/icons-material/StarRate';
 import { GlobalStoreContext } from '../store'
 import { useContext } from "react";
+import { Button } from '@mui/material';
 
 
 export default function ViewMyProfile() {
     const { store } = useContext(GlobalStoreContext);
 
-	let username = store.userProfile.username;
 	let joined = store.userProfile.dateJoined.substring(0,10);
 	let userStars = 0
     let reviews = store.userProfile.reviews;
@@ -112,7 +112,7 @@ export default function ViewMyProfile() {
 			<Grid container className="Profile" style={{ margin: '50px 0% 0px 10%', width: '80%', height: '700px', border: 'black 2px solid', borderRadius: '20px' }}>
 				{/* LEFT PROFILE */}
 				<Grid item xs={4} className="display-name-wallet" style={{ margin: '50px 0% 0px 5%', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '50px', color: 'black' }}>
-					<u> {username}'s Profile </u>
+					<u> My Profile </u>
 					<div style={{ fontFamily: 'Quicksand', fontWeight: '300',fontSize: '30px' }}>Joined: {joined}</div>
 					<div style={{ fontFamily: 'Quicksand', fontWeight: '300',fontSize: '30px' }}>{userStars}/5 Stars </div>
 					{stars(userStars, '3vw')}
@@ -140,7 +140,7 @@ export default function ViewMyProfile() {
 			{/* LISTED ITEMS */}
 			<div style={{ overflowY: 'scroll', margin: '50px 0% 50px 10%', width: '80%', height: '700px', border: 'black 2px solid', borderRadius: '20px' }}>
 				<div style={{ margin: '50px 0% 0px 5%', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '50px' }}>
-					<u>{username}'s' Listings</u>
+					<u>My Listings</u>
 				</div>
 				{/* EACH ITEM CARDS */}
 				<Grid item container xs >
@@ -164,6 +164,11 @@ export default function ViewMyProfile() {
 					))}
 				</Grid>
 			</div>
+            <div style={{ margin: '0px 0px 50px 0px', textAlign: 'center' }}>
+                <Button className="edit-account-button" onClick={() => { store.getAccount() }} style={{ background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
+                    Edit Account
+                </Button>
+            </div>
 		</div>
         
     )

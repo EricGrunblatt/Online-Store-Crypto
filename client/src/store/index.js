@@ -25,7 +25,6 @@ export const GlobalStoreActionType = {
     UNMARK_LISTING_DELETION: "UNMARK_LISTING_DELETION",
     GET_ACCOUNT: "GET_ACCOUNT",
     GET_PROFILE: "GET_PROFILE",
-    STORE_SEARCH_BAR: "STORE_SEARCH_BAR",
 }
 
 // WITH THIS WE'RE MAKING OUR GLOBAL DATA STORE
@@ -39,8 +38,7 @@ function GlobalStoreContextProvider(props) {
         cartItemRemove: null,
         listingItemDelete: null,
         userAccount: null,
-        userProfile: null,
-        searchBar: null
+        userProfile: null
     });
 
     const history = useHistory();
@@ -53,8 +51,8 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.LOAD_CATALOG_ITEMS: {
                 return setStore({
                     catalogItems: payload,
-                    loginModal: store.loginModal,
-                    registerModal: store.registerModal,
+                    loginModal: false,
+                    registerModal: false,
                     cartItemRemove: null,
                     listingItemDelete: null,
                     userAccount: null,
@@ -166,19 +164,6 @@ function GlobalStoreContextProvider(props) {
                     searchBar: null,
                 });
             }
-            // SET SEARCH BAR
-            case GlobalStoreActionType.STORE_SEARCH_BAR: {
-                return setStore({
-                    catalogItems: store.catalogItems,
-                    loginModal: store.loginModal,
-                    registerModal: store.registerModal,
-                    cartItemRemove: null,
-                    listingItemDelete: null,
-                    userAccount: null,
-                    userProfile: store.userProfile,
-                    searchBar: payload,
-                });
-            }
             // SET USER ACCOUNT
             case GlobalStoreActionType.GET_ACCOUNT: {
                 return setStore({
@@ -212,9 +197,32 @@ function GlobalStoreContextProvider(props) {
         }
     }
 
+    // LOADS ALL ITEMS IN THE CATALOG AFTER LOGIN/REGISTER
+    store.initialLoad = async function () {
+        let jsonCatalog = {};
+        let response = await api.getCatalog(jsonCatalog);
+        if(response.data.status === "OK") {
+            storeReducer({
+                type: GlobalStoreActionType.LOAD_CATALOG_ITEMS,
+                payload: response.data.products
+            });
+            console.log("Initial Items");
+            history.push("/");
+        }
+    }
+
     // LOADS ALL ITEMS IN THE CATALOG
-    store.loadItems = async function () {
-        // TODO
+    store.loadItems = async function (json) {
+        let response = await api.getCatalog(json);
+        if(response.data.status === "OK") {
+            storeReducer({
+                type: GlobalStoreActionType.LOAD_CATALOG_ITEMS,
+                payload: response.data.products
+            });
+            console.log("Catalog Items Loaded");
+            history.push("/");
+        }
+        
     }
 
     // SETS ID FOR CART ITEM BEING REMOVED
@@ -267,7 +275,7 @@ function GlobalStoreContextProvider(props) {
                             profile: myProfile
                         }
                     });
-                    history.push("/profile");
+                    history.push("/editprofile");
                 }
             }
             getProfile();
@@ -275,6 +283,23 @@ function GlobalStoreContextProvider(props) {
         else {
             console.log("API FAILED TO GET ACCOUNT");
         }
+    }
+
+    // GETS MY PROFILE FROM USERNAME
+    store.getMyProfile = async function (username) {
+        let response = await api.getProfileByUsername(username);
+        if(response.data.status === "OK") {
+            let profile = response.data;
+            storeReducer({
+                type: GlobalStoreActionType.GET_PROFILE,
+                payload: profile
+            });
+            history.push("/myprofile");
+        }
+        else {
+            console.log("API FAILED TO GET PROFILE");
+        }
+    
     }
 
     // GETS PROFILE FROM USERNAME
@@ -286,6 +311,7 @@ function GlobalStoreContextProvider(props) {
                 type: GlobalStoreActionType.GET_PROFILE,
                 payload: profile
             });
+            history.push("/viewprofile");
         }
         else {
             console.log("API FAILED TO GET PROFILE");
@@ -321,14 +347,6 @@ function GlobalStoreContextProvider(props) {
         storeReducer({
             type: GlobalStoreActionType.CLOSE_REGISTER_MODAL,
             payload: null
-        });
-    }
-
-    // THIS FUNCTION SETS SEARCH BAR
-    store.setSearchBar = function (search) {
-        storeReducer({
-            type: GlobalStoreActionType.STORE_SEARCH_BAR,
-            payload: search
         });
     }
 

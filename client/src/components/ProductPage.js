@@ -7,9 +7,12 @@ import RegisterModal from './RegisterModal';
 import { useHistory } from "react-router-dom";
 import axios from 'axios';
 import qs from 'qs';
+import { GlobalStoreContext } from '../store'
+import { useContext } from "react";
 
 
 export default function ProductPage() {
+	const { store } = useContext(GlobalStoreContext);
 	const history = useHistory();
 
 	const pathname = window.location.pathname;
@@ -71,6 +74,14 @@ export default function ProductPage() {
 			))}
 		</Grid>;
 	
+	const handleViewProfile = (seller) => {
+		let json = {
+			username: seller
+		}
+		console.log(json);
+		store.getProfile(json);
+	}
+	
     return (
 		<Box style={{ position: 'absolute', marginLeft: '10%', marginRight: '10%', marginTop: '60px', width: '79%', minHeight: '450px'}}>
 			<Grid container spacing={17}>
@@ -101,7 +112,7 @@ export default function ProductPage() {
                     	Condition: {condition}
 					</div>
 					<div style={{ paddingTop: '30px', textDecoration: 'none', fontFamily: 'Quicksand', fontSize: '20px', color: 'black' }}>
-                    	Seller: <a href="https://example.com/faq.html" rel="noreferrer"> {seller} </a>
+                    	Seller: <div onClick={() => { handleViewProfile(seller) }} style={{ cursor: 'pointer', color: '#879ED9'}}><u>{seller}</u></div>
 					</div>
 					
 					<div style={{ paddingTop: '60px', textDecoration: 'none', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '45px', color: 'black', textAlign: 'right' }}>
