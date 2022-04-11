@@ -75,7 +75,10 @@ export default function ProductPage() {
             data: qs.stringify(data),
             url
         };
-        axios(options);
+        axios(options).then(function(result){
+			result? store.setOpenLoginModal():
+			history.push("/cart");
+		});
     };
 
 

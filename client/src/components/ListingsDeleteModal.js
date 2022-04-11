@@ -39,7 +39,7 @@ function ListingsDeleteModal() {
     }
 
     function handleDeleteListing() {
-        console.log("the product id: ", store.listingItemDelete)
+        console.log("the product id: ", store.listingItemDelete);
         store.unmarkListingDelete();
         isOpen=false;
     }
