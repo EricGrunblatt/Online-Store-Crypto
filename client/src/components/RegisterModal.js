@@ -91,6 +91,10 @@ function RegisterModal() {
         store.setOpenLoginModal();
     }
 
+	function handleCloseModal() {
+		store.setCloseRegisterModal();
+	}
+
     let list = "";
     if(!cont) {
         list =
@@ -148,6 +152,7 @@ function RegisterModal() {
                     onChange={(event) => { setConfirm(event.target.value) }}
                     style={{ margin: '15px 0px 0px 0px', float: 'left', width: '500px' }}></TextField>
             </Box>
+			<Button onClick={handleCloseModal} style={{ margin: '15px 10px 0px 0px', color: 'white', background: 'black', width: '150px', height: '40px', fontSize: '8px', borderRadius: '10px' }}><h1>Close</h1></Button>
             <Button onClick={handleContinue} style={{ margin: '15px 0px 0px 0px', color: 'white', background: 'black', width: '150px', height: '40px', fontSize: '8px', borderRadius: '10px' }}><h1>Continue</h1></Button>
         </div>;
     } else {

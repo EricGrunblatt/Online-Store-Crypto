@@ -1,22 +1,42 @@
-import React from "react";
+import React, {useState, useEffect, useContext} from "react";
 import Button from '@mui/material/Button';
 import { useHistory } from "react-router-dom";
+import axios from 'axios';
 import Grid from '@mui/material/Grid';
 import CartDeleteModal from "./CartDeleteModal";
+import { GlobalStoreContext } from '../store'
 
 export default function Cart() {
     const history = useHistory();
+	const { store } = useContext(GlobalStoreContext);
+	const [items, setItems] = useState([]);
 
-    //let items = [];
-    
-    let items = [
-		{itemName: "Hoodie", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", listed: ""},
-		{itemName: "Hoodie", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", listed: ""},
-		{itemName: "Hoodie", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", listed: "02/20/2022"},
-		{itemName: "Hoodie", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", listed: "02/20/2022"},
-		{itemName: "Hoodie", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", listed: "02/20/2022"},
-		{itemName: "Hoodie", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", listed: "02/20/2022"}
-	]
+    /* GET PRODUCTS BY USER ID */
+    useEffect(() => {
+        async function fetchData() {
+            try{
+                // getCartProductsForUser
+                const url = 'http://localhost:4000/api/product/getCartProductsForUser';
+                // POST 
+                const options = {
+                    method: 'POST',
+                    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+                    url
+                };
+                axios(options).then(function(result) {
+                    setItems(result.data.products);
+                });
+            }
+            catch{
+            }
+        }
+        fetchData()
+    },[]);
+
+	/* OPENS CART DELETE MODAL IF PRESSED */
+	const handleDeleteCart = (event) => {
+		store.markCartRemove(event.target.id);
+    }
 
     let cartItems = 
         <div className="order-card" style={{ margin: '0px 0px 20px 0px' }}>
@@ -27,14 +47,14 @@ export default function Cart() {
                         <Grid item container xs style={{ margin: '10px auto 10px auto', width: '100%', height: '200px', border: 'black 2px solid', borderRadius: '20px' }}>
                             {/* ITEM IMAGE */}
                             <Grid item xs={3} style={{ margin: '20px'}}>
-                                <img src={index.img} alt="" style={{ borderRadius: '10%' }} ></img>
+							<img src={`data:${index.image.mimetype};base64,${Buffer.from(index.image.data).toString('base64')}`} alt="" width="150px" height="150px" style={{ borderRadius: '10%' }} ></img>
                             </Grid>
                             {/* ITEM INFO */}
                             <Grid item xs={5} style={{ margin: '10px auto auto 40px'}}>
-                                <div style={{ fontSize: '50px', fontWeight: 'bold' }}> {index.itemName}</div>
+                                <div style={{ fontSize: '50px', fontWeight: 'bold' }}> {index.name}</div>
                                 <div style={{ marginTop: '3px', fontSize: '30px' }}>{index.price}&nbsp;Algo</div>
-                                <div style={{ marginTop: '3px', fontSize: '20px' }}>Seller:&nbsp;{index.seller}</div>
-                                <div style={{ marginTop: '3px', fontSize: '20px' }}><a href="/" style={{ color: 'red' }}>Remove</a></div>
+                                <div style={{ marginTop: '3px', fontSize: '20px' }}>Seller:&nbsp;{index.sellerUsername}</div>
+                                <div id={index._id} onClick={handleDeleteCart} style={{ marginTop: '3px', fontSize: '20px', cursor: 'pointer', color: 'red' }}>Remove</div>
                             </Grid>
                         </Grid>	
                     </Grid>

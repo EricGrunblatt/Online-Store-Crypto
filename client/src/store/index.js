@@ -253,9 +253,10 @@ function GlobalStoreContextProvider(props) {
 
     // SETS ID FOR CART ITEM BEING REMOVED
     store.markCartRemove = async function (id) {
-        // Get item from database
-        // TODO
-        
+        storeReducer({
+            type: GlobalStoreActionType.MARK_CART_REMOVE,
+            payload: id
+        });
     }
 
     // NO CART ITEM WANTING TO BE REMOVED
