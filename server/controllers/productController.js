@@ -17,7 +17,7 @@ const {
 getCatalog = async (req, res) => {
 	console.log("getCatalog", req.body)
 
-	const { search, category, condition, minPrice, maxPrice, sortBy } = req.body
+	const {search, categories, conditions, minPrice, maxPrice, sortBy} = req.body
 
 	let searchWords = search ? search.split(" ") : []
 
@@ -26,6 +26,8 @@ getCatalog = async (req, res) => {
 	// TODO: allow search through product descriptions
 
 	let productQuery = {}
+
+	let productQueryArray = []
 
 	let searchQuery = []
 	const searchKeys = [
@@ -38,29 +40,42 @@ getCatalog = async (req, res) => {
 		}
 	}
 	if (searchQuery.length > 0) {
-		productQuery.$or = searchQuery
+		productQueryArray.push({$or: searchQuery})
 	}
 
-	if (category) {
-		productQuery.category = category
+	let categoryQuery = []
+	if (categories && (categories.length > 0)) {
+		for(const category of categories) {
+			categoryQuery.push({category: category})
+		}
+		productQueryArray.push({$or: categoryQuery})
 	}
-	if (condition) {
-		condition ? productQuery.condition = condition : null
+
+	let conditionQuery = []
+	if (conditions && (conditions.length > 0)) {
+		for(const condition of conditions) {
+			conditionQuery.push({condition: condition})
+		}
+		productQueryArray.push({$or: conditionQuery})
 	}
+
 	const isMinPriceDefined = typeof minPrice !== 'undefined'
 	const isMaxPriceDefined = typeof maxPrice !== 'undefined'
-	if (isMinPriceDefined || isMaxPriceDefined) {
-		productQuery.price = {}
+	if (isMinPriceDefined && isMaxPriceDefined) {
+		productQueryArray.push({price: {$gte: minPrice, $lte: maxPrice}})
 	}
-	if (isMinPriceDefined) {
-		productQuery.price.$gte = minPrice
+	else if (isMinPriceDefined) {
+		productQueryArray.push({price: {$gte: minPrice}})
 	}
-	if (isMaxPriceDefined) {
-		productQuery.price.$lte = maxPrice
+	else if (isMaxPriceDefined) {
+		productQueryArray.push({price: {$lte: maxPrice}})
 	}
+
+	if (productQueryArray.length > 0)
+		productQuery.$and = productQueryArray
 
 	console.log("PRODUCT QUERY: ", productQuery)
-
+	console.dir(productQuery, {depth: null})
 
 	sortQuery = {}
 	if (sortBy === "DATE_DESCENDING") { // NEWEST TO OLDEST
