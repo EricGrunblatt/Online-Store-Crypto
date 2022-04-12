@@ -50,6 +50,8 @@ router.post('/product/addListingProduct', auth.verify, productController.addList
 router.post('/product/updateListingProduct', auth.verify, productController.updateListingProduct)
 // Delete Listing Product
 router.post('/product/deleteListingProduct', auth.verify, productController.deleteListingProduct)
+// Get Product Shipping Price
+router.post('/product/getShippingPrice', auth.verify, productController.getShippingPrice)
 
 // Add Product to Cart
 router.post('/purchase/addToCart', auth.verify, purchaseController.addToCart)
