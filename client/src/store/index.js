@@ -33,6 +33,7 @@ function GlobalStoreContextProvider(props) {
     // THESE ARE ALL THE THINGS OUR DATA STORE WILL MANAGE
     const [store, setStore] = useState({
         catalogItems: [],
+        newItems: [],
         loginModal: false,
         registerModal: false,
         cartItemRemove: null,
@@ -47,10 +48,25 @@ function GlobalStoreContextProvider(props) {
     const storeReducer = (action) => {
         const { type, payload } = action;
         switch (type) {
+            // GET ALL CATALOG ITEMS FOR THE NEWEST ITEMS
+            case GlobalStoreActionType.LOAD_NEW_ITEMS: {
+                return setStore({
+                    catalogItems: payload,
+                    newItems: payload,
+                    loginModal: false,
+                    registerModal: false,
+                    cartItemRemove: null,
+                    listingItemDelete: null,
+                    userAccount: null,
+                    userProfile: store.userProfile,
+                    searchBar: store.searchBar,
+                });
+            }
             // GET ALL CATALOG ITEMS
             case GlobalStoreActionType.LOAD_CATALOG_ITEMS: {
                 return setStore({
                     catalogItems: payload,
+                    newItems: store.newItems,
                     loginModal: false,
                     registerModal: false,
                     cartItemRemove: null,
@@ -64,6 +80,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.OPEN_LOGIN_MODAL: {
                 return setStore({
                     catalogItems: store.catalogItems,
+                    newItems: store.newItems,
                     loginModal: true,
                     registerModal: false,
                     cartItemRemove: null,
@@ -77,6 +94,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.CLOSE_LOGIN_MODAL: {
                 return setStore({
                     catalogItems: store.catalogItems,
+                    newItems: store.newItems,
                     loginModal: false,
                     registerModal: false,
                     cartItemRemove: null,
@@ -90,6 +108,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.OPEN_REGISTER_MODAL: {
                 return setStore({
                     catalogItems: store.catalogItems,
+                    newItems: store.newItems,
                     loginModal: false,
                     registerModal: true,
                     cartItemRemove: null,
@@ -103,6 +122,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.CLOSE_REGISTER_MODAL: {
                 return setStore({
                     catalogItems: store.catalogItems,
+                    newItems: store.newItems,
                     loginModal: false,
                     registerModal: false,
                     cartItemRemove: null,
@@ -116,6 +136,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.MARK_CART_REMOVE: {
                 return setStore({
                     catalogItems: store.catalogItems,
+                    newItems: store.newItems,
                     loginModal: false,
                     registerModal: false,
                     cartItemRemove: payload,
@@ -129,6 +150,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.UNMARK_CART_REMOVE: {
                 return setStore({
                     catalogItems: store.catalogItems,
+                    newItems: store.newItems,
                     loginModal: false,
                     registerModal: false,
                     cartItemRemove: null,
@@ -142,6 +164,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.MARK_LISTING_DELETION: {
                 return setStore({
                     catalogItems: store.catalogItems,
+                    newItems: store.newItems,
                     loginModal: false,
                     registerModal: false,
                     cartItemRemove: null,
@@ -155,6 +178,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.UNMARK_LISTING_DELETION: {
                 return setStore({
                     catalogItems: store.catalogItems,
+                    newItems: store.newItems,
                     loginModal: false,
                     registerModal: false,
                     cartItemRemove: null,
@@ -168,6 +192,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.GET_ACCOUNT: {
                 return setStore({
                     catalogItems: store.catalogItems,
+                    newItems: store.newItems,
                     loginModal: store.loginModal,
                     registerModal: store.registerModal,
                     cartItemRemove: null,
@@ -182,6 +207,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.GET_PROFILE: {
                 return setStore({
                     catalogItems: store.catalogItems,
+                    newItems: store.newItems,
                     loginModal: store.loginModal,
                     registerModal: store.registerModal,
                     cartItemRemove: null,
@@ -203,7 +229,7 @@ function GlobalStoreContextProvider(props) {
         let response = await api.getCatalog(jsonCatalog);
         if(response.data.status === "OK") {
             storeReducer({
-                type: GlobalStoreActionType.LOAD_CATALOG_ITEMS,
+                type: GlobalStoreActionType.LOAD_NEW_ITEMS,
                 payload: response.data.products
             });
             console.log("Initial Items");
@@ -222,7 +248,7 @@ function GlobalStoreContextProvider(props) {
             console.log("Catalog Items Loaded");
             history.push("/");
         }
-        
+
     }
 
     // SETS ID FOR CART ITEM BEING REMOVED

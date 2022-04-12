@@ -31,7 +31,7 @@ export default function HomeScreen() {
     const [sort, setSort] = useState("");
 
     /* MAKES AN ARRAY TO SHOW THE 3 NEWEST ITEMS */
-    let fullNewItems = store.catalogItems;
+    let fullNewItems = store.newItems;
     
     // Calculate number of pages and set length of newItems
     let numPages = Math.ceil(fullNewItems.length/3);
@@ -253,6 +253,10 @@ export default function HomeScreen() {
         setCheckedCon([]);
         setMaxPrice("");
         setMinPrice("");
+        setOpenCat("");
+        setOpenPrice("");
+        setOpenCon("");
+        store.initialLoad();
     }
 
     /* APPLIES FILTER OR SORT AFTER EITHER IS CHANGED */
