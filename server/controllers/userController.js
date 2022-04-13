@@ -1,7 +1,7 @@
 const { application } = require('express')
 const bcryptjs = require('bcryptjs')
 const User = require('../models/userModel')
-const Product = require('../models/productModel')
+const {Product, ProductState} = require('../models/productModel')
 const Review = require('../models/reviewModel')
 const constants = require('./constants.json')
 const Image = require('../models/imageModel')

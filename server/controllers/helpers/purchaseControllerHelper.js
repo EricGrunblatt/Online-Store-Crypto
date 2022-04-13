@@ -1,4 +1,4 @@
-const Product = require("../../models/productModel")
+const {Product, ProductState} = require("../../models/productModel")
 
 calculatePriceOfCart = async (user) => {
 	let price = 0;

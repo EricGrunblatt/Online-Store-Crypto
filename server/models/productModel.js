@@ -19,8 +19,19 @@ const ProductSchema = new Schema(
 		boxWeight:		{type: Number, required: true},
 		reviewId:		{type: ObjectId, default: null},
 		imageIds:		{type: [ObjectId], required: true},
+		state:			{type: String, default: "LISTED"},
 	},
 	{ timestamps: true },
 )
 
-module.exports = mongoose.model('Product', ProductSchema)
+const ProductState = {
+	LISTED: "LISTED",
+	DELETED: "DELETED",
+	RESERVED: "RESERVED",
+	SOLD: "SOLD",
+}
+
+module.exports = {
+	Product: mongoose.model('Product', ProductSchema),
+	ProductState: ProductState,
+}
