@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+// import { Alert } from 'react-alert'
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
@@ -64,6 +65,8 @@ export default function ProductPage() {
         setItemImage0(itemImages[event.target.id]);
     };
 
+	// let alert = "";
+
 	// ADD TO CART BUTTON
     const handleAddToCart = async function() {
         const url = 'http://localhost:4000/api/purchase/addToCart';
@@ -76,8 +79,19 @@ export default function ProductPage() {
             url
         };
         axios(options).then(function(result){
-			result? store.setOpenLoginModal():
-			history.push("/cart");
+			if(result.data.status === "OK") {
+				history.push("/cart")
+			}
+			else {
+				if(result.data.errorMessage === "USER OWNS THIS ITEM"){
+					console.log(result.data.errorMessage);
+					// alert("You can't put your item in the cart");
+				}
+				// USER NOT LOGGED IN
+				else {
+					store.setOpenLoginModal();
+				}
+			}
 		});
     };
 
@@ -157,7 +171,6 @@ export default function ProductPage() {
 					</div>
 				</Grid>
 			</Grid>
-			
             <LoginModal />
             <RegisterModal />
         </Box>  
