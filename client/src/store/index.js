@@ -23,6 +23,8 @@ export const GlobalStoreActionType = {
     UNMARK_CART_REMOVE: "MARK_CART_REMOVE",
     MARK_LISTING_DELETION: "MARK_LISTING_DELETION",
     UNMARK_LISTING_DELETION: "UNMARK_LISTING_DELETION",
+    MARK_BUYER_ADDRESS: "MARK_BUYER_ADDRESS",
+    UNMARK_BUYER_ADDRESS: "UNMARK_BUYER_ADDRESS",
     GET_ACCOUNT: "GET_ACCOUNT",
     GET_PROFILE: "GET_PROFILE",
 }
@@ -39,7 +41,8 @@ function GlobalStoreContextProvider(props) {
         cartItemRemove: null,
         listingItemDelete: null,
         userAccount: null,
-        userProfile: null
+        userProfile: null,
+        buyerAddress: null
     });
 
     const history = useHistory();
@@ -59,7 +62,7 @@ function GlobalStoreContextProvider(props) {
                     listingItemDelete: null,
                     userAccount: null,
                     userProfile: store.userProfile,
-                    searchBar: store.searchBar,
+                    buyerAddress: null
                 });
             }
             // GET ALL CATALOG ITEMS
@@ -73,7 +76,7 @@ function GlobalStoreContextProvider(props) {
                     listingItemDelete: null,
                     userAccount: null,
                     userProfile: store.userProfile,
-                    searchBar: store.searchBar,
+                    buyerAddress: null
                 });
             }
             // OPEN LOGIN MODAL
@@ -87,7 +90,7 @@ function GlobalStoreContextProvider(props) {
                     listingItemDelete: null,
                     userAccount: null,
                     userProfile: null,
-                    searchBar: null,
+                    buyerAddress: null
                 });
             }
             // CLOSE LOGIN MODAL
@@ -101,7 +104,7 @@ function GlobalStoreContextProvider(props) {
                     listingItemDelete: null,
                     userAccount: null,
                     userProfile: null,
-                    searchBar: null,
+                    buyerAddress: null
                 });
             }
             // OPEN REGISTER MODAL
@@ -115,7 +118,7 @@ function GlobalStoreContextProvider(props) {
                     listingItemDelete: null,
                     userAccount: null,
                     userProfile: null,
-                    searchBar: null,
+                    buyerAddress: null
                 });
             }
             // CLOSE REGISTER MODAL
@@ -129,7 +132,7 @@ function GlobalStoreContextProvider(props) {
                     listingItemDelete: null,
                     userAccount: null,
                     userProfile: null,
-                    searchBar: null,
+                    buyerAddress: null
                 });
             }
             // MARK CART ITEM TO BE REMOVED
@@ -143,7 +146,7 @@ function GlobalStoreContextProvider(props) {
                     listingItemDelete: null,
                     userAccount: null,
                     userProfile: store.userProfile,
-                    searchBar: null,
+                    buyerAddress: null
                 });
             }
             // UNMARK CART ITEM TO BE REMOVED
@@ -157,7 +160,7 @@ function GlobalStoreContextProvider(props) {
                     listingItemDelete: null,
                     userAccount: null,
                     userProfile: store.userProfile,
-                    searchBar: null,
+                    buyerAddress: null
                 });
             }
             // MARK LISTING ITEM TO BE DELETED
@@ -171,7 +174,7 @@ function GlobalStoreContextProvider(props) {
                     listingItemDelete: payload,
                     userAccount: null,
                     userProfile: store.userProfile,
-                    searchBar: null,
+                    buyerAddress: null
                 });
             }
             // UNMARK LISTING ITEM TO BE DELETED
@@ -185,7 +188,35 @@ function GlobalStoreContextProvider(props) {
                     listingItemDelete: null,
                     userAccount: null,
                     userProfile: store.userProfile,
-                    searchBar: null,
+                    buyerAddress: null
+                });
+            }
+            // MARK BUYER ADDRESS
+            case GlobalStoreActionType.MARK_BUYER_ADDRESS: {
+                return setStore({
+                    catalogItems: store.catalogItems,
+                    newItems: store.newItems,
+                    loginModal: false,
+                    registerModal: false,
+                    cartItemRemove: null,
+                    listingItemDelete: null,
+                    userAccount: null,
+                    userProfile: store.userProfile,
+                    buyerAddress: payload
+                });
+            }
+            // UNMARK BUYER ADDRESS
+            case GlobalStoreActionType.UNMARK_BUYER_ADDRESS: {
+                return setStore({
+                    catalogItems: store.catalogItems,
+                    newItems: store.newItems,
+                    loginModal: false,
+                    registerModal: false,
+                    cartItemRemove: null,
+                    listingItemDelete: null,
+                    userAccount: null,
+                    userProfile: store.userProfile,
+                    buyerAddress: null
                 });
             }
             // SET USER ACCOUNT
@@ -199,7 +230,7 @@ function GlobalStoreContextProvider(props) {
                     listingItemDelete: null,
                     userAccount: payload.account,
                     userProfile: payload.profile,
-                    searchBar: null,
+                    buyerAddress: null
                 });
             }
 
@@ -214,7 +245,7 @@ function GlobalStoreContextProvider(props) {
                     listingItemDelete: null,
                     userAccount: store.userAccount,
                     userProfile: payload,
-                    searchBar: null,
+                    buyerAddress: null
                 });
             }
          
@@ -248,7 +279,11 @@ function GlobalStoreContextProvider(props) {
             console.log("Catalog Items Loaded");
             history.push("/");
         }
+    }
 
+    // LOADS PRODUCT PAGE
+    store.loadProduct = async function (id) {
+        history.push("/product/" + id);
     }
 
     // SETS ID FOR CART ITEM BEING REMOVED
@@ -279,6 +314,22 @@ function GlobalStoreContextProvider(props) {
     store.unmarkListingDelete = function () {
         storeReducer({
             type: GlobalStoreActionType.UNMARK_LISTING_DELETION,
+            payload: null
+        });
+    }
+
+    // SETS ID FOR BUYER ADDRESS MODAL
+    store.markBuyerAddress = async function (id) {
+        storeReducer({
+            type: GlobalStoreActionType.MARK_BUYER_ADDRESS,
+            payload: id
+        });
+    }
+
+    // NO BUYER ADDRESS BEING SHOWN
+    store.unmarkBuyerAddress = function () {
+        storeReducer({
+            type: GlobalStoreActionType.UNMARK_BUYER_ADDRESS,
             payload: null
         });
     }
