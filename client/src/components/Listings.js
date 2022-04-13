@@ -85,14 +85,41 @@ export default function Listings() {
                     <u> Listings </u>
                 </div>
                 {sellingItemsCards}
+                <div style={{ textAlign: 'center' }}>
+                    <Button onClick={() => {history.push("/listitem")}} style={{ margin: '100px', background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
+                        List Item
+                    </Button>
+                </div>
             </div>
-			{notShippedItems.length === 0 ? "": <div className="listings" style={{ margin: '50px 0% 50px 10%', width: '80%', minHeight: '600px', border: 'black 2px solid', borderRadius: '20px' }}>
+			{notShippedItems.length === 0 ? 
+            <div>
+                <div className="listings" style={{ margin: '50px 0% 50px 10%', width: '80%', minHeight: '600px', border: 'black 2px solid', borderRadius: '20px' }}>
+                    <div className="display-name-listings" style={{ margin: '20px 0% 0px 5%', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '65px', color: 'black' }}>
+                        <u> Sold But Not Shipped Yet </u>
+                    </div>
+                    <div style={{ margin: '140px 0px 0px 0px', textAlign: 'center', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '40px', color: 'black' }}>
+                        No orders ready to be shipped
+                    </div>
+                </div>
+            </div>: 
+            <div className="listings" style={{ margin: '50px 0% 50px 10%', width: '80%', minHeight: '600px', border: 'black 2px solid', borderRadius: '20px' }}>
                 <div className="display-name-listings" style={{ margin: '20px 0% 0px 5%', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '65px', color: 'black' }}>
                     <u> Sold But Not Shipped Yet </u>
                 </div>
                 {notShippedItemsCards}
             </div>}
-			{soldItems.length ===0 ? "": <div className="listings" style={{ margin: '50px 0% 50px 10%', width: '80%', minHeight: '600px', border: 'black 2px solid', borderRadius: '20px' }}>
+			{soldItems.length ===0 ? 
+            <div>
+                <div className="listings" style={{ margin: '50px 0% 50px 10%', width: '80%', minHeight: '600px', border: 'black 2px solid', borderRadius: '20px' }}>
+                    <div className="display-name-listings" style={{ margin: '20px 0% 0px 5%', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '65px', color: 'black' }}>
+                        <u> Sold </u>
+                    </div>
+                    <div style={{ margin: '140px 0px 0px 0px', textAlign: 'center', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '40px', color: 'black' }}>
+                        No orders have been sold
+                    </div>
+                </div>
+            </div>: 
+            <div className="listings" style={{ margin: '50px 0% 50px 10%', width: '80%', minHeight: '600px', border: 'black 2px solid', borderRadius: '20px' }}>
                 <div className="display-name-listings" style={{ margin: '20px 0% 0px 5%', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '65px', color: 'black' }}>
                     <u> Sold </u>
                 </div>
