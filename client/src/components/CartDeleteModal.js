@@ -1,7 +1,5 @@
 import { useContext } from 'react'
 import { GlobalStoreContext } from '../store'
-import axios from 'axios';
-import qs from 'qs';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
@@ -30,7 +28,7 @@ const style = {
     pb: 3,
   };
 
-function CartDeleteModal() {
+function CartDeleteModal(props) {
     const { store } = useContext(GlobalStoreContext);
 
     let name = "";
@@ -41,17 +39,7 @@ function CartDeleteModal() {
     }
 
     function handleDeleteCartItem() {
-		// removeFromCart
-		const url = 'http://localhost:4000/api/purchase/removeFromCart';
-		// POST 
-		const data = { '_id': store.cartItemRemove };
-		const options = {
-			method: 'POST',
-			headers: { 'content-type': 'application/x-www-form-urlencoded' },
-			data: qs.stringify(data),
-			url
-		};
-		axios(options).then();
+		props.handleDeleteCartItem(store.cartItemRemove);
         store.unmarkCartRemove();
         isOpen=false;
     }
