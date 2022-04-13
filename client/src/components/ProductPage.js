@@ -98,15 +98,15 @@ export default function ProductPage() {
 
 
 	let showImages = 
-        <Grid container spacing={4}>
+        <div style={{ width: '40%', margin: '3% 0 0 3%', display: 'grid', gridTemplateColumns: 'repeat(4, 10vw)' }}>
             {itemImages.map((index, indexNum) => (
                 index? 
-                    <Grid item xs style={{cursor: "pointer"}}>
+                    <div style={{cursor: "pointer", marginBottom: '20px' }}>
                         <img id={indexNum} src={`data:${index.mimetype};base64,${Buffer.from(index.data).toString('base64')}`} alt="" 
                         onClick={handleImage} title={index.title} width="100px" height="100px" style={{ borderRadius: '10%', border: "black 2px" }} ></img>
-                    </Grid>:<div></div>
+                    </div>:<div></div>
             ))}
-        </Grid>;
+        </div>;
 
 	
 	const handleViewProfile = (seller) => {
@@ -119,12 +119,12 @@ export default function ProductPage() {
 	
     return (
 		<Box style={{ position: 'absolute', marginLeft: '10%', marginRight: '10%', marginTop: '60px', width: '79%', minHeight: '450px'}}>
-			<Grid container spacing={17}>
+			<div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 40vw)' }}>
 				{/* LEFT IMAGES & DESCRIPTION */}
-				<Grid item xs>
+				<div>
 					{/* THE MAIN IMAGE */}
 					{itemImage0? <img src={`data:${itemImage0.mimetype};base64,${Buffer.from(itemImage0.data).toString('base64')}`} width="600px" height="400px" alt="" style={{ borderRadius: '10%' }} ></img>
-						:<img src="https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg" width="600px" height="400px" alt="" style={{ borderRadius: '10%' }} ></img>}
+						:<img src="https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg" width="600px" height="600px" alt="" style={{ borderRadius: '10%' }} ></img>}
 					{/* THE 8 IMAGES */}
 					{showImages}
 					{/* DESCRIPTION */}
@@ -134,9 +134,9 @@ export default function ProductPage() {
 					<div style={{ paddingBottom: '50px', paddingTop: '10px', fontFamily: 'Quicksand', fontSize: '20px', color: 'black' }}>
 						{description}
 					</div>
-				</Grid>
+				</div>
 				{/* RIGHT ABOUT THE ITEM */}
-				<Grid item xs> 
+				<div style={{margin: '0 0 0 20%'}}> 
 					<div style={{ fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '50px', color: 'black' }}>
                     	{productName}
 					</div>
@@ -169,8 +169,8 @@ export default function ProductPage() {
 					<div style={{ paddingTop: '10px', paddingBottom: '80px', fontFamily: 'Quicksand', fontSize: '20px', color: 'black', textAlign: 'right' }}>
 						Standard 3-Day Priority Shipping through USPS. Shipping costs varies based on location
 					</div>
-				</Grid>
-			</Grid>
+				</div>
+			</div>
             <LoginModal />
             <RegisterModal />
         </Box>  

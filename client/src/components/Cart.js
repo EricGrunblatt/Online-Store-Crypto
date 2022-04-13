@@ -41,26 +41,25 @@ export default function Cart() {
     let cartItems = 
         <div className="order-card" style={{ margin: '0px 0px 20px 0px' }}>
             {/* EACH ITEM CARDS */}
-            <Grid item container xs >
+            <div style={{ margin: '3% 0 3% 7%', display: 'grid', gridTemplateColumns: 'repeat(2, 35vw)' }}>
                 {items.map((index) => (
-                    <Grid item xs={5} style={{ margin: '10px auto 10px auto'}}>
-                        <Grid item container xs style={{ margin: '10px auto 10px auto', width: '100%', height: '200px', border: 'black 2px solid', borderRadius: '20px' }}>
-                            {/* ITEM IMAGE */}
-                            <Grid item xs={3} style={{ margin: '20px'}}>
-							<img src={`data:${index.image.mimetype};base64,${Buffer.from(index.image.data).toString('base64')}`} alt="" width="150px" height="150px" style={{ borderRadius: '10%' }} ></img>
-                            </Grid>
-                            {/* ITEM INFO */}
-                            <Grid item xs={5} style={{ margin: '10px auto auto 40px'}}>
-                                <div style={{ fontSize: '50px', fontWeight: 'bold' }}> {index.name}</div>
-                                <div style={{ marginTop: '3px', fontSize: '30px' }}>{index.price}&nbsp;Algo</div>
-                                <div style={{ marginTop: '3px', fontSize: '20px' }}>Seller:&nbsp;{index.sellerUsername}</div>
-                                <div id={index._id} onClick={handleDeleteCart} style={{ marginTop: '3px', fontSize: '20px', cursor: 'pointer', color: 'red' }}>Remove</div>
-                            </Grid>
-                        </Grid>	
-                    </Grid>
+                    <div style={{ marginBottom: '5%', display: 'grid', gridTemplateColumns: 'repeat(2, 35vw)', width: '95%', height: '200px', border: 'black 2px solid', borderRadius: '20px' }}>
+						{/* ITEM IMAGE */}
+						<div style={{ position: 'absolute', margin: '2% 0 0 2%'}}>
+						<img onClick={() => { history.push("/product/" + index._id) }} src={`data:${index.image.mimetype};base64,${Buffer.from(index.image.data).toString('base64')}`} 
+						alt="" width="150px" height="150px" style={{ borderRadius: '10%', cursor: 'pointer' }} ></img>
+						</div>
+						{/* ITEM INFO */}
+						<div style={{position: 'absolute', margin: '1% 0 0 15%'}}>
+							<div onClick={() => { history.push("/product/" + index._id) }} style={{ fontSize: '50px', fontWeight: 'bold', cursor: 'pointer' }}> {index.name}</div>
+							<div style={{ marginTop: '3px', fontSize: '30px' }}>{index.price}&nbsp;Algo</div>
+							<div style={{ marginTop: '3px', fontSize: '20px' }}>Seller:&nbsp;{index.sellerUsername}</div>
+							<div id={index._id} onClick={handleDeleteCart} style={{ marginTop: '3px', fontSize: '20px', cursor: 'pointer', color: 'red' }}>Remove</div>
+						</div>
+                    </div>
                     
                 ))}
-            </Grid>
+            </div>
             <div className="go-to-checkout" style={{ justifyContent: 'center', textAlign: 'center', margin: '10px 0px 40px 0px' }}>
                 <Button onClick={() => { history.push("/checkout") }} className="back-to-profile-button" style={{ background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
                     Checkout
