@@ -31,7 +31,7 @@ export default function HomeScreen() {
     const [sort, setSort] = useState("");
 
     /* MAKES AN ARRAY TO SHOW THE 3 NEWEST ITEMS */
-    let fullNewItems = store.catalogItems;
+    let fullNewItems = store.newItems;
     
     // Calculate number of pages and set length of newItems
     let numPages = Math.ceil(fullNewItems.length/3);
@@ -253,6 +253,10 @@ export default function HomeScreen() {
         setCheckedCon([]);
         setMaxPrice("");
         setMinPrice("");
+        setOpenCat("");
+        setOpenPrice("");
+        setOpenCon("");
+        store.initialLoad();
     }
 
     /* APPLIES FILTER OR SORT AFTER EITHER IS CHANGED */
@@ -338,15 +342,28 @@ export default function HomeScreen() {
         }    
         </div>;
 
+    const handleTopFilterButton = (cat) => {
+        let json = {
+            search: null,
+            categories: [cat],
+            conditions: null,
+            minPrice: undefined,
+            maxPrice: undefined,
+            sortBy: null
+        }
+        handleFilter(json);
+    }
+
     return (
         <Box className="homescreen" style={{ maxWidth: '99vw' }}>
             <div className="homescreen-category-bar" style={{ padding: '10px 0px 10px 10px'}}>
-                <span style={{ paddingRight: '10px' }}> Electronics </span>
-                <span style={{ paddingRight: '10px' }}> Clothing </span>
-                <span style={{ paddingRight: '10px' }}> Furniture </span>
-                <span style={{ paddingRight: '10px' }}> Sports Equipment </span>
-                <span style={{ paddingRight: '10px' }}> Music </span>
-                <span style={{ paddingRight: '10px' }}> Fashion </span>
+            <span style={{ paddingRight: '10px' }}><Button onClick={() => { store.initialLoad() }} style={{ color: 'black', fontFamily: 'Quicksand', textTransform: 'none', fontSize: '15px' }}>No Filter</Button></span>
+                <span style={{ paddingRight: '10px' }}><Button onClick={() => { handleTopFilterButton("Clothing") }} style={{ color: 'black', fontFamily: 'Quicksand', textTransform: 'none', fontSize: '15px' }}>Clothing</Button></span>
+                <span style={{ paddingRight: '10px' }}><Button onClick={() => { handleTopFilterButton("Electronics") }} style={{ color: 'black', fontFamily: 'Quicksand', textTransform: 'none', fontSize: '15px' }}>Electronics</Button></span>
+                <span style={{ paddingRight: '10px' }}><Button onClick={() => { handleTopFilterButton("Fashion") }} style={{ color: 'black', fontFamily: 'Quicksand', textTransform: 'none', fontSize: '15px' }}>Fashion</Button> </span>
+                <span style={{ paddingRight: '10px' }}><Button onClick={() => { handleTopFilterButton("Furniture") }} style={{ color: 'black', fontFamily: 'Quicksand', textTransform: 'none', fontSize: '15px' }}>Furniture</Button></span>
+                <span style={{ paddingRight: '10px' }}><Button onClick={() => { handleTopFilterButton("Music") }} style={{ color: 'black', fontFamily: 'Quicksand', textTransform: 'none', fontSize: '15px' }}>Music</Button></span>
+                <span style={{ paddingRight: '10px' }}><Button onClick={() => { handleTopFilterButton("Sports Equipment") }} style={{ color: 'black', fontFamily: 'Quicksand', textTransform: 'none', fontSize: '15px' }}>Sports Equipment</Button></span>
             </div>
             <div className="homescreen-new-items" style={{ paddingTop: '5px', textAlign: 'center', height: '180px', backgroundColor: '#FFBD59', fontSize: '30px' }}>
                 New Items
@@ -418,7 +435,7 @@ export default function HomeScreen() {
                     </Select>
                 </FormControl>
             </Box>
-            <Box style={{ position: 'absolute', margin: '-10px 0px 50px 20vw', background: 'white', top: '450px', width: '79%', minHeight: '1010px' }}>
+            <Box style={{ position: 'absolute', margin: '10px 0px 50px 20vw', background: 'white', top: '450px', width: '79%', minHeight: '1010px' }}>
                     <div>
                     {
                         productCard
