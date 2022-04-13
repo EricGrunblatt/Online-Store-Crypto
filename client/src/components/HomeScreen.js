@@ -330,7 +330,7 @@ export default function HomeScreen() {
 
 
     let productCard = 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 19vw)', gridTemplateRows: 'repeat(4, 25.5vw)' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 19vw)', gridTemplateRows: 'auto' }}>
         {
             pageProductAll.map((index) => (
                 <HomeProduct
@@ -435,14 +435,14 @@ export default function HomeScreen() {
                     </Select>
                 </FormControl>
             </Box>
-            <Box style={{ position: 'absolute', margin: '10px 0px 50px 20vw', background: 'white', top: '450px', width: '79%', minHeight: '1010px' }}>
-                    <div>
-                    {
-                        productCard
-                    }
-                    </div>
+            <Box style={{ zIndex: 1, margin: '-150px 0px 50px 20vw', background: 'white', top: '450px', width: '79%', minHeight: '350px' }}>
+                <div>
+                {
+                    productCard
+                }
+                </div>
             </Box>
-            <Box style={{ margin: '100vw 0px 5vw 0vw', textAlign: 'center', alignContent: 'center', fontSize: '35px', width: '99%' }}>
+            <Box style={{ zIndex: 1, whiteSpace: 'nowrap', margin: '10vw 0px 5vw 0vw', justifyContent: 'center', fontSize: '35px', width: '100%' }}>
                 <Pagination
                     className="pagination-bar"
                     currentPage={currentPage}

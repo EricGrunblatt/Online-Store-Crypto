@@ -80,11 +80,6 @@ export default function Listings() {
 	
     return (
         <div>
-			<div className="list-item-button" style={{ textAlign: 'center' }}>
-				<Button onClick={() => { history.push("/listitem") }} className="back-to-profile-button" style={{ margin: '50px 0px 20px 0px', background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
-					List Item
-				</Button>
-			</div>
             <div className="listings" style={{ margin: '50px 0% 50px 10%', width: '80%', minHeight: '600px', border: 'black 2px solid', borderRadius: '20px' }}>
                 <div className="display-name-listings" style={{ margin: '20px 0% 0px 5%', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '65px', color: 'black' }}>
                     <u> Listings </u>

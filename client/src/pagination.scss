@@ -48,11 +48,12 @@
         }
   
         &.left {
-          transform: rotate(-135deg) translate(-50%);
+          transform: rotate(-135deg) translate(-40%);
+          margin-right: 10px;
         }
   
         &.right {
-          transform: rotate(45deg);
+          transform: rotate(45deg) translate(-20%);
         }
       }
   
