@@ -26,6 +26,7 @@ export const addListingProduct = (payload) => api.post('/product/addListingProdu
 export const getProduct = (payload) => api.post('/product/getProduct', payload);
 export const updateListingProduct = (payload) => api.post('/product/updateListingProduct', payload);
 export const getListingProductsForUser = () => api.post('/product/getListingProductsForUser');
+export const getOrderedProductsForUser = () => api.post('/product/getOrderedProductsForUser');
 
 
 
@@ -41,6 +42,7 @@ const apis = {
     updateAccount,
     updateProfilePicture,
     getProfileByUsername,
+    getOrderedProductsForUser,
 
     getCatalog,
     addListingProduct,

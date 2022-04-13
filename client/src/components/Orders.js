@@ -2,21 +2,34 @@ import React from "react";
 import StarIcon from '@mui/icons-material/Star';
 import { Button, TextareaAutosize } from '@mui/material';
 import { useHistory } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from 'axios';
 
 export default function Orders() {
     const history = useHistory();
     let numStars = 0;
-
-    //let items = [];
+    const [items, setItems] = useState([]);
     
-    let items = [
-		{itemName: "Hoodie", id: "fsdlkfj", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", ordered: "03/04/2022", submitRating: ["", ""]},
-		{itemName: "Hoodie", id: "dsfsdf", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", ordered: "03/01/2022", submitRating: ["", ""]},
-		{itemName: "Hoodie", id: "fsdlkfasj", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", ordered: "02/20/2022", submitRating: ["", ""]},
-		{itemName: "Hoodie", id: "fsdj", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", ordered: "02/20/2022", submitRating: ["", ""]},
-		{itemName: "Hoodie", id: "lrtfj", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", ordered: "02/20/2022", submitRating: ["", ""]},
-		{itemName: "Hoodie", id: "fsertfj", img: "https://dummyimage.com/160x160/000/fff", price: 45, seller: "user1", ordered: "02/20/2022", submitRating: ["", ""]}
-	]
+    useEffect(() => {
+        async function fetchData() {
+            try{
+                // getListingProductsForUser
+                const url = 'http://localhost:4000/api/product/getOrderedProductsForUser';
+                // POST 
+                const options = {
+                    method: 'POST',
+                    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+                    url
+                };
+                axios(options).then(function(result) {
+                    setItems(result.data.products);
+                });
+            }
+            catch{
+            }
+        }
+        fetchData()
+    }, [])
 
     const handleSubmit = (index) => {
         let count = 0;
