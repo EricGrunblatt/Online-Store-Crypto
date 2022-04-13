@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from "react";
-// import { Alert } from 'react-alert'
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
+import { Alert } from '@mui/material';
 import LoginModal from './LoginModal';
 import RegisterModal from './RegisterModal';
 import { useHistory } from "react-router-dom";
@@ -27,6 +26,7 @@ export default function ProductPage() {
 	const [cost, setCost] = useState("");
 	const [itemImage0, setItemImage0] = useState(null);
 	const [itemImages, setItemImages] = useState([]);
+	const [alert, setAlert] = useState("");
 
 	/* GET PRODUCTS BY USER ID */
     useEffect(() => {
@@ -43,7 +43,6 @@ export default function ProductPage() {
                     url
                 };
                 axios(options).then(function(result) {
-                    console.log("RESPONSE: ", result);
 					setProductName(result.data.product.name);
 					setProductNum(result.data.product._id);
 					setDescription(result.data.product.description);
@@ -65,8 +64,6 @@ export default function ProductPage() {
         setItemImage0(itemImages[event.target.id]);
     };
 
-	// let alert = "";
-
 	// ADD TO CART BUTTON
     const handleAddToCart = async function() {
         const url = 'http://localhost:4000/api/purchase/addToCart';
@@ -83,13 +80,11 @@ export default function ProductPage() {
 				history.push("/cart")
 			}
 			else {
-				if(result.data.errorMessage === "USER OWNS THIS ITEM"){
-					console.log(result.data.errorMessage);
-					// alert("You can't put your item in the cart");
-				}
-				// USER NOT LOGGED IN
-				else {
+				if(result.data.errorMessage === "Unauthorized") {
 					store.setOpenLoginModal();
+				}
+				else {
+					setAlert(<Alert severity="error">{result.data.errorMessage}! </Alert>);
 				}
 			}
 		});
@@ -101,10 +96,10 @@ export default function ProductPage() {
         <div style={{ width: '40%', margin: '3% 0 0 3%', display: 'grid', gridTemplateColumns: 'repeat(4, 10vw)' }}>
             {itemImages.map((index, indexNum) => (
                 index? 
-                    <div style={{cursor: "pointer", marginBottom: '20px' }}>
+                    <div key={indexNum} style={{cursor: "pointer", marginBottom: '20px' }}>
                         <img id={indexNum} src={`data:${index.mimetype};base64,${Buffer.from(index.data).toString('base64')}`} alt="" 
                         onClick={handleImage} title={index.title} width="100px" height="100px" style={{ borderRadius: '10%', border: "black 2px" }} ></img>
-                    </div>:<div></div>
+                    </div>:<div key={indexNum}></div>
             ))}
         </div>;
 
@@ -156,6 +151,7 @@ export default function ProductPage() {
 					<Button onClick={handleAddToCart} className="add-to-cart-button" style={{ background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
 						Add to Cart
 					</Button>
+					{alert}
 					<div style={{ paddingTop: '40px', fontFamily: 'Quicksand', fontWeight: '500', fontSize: '25px', color: 'black' }}>
                     	<u> Return &#38; Refund Policy </u>
 					</div>

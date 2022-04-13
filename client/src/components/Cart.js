@@ -2,7 +2,7 @@ import React, {useState, useEffect, useContext} from "react";
 import Button from '@mui/material/Button';
 import { useHistory } from "react-router-dom";
 import axios from 'axios';
-import Grid from '@mui/material/Grid';
+import qs from 'qs';
 import CartDeleteModal from "./CartDeleteModal";
 import { GlobalStoreContext } from '../store'
 
@@ -11,30 +11,58 @@ export default function Cart() {
 	const { store } = useContext(GlobalStoreContext);
 	const [items, setItems] = useState([]);
 
-    /* GET PRODUCTS BY USER ID */
+    
     useEffect(() => {
-        async function fetchData() {
-            try{
-                // getCartProductsForUser
-                const url = 'http://localhost:4000/api/product/getCartProductsForUser';
-                // POST 
-                const options = {
-                    method: 'POST',
-                    headers: { 'content-type': 'application/x-www-form-urlencoded' },
-                    url
-                };
-                axios(options).then(function(result) {
-                    setItems(result.data.products);
-                });
-            }
-            catch{
-            }
-        }
+		/* GET PRODUCTS BY USER ID */
+		async function fetchData() {
+			try{
+				// getCartProductsForUser
+				const url = 'http://localhost:4000/api/product/getCartProductsForUser';
+				// POST 
+				const options = {
+					method: 'POST',
+					headers: { 'content-type': 'application/x-www-form-urlencoded' },
+					url
+				};
+				axios(options).then(function(result) {
+					setItems(result.data.products);
+				});
+			}
+			catch{
+			}
+		}
         fetchData()
     },[]);
 
+	async function handleDeleteCartItem(productId) {
+		console.log("DELETE HERE", productId);
+		// removeFromCart
+		const url = 'http://localhost:4000/api/purchase/removeFromCart';
+		// POST 
+		const data = { '_id': store.cartItemRemove };
+		const options = {
+			method: 'POST',
+			headers: { 'content-type': 'application/x-www-form-urlencoded' },
+			data: qs.stringify(data),
+			url
+		};
+		axios(options).then(function() {
+			// getCartProductsForUser
+			const url = 'http://localhost:4000/api/product/getCartProductsForUser';
+			// POST 
+			const options = {
+				method: 'POST',
+				headers: { 'content-type': 'application/x-www-form-urlencoded' },
+				url
+			};
+			axios(options).then(function(result) {
+				setItems(result.data.products);
+			});
+		});
+	}
+
 	/* OPENS CART DELETE MODAL IF PRESSED */
-	const handleDeleteCart = (event) => {
+	const handleDeleteModalOpen = function (event) {
 		store.markCartRemove(event.target.id);
     }
 
@@ -43,7 +71,7 @@ export default function Cart() {
             {/* EACH ITEM CARDS */}
             <div style={{ margin: '3% 0 3% 7%', display: 'grid', gridTemplateColumns: 'repeat(2, 35vw)' }}>
                 {items.map((index) => (
-                    <div style={{ marginBottom: '5%', display: 'grid', gridTemplateColumns: 'repeat(2, 35vw)', width: '95%', height: '200px', border: 'black 2px solid', borderRadius: '20px' }}>
+                    <div key={index._id} style={{ marginBottom: '5%', display: 'grid', gridTemplateColumns: 'repeat(2, 35vw)', width: '95%', height: '200px', border: 'black 2px solid', borderRadius: '20px' }}>
 						{/* ITEM IMAGE */}
 						<div style={{ position: 'absolute', margin: '2% 0 0 2%'}}>
 						<img onClick={() => { history.push("/product/" + index._id) }} src={`data:${index.image.mimetype};base64,${Buffer.from(index.image.data).toString('base64')}`} 
@@ -54,7 +82,7 @@ export default function Cart() {
 							<div onClick={() => { history.push("/product/" + index._id) }} style={{ fontSize: '50px', fontWeight: 'bold', cursor: 'pointer' }}> {index.name}</div>
 							<div style={{ marginTop: '3px', fontSize: '30px' }}>{index.price}&nbsp;Algo</div>
 							<div style={{ marginTop: '3px', fontSize: '20px' }}>Seller:&nbsp;{index.sellerUsername}</div>
-							<div id={index._id} onClick={handleDeleteCart} style={{ marginTop: '3px', fontSize: '20px', cursor: 'pointer', color: 'red' }}>Remove</div>
+							<div id={index._id} onClick={handleDeleteModalOpen} style={{ marginTop: '3px', fontSize: '20px', cursor: 'pointer', color: 'red' }}>Remove</div>
 						</div>
                     </div>
                     
@@ -71,7 +99,7 @@ export default function Cart() {
         cartItems = 
             <div className="cart-empty" style={{ margin: '140px 0px 0px 0px', textAlign: 'center', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '40px', color: 'black' }}>
                 <div>Your orders are empty... Let's begin<br></br>shopping</div>
-                <Button onClick={() => {history.push("/")}} style={{ margin: '100px', background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>Start Shopping</Button>
+                <Button onClick={() => { history.push("/") }} style={{ margin: '100px', background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>Start Shopping</Button>
             </div>
     }
 
@@ -83,7 +111,7 @@ export default function Cart() {
                 </div>
                 {cartItems}
             </div>
-            <CartDeleteModal />
+            <CartDeleteModal handleDeleteCartItem={handleDeleteCartItem}/>
         </div>
     )
 }
