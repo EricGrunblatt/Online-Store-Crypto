@@ -257,7 +257,7 @@ writeReview = async (req, res) => {
 			await product.save();
 			json = { "status": constants.status.OK};
 		}
-		console.log("RESPONSE: ", json).send();
+		console.log("RESPONSE: ", json);
 		res.status(200).json(json);
 	}
 	catch (err) {
