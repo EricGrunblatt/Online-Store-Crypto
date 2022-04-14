@@ -5,11 +5,13 @@ import axios from 'axios';
 import qs from 'qs';
 import CartDeleteModal from "./CartDeleteModal";
 import { GlobalStoreContext } from '../store'
+import api from "../api"
 
 export default function Cart() {
     const history = useHistory();
 	const { store } = useContext(GlobalStoreContext);
 	const [items, setItems] = useState([]);
+	const [shippingPrices, setshippingPrices] = useState([]);
 
     
     useEffect(() => {
@@ -24,8 +26,15 @@ export default function Cart() {
 					headers: { 'content-type': 'application/x-www-form-urlencoded' },
 					url
 				};
-				axios(options).then(function(result) {
+				axios(options).then(async function(result) {
 					setItems(result.data.products);
+					
+					const unresolvedShippingPrices = result.data.products.map(async(product) => {
+						const data = { '_id': product._id };
+						const res = await api.getShippingPrice(qs.stringify(data));
+						return res.data.shippingPrice;
+					});
+					setshippingPrices(await Promise.all(unresolvedShippingPrices));
 				});
 			}
 			catch{
@@ -70,7 +79,7 @@ export default function Cart() {
         <div className="order-card" style={{ margin: '0px 0px 20px 0px' }}>
             {/* EACH ITEM CARDS */}
             <div style={{ margin: '3% 0 3% 7%', display: 'grid', gridTemplateColumns: 'repeat(2, 35vw)' }}>
-                {items.map((index) => (
+                {items.map((index, i) => (
                     <div key={index._id} style={{ marginBottom: '5%', display: 'grid', gridTemplateColumns: 'repeat(2, 35vw)', width: '95%', height: '200px', border: 'black 2px solid', borderRadius: '20px' }}>
 						{/* ITEM IMAGE */}
 						<div style={{ position: 'absolute', margin: '2% 0 0 2%'}}>
@@ -78,9 +87,10 @@ export default function Cart() {
 						alt="" width="150px" height="150px" style={{ borderRadius: '10%', cursor: 'pointer' }} ></img>
 						</div>
 						{/* ITEM INFO */}
-						<div style={{position: 'absolute', margin: '1% 0 0 15%'}}>
+						<div style={{position: 'absolute', margin: '0 0 0 15%'}}>
 							<div onClick={() => { history.push("/product/" + index._id) }} style={{ fontSize: '50px', fontWeight: 'bold', cursor: 'pointer' }}> {index.name}</div>
-							<div style={{ marginTop: '3px', fontSize: '30px' }}>{index.price}&nbsp;Algo</div>
+							<div style={{ marginTop: '2px', fontSize: '30px' }}>{index.price}&nbsp;Algo</div>
+							<div style={{ marginTop: '3px', fontSize: '15px' }}>(Shipping Price: ${shippingPrices[i]})</div>
 							<div style={{ marginTop: '3px', fontSize: '20px' }}>Seller:&nbsp;{index.sellerUsername}</div>
 							<div id={index._id} onClick={handleDeleteModalOpen} style={{ marginTop: '3px', fontSize: '20px', cursor: 'pointer', color: 'red' }}>Remove</div>
 						</div>
