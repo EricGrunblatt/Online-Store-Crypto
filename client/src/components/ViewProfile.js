@@ -122,7 +122,7 @@ export default function ViewMyProfile() {
 							</Grid>
 							<Grid item xs={6} style={{ margin: '7px 0px 0px 2vw'}}>
 								<div style={{ fontSize: '25px' }}><u>Comment:</u></div>
-								<div style={{ border: 'black 1px solid', overflowY: 'scroll', width: '21vw', height: '90px', marginTop: '5px' }}>{index.comment}</div>
+								<div style={{ border: 'black 1px solid', borderRadius: '10px', overflowY: 'auto', width: '21vw', height: '90px', marginTop: '5px' }}><div style={{ margin: '0px 5px 0px 5px' }}>{index.comment}</div></div>
 							</Grid>
 						</Grid>
 					))}
