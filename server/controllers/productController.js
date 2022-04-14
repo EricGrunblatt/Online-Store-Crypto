@@ -202,14 +202,9 @@ getOrderedProductsForUser = async (req, res) => {
 				reviewId: 1
 			}
 
-<<<<<<< Updated upstream
-			let products = await Product.find({ buyerUsername: user.username }).lean().select(selectOptions)
-
-=======
 			let products = await Product.find({state: ProductState.SOLD, buyerUsername: user.username})
 				.lean().select(selectOptions)
 			
->>>>>>> Stashed changes
 			products = await Promise.all(products.map(async (product) => {
 				const image = await getProductFirstImage(product);
 				product.image = image
@@ -384,13 +379,8 @@ getSellingProductsForUser = async (req, res) => {
 				dateListed: "$createdAt"
 			}
 
-<<<<<<< Updated upstream
-			let products = await Product.find({ sellerUsername: user.username, buyerUsername: null }).lean().select(selectOptions)
-
-=======
 			let products = await Product.find({sellerUsername: user.username, state: ProductState.LISTED}).lean().select(selectOptions)
 			
->>>>>>> Stashed changes
 			products = await Promise.all(products.map(async (product) => {
 				const image = await getProductFirstImage(product);
 				product.image = image
@@ -527,13 +517,8 @@ updateListingProduct = async (req, res) => {
 			else if (product.sellerUsername !== user.username) {
 				json = { status: constants.status.ERROR, errorMessage: constants.product.youAreNotTheSeller }
 			}
-<<<<<<< Updated upstream
-			else if (product.dateSold || product.buyerUsername) {
-				json = { status: constants.status.ERROR, errorMessage: constants.product.productIsSold }
-=======
 			else if (product.state !== ProductState.LISTED) {
 				json = {status: constants.status.ERROR, errorMessage: constants.product.productIsSold}
->>>>>>> Stashed changes
 			}
 			else {
 				// TODO: Calculate shipping price via api
