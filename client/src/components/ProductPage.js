@@ -28,7 +28,6 @@ export default function ProductPage() {
 	const [itemImage0, setItemImage0] = useState(null);
 	const [itemImages, setItemImages] = useState([]);
 	const [cartAlert, setCartAlert] = useState("");
-	const [shippingAlert, setShippingAlert] = useState("");
 	const [shippingPrice, setShippingPrice] = useState(null);
 
 	/* GET PRODUCTS BY USER ID */
@@ -84,28 +83,34 @@ export default function ProductPage() {
 
 	// ADD TO CART BUTTON
     const handleAddToCart = async function() {
-        const url = 'http://localhost:4000/api/purchase/addToCart';
-        // POST 
-        const data = { '_id': productId };
-        const options = {
-            method: 'POST',
-            headers: { 'content-type': 'application/x-www-form-urlencoded' },
-            data: qs.stringify(data),
-            url
-        };
-        axios(options).then(function(result){
-			if(result.data.status === "OK") {
-				history.push("/cart")
-			}
-			else {
-				if(result.data.errorMessage === "Unauthorized") {
-					store.setOpenLoginModal();
+		// USER CANNOT ADD THE ITEM IF WE CANNOT GET SHIPPING PRICE
+		if(!shippingPrice) {
+			setCartAlert(<Alert severity="error">Cannot be shipped to your location! </Alert>);
+		}
+		else {
+			const url = 'http://localhost:4000/api/purchase/addToCart';
+			// POST 
+			const data = { '_id': productId };
+			const options = {
+				method: 'POST',
+				headers: { 'content-type': 'application/x-www-form-urlencoded' },
+				data: qs.stringify(data),
+				url
+			};
+			axios(options).then(function(result){
+				if(result.data.status === "OK") {
+					history.push("/cart")
 				}
 				else {
-					setCartAlert(<Alert severity="error">{result.data.errorMessage}! </Alert>);
+					if(result.data.errorMessage === "Unauthorized") {
+						store.setOpenLoginModal();
+					}
+					else {
+						setCartAlert(<Alert severity="error">{result.data.errorMessage}! </Alert>);
+					}
 				}
-			}
-		});
+			});
+		}
     };
 
 
