@@ -114,7 +114,7 @@ export default function ViewMyProfile() {
             	<Grid item xs={6} style={{ overflowY: 'scroll', margin: '50px 0px 0px 70px', width: '90%', height: '600px', border: 'black 2px solid', borderRadius: '20px' }}>
 					<div style={{ margin: '20px 0% 0px 5%', fontFamily: 'Quicksand', fontSize: '35px', color: 'black'  }}><u>Reviews</u></div>
 					{reviews.map((index) => (
-						<Grid item container xs style={{ margin: '15px auto 15px auto', width: '90%', height: '150px', border: 'black 2px solid', borderRadius: '20px' }}>
+						<Grid key={"review"} item container xs style={{ margin: '15px auto 15px auto', width: '90%', height: '150px', border: 'black 2px solid', borderRadius: '20px' }}>
 							<Grid item xs={3} style={{ marginLeft: '20px'}}>
 								<div style={{ fontSize: '30px' }}><a href="https://example.com/faq.html" rel="noreferrer"> {index.byUsername} </a></div>
 								<div style={{ marginTop: '15px', fontSize: '1.25vw' }}>{index.stars}/5 Stars</div>

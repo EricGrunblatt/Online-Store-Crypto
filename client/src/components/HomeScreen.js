@@ -444,6 +444,7 @@ export default function HomeScreen() {
             </Box>
             <Box style={{ zIndex: 1, whiteSpace: 'nowrap', margin: '10vw 0px 5vw 0vw', justifyContent: 'center', fontSize: '35px', width: '100%' }}>
                 <Pagination
+                    key="pagination"
                     className="pagination-bar"
                     currentPage={currentPage}
                     totalCount={allProducts.length}
