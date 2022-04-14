@@ -106,8 +106,8 @@ export default function Listings() {
     }
 
     const handleTrackingNumber = (index, trackingNumber) => {
-        trackingNumber = trackingNumber.value;
-        if((trackingNumber.startsWith("94001") && trackingNumber.length === 22) || (trackingNumber.startsWith("92055") && trackingNumber.length === 22)) {
+        let trackingString = trackingNumber.value;
+        if((trackingString.startsWith("94001") && trackingString.length === 22) || (trackingNumber.startsWith("92055") && trackingNumber.length === 22)) {
             // TODO 
             // Submit tracking number
             // Change date so its sold
@@ -147,7 +147,7 @@ export default function Listings() {
                 </div>
                 {notShippedItemsCards}
             </div>}
-			{soldItems.length ===0 ? 
+			{soldItems.length === 0 ? 
             <div>
                 <div className="listings" style={{ margin: '50px 0% 50px 10%', width: '80%', minHeight: '600px', border: 'black 2px solid', borderRadius: '20px' }}>
                     <div className="display-name-listings" style={{ margin: '20px 0% 0px 5%', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '65px', color: 'black' }}>

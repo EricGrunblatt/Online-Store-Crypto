@@ -21,12 +21,14 @@ export const updateAccount = (payload) => api.post('/user/updateAccount', payloa
 export const updateProfilePicture = (payload) => api.post('/user/updateProfileImage', payload);
 export const getProfileByUsername = (payload) => api.post('/user/getProfileByUsername', payload);
 
+// ALL REQUESTS FOR PRODUCTS
 export const getCatalog = (payload) => api.post('/product/getCatalog', payload);
 export const addListingProduct = (payload) => api.post('/product/addListingProduct', payload);
 export const getProduct = (payload) => api.post('/product/getProduct', payload);
 export const updateListingProduct = (payload) => api.post('/product/updateListingProduct', payload);
 export const getListingProductsForUser = () => api.post('/product/getListingProductsForUser');
 export const getOrderedProductsForUser = () => api.post('/product/getOrderedProductsForUser');
+export const writeReview = (payload) => api.post('/user/writeReview', payload);
 
 
 
@@ -46,7 +48,8 @@ const apis = {
 
     getCatalog,
     addListingProduct,
-    getListingProductsForUser
+    getListingProductsForUser,
+    writeReview
 }
 
 export default apis

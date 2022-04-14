@@ -2,10 +2,13 @@ import React from "react";
 import StarIcon from '@mui/icons-material/Star';
 import { Button, TextareaAutosize } from '@mui/material';
 import { useHistory } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import axios from 'axios';
+import { GlobalStoreContext } from "../store";
+
 
 export default function Orders() {
+    const { store } = useContext(GlobalStoreContext);
     const history = useHistory();
     let numStars = 0;
     const [items, setItems] = useState([]);
@@ -31,45 +34,55 @@ export default function Orders() {
         fetchData()
     }, [])
 
-    const handleSubmit = (index) => {
+    const handleSubmit = (index, productId) => {
         let count = 0;
         let stars = document.querySelectorAll('[data-star]');
         stars.forEach(star => {
             let starId = star.id.substring(0, star.id.length-1)
-            if(starId === index.id) {
+            if(starId === index._id) {
                 if(star.style.color === "rgb(255, 189, 89)") {
                     count++;
                 }
             }
         });
+        console.log(count);
         let newComment = "";
         let comments = document.querySelectorAll('[data-comment]');
         comments.forEach(comment => {
             let commentId = comment.id.substring(0, comment.id.length-7);
-            if(commentId === index.id) {
+            console.log(commentId);
+            console.log(index._id);
+            if(commentId === index._id) {
                 newComment = comment.value;
             }
         });
-        index.submitRating = [count.toString(), newComment.toString()];
-        let submitButtons = document.getElementById(index.id + "submit");
-        submitButtons.style.visibility = 'hidden';
-        let commentBox = document.getElementById(index.id + "comment");
-        commentBox.setAttribute("disabled", true);
-        
+        console.log(newComment);
+        if(count < 1 || count > 5) {
+            alert("Please click the number of stars for the rating");
+        } else {
+            let json = {
+                stars: count,
+                comment: newComment,
+                productId: productId
+            }
+            store.writeReview(json);
+            let submitButtons = document.getElementById(index._id + "submit");
+            submitButtons.style.visibility = 'hidden';
+        }
         
     }
 
     const handleStars = (i, index) => {
-        if(index.submitRating[0] === "" && index.submitRating[1] === "") {
+        if(index.review === null) {
             numStars = parseInt(i);
             let stars = document.querySelectorAll('[data-star]');
             stars.forEach(star => {
                 let starValue = star.id.substring(star.id.length-1, star.id.length);
                 let starId = star.id.substring(0, star.id.length-1);
-                if(parseInt(starValue) <= numStars && starId === index.id) {
+                if(parseInt(starValue) <= numStars && starId === index._id) {
                     star.style.color = '#FFBD59';
                 }
-                else if(parseInt(starValue) > numStars && starId === index.id) {
+                else if(parseInt(starValue) > numStars && starId === index._id) {
                     star.style.color = '#C4C4C4';
                 }
             });
@@ -85,7 +98,7 @@ export default function Orders() {
                         <div className="right-of-photo" style={{ zIndex: 0, position: 'absolute', display: 'inline-block', float: 'left' }}>
                             <div className="product-data" style={{margin: '10px 0vw 0vw 10px' }}>
                                 <div className="product-name" style={{ fontSize: '30px' }}>
-                                    {index.itemName}
+                                    {index.name}
                                 </div>
                                 <div className="product-price" style={{ marginTop: '10px', fontSize: '20px' }}>
                                     Price: {index.price} Algo
@@ -94,16 +107,16 @@ export default function Orders() {
                                     <div style={{ marginRight: '10px', display: 'inline-block' }}>
                                         Seller:
                                     </div>
-                                    <a href="/viewprofile" style={{ display: 'inline-block', color: '#879ED9' }}>
-                                        {index.seller}
-                                    </a>
+                                    <div onClick={() => { store.getProfile(index.sellerUsername) }} style={{ cursor: 'pointer', display: 'inline-block', color: '#879ED9' }}>
+                                        <u>{index.sellerUsername}</u>
+                                    </div>
                                 </div>
                                 <div className="order-date" style={{ marginTop: '10px', color: '#808080', fontSize: '15px' }}>
                                     <div style={{ marginRight: '10px', display: 'inline-block' }}>
                                         Placed:
                                     </div>
                                     <div style={{ display: 'inline-block', color: 'black' }}>
-                                        {index.ordered}
+                                        {index.dateSold}
                                     </div>
                                 </div>
                             </div>
@@ -112,25 +125,40 @@ export default function Orders() {
                             <div className="leave-rating" style={{ display: 'inline-block', margin: '10px 0vw 0vw 0vw', fontSize: '20px' }}>
                                 <u>Leave a Rating</u>
                                 <div className="stars" style={{ marginTop: '20px' }}>
-                                    <StarIcon data-star id={index.id + "1"} onClick={() => {handleStars("1", index)}} style={{ cursor: 'pointer', fontSize: '25px', color: '#C4C4C4' }}>1</StarIcon>
-                                    <StarIcon data-star id={index.id + "2"} onClick={() => {handleStars("2", index)}} style={{ cursor: 'pointer', fontSize: '25px', color: '#C4C4C4' }}>2</StarIcon>
-                                    <StarIcon data-star id={index.id + "3"} onClick={() => {handleStars("3", index)}} style={{ cursor: 'pointer', fontSize: '25px', color: '#C4C4C4' }}>3</StarIcon>
-                                    <StarIcon data-star id={index.id + "4"} onClick={() => {handleStars("4", index)}} style={{ cursor: 'pointer', fontSize: '25px', color: '#C4C4C4' }}>4</StarIcon>
-                                    <StarIcon data-star id={index.id + "5"} onClick={() => {handleStars("5", index)}} style={{ cursor: 'pointer', fontSize: '25px', color: '#C4C4C4' }}>5</StarIcon>
+                                    <StarIcon data-star id={index._id + "1"} onClick={() => {handleStars("1", index)}} style={{ cursor: index.review === null ? 'pointer' : 'default', fontSize: '25px', color: index.review !== null && index.review.stars >= 1 ? '#FFBD59' : '#C4C4C4' }}>1</StarIcon>
+                                    <StarIcon data-star id={index._id + "2"} onClick={() => {handleStars("2", index)}} style={{ cursor: index.review === null ? 'pointer' : 'default', fontSize: '25px', color: index.review !== null && index.review.stars >= 2 ? '#FFBD59' : '#C4C4C4' }}>2</StarIcon>
+                                    <StarIcon data-star id={index._id + "3"} onClick={() => {handleStars("3", index)}} style={{ cursor: index.review === null ? 'pointer' : 'default', fontSize: '25px', color: index.review !== null && index.review.stars >= 3 ? '#FFBD59' : '#C4C4C4' }}>3</StarIcon>
+                                    <StarIcon data-star id={index._id + "4"} onClick={() => {handleStars("4", index)}} style={{ cursor: index.review === null ? 'pointer' : 'default', fontSize: '25px', color: index.review !== null && index.review.stars >= 4 ? '#FFBD59' : '#C4C4C4' }}>4</StarIcon>
+                                    <StarIcon data-star id={index._id + "5"} onClick={() => {handleStars("5", index)}} style={{ cursor: index.review === null ? 'pointer' : 'default', fontSize: '25px', color: index.review !== null && index.review.stars >= 5 ? '#FFBD59' : '#C4C4C4' }}>5</StarIcon>
                                 </div>
-                                <Button data-submit id={index.id + "submit"} onClick={() => {handleSubmit(index)}} style={{ visibility: "", marginTop: '25px', color: 'black', border: 'black 1px solid', borderRadius: '10px', width: '110px', height: '35px', fontSize: '13px' }}>Submit</Button>
+                                { console.log(index) }
+                                { index.review === null ? <Button data-submit id={index._id + "submit"} onClick={() => {handleSubmit(index, index._id)}} style={{ visibility: "", marginTop: '25px', color: 'black', border: 'black 1px solid', borderRadius: '10px', width: '110px', height: '35px', fontSize: '13px' }}>Submit</Button>: ""}
                                 
                             </div>
                             <div className="leave-comment" style={{ margin: '15px 0vw 0vw 20px', display: 'inline-block', float: 'right', fontSize: '15px' }}>
                                 <u>Comment</u>
                                 <div style={{ margin: '10px 0vw 0vw 0vw' }}>
-                                    <TextareaAutosize
-                                        id={index.id + "comment"}
-                                        maxRows={5}
-                                        aria-label="maximum height"
-                                        placeholder="Leave Comment"
-                                        style={{ width: '30vw', height: '100px', maxWidth: '40vw', maxHeight: '100px', fontSize: '15px' }}
-                                    />
+                                    {index.review === null ?
+                                        <TextareaAutosize
+                                            data-comment
+                                            id={index._id + "comment"}
+                                            disabled={index.review !== null}
+                                            maxRows={5}
+                                            aria-label="maximum height"
+                                            placeholder="Leave Comment"
+                                            style={{ width: '30vw', height: '100px', maxWidth: '40vw', maxHeight: '100px', fontSize: '15px' }}
+                                        /> : 
+                                        <TextareaAutosize
+                                            data-comment-disabled
+                                            value={index.review.comment}
+                                            id={index._id + "commentDisabled"}
+                                            disabled={index.review !== null}
+                                            maxRows={5}
+                                            aria-label="maximum height"
+                                            placeholder="Leave Comment"
+                                            style={{ width: '30vw', height: '100px', maxWidth: '40vw', maxHeight: '100px', fontSize: '15px' }}
+                                        />
+                                    }
                                 </div>
                             </div>
                         </div>

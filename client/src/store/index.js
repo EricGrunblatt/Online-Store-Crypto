@@ -281,6 +281,17 @@ function GlobalStoreContextProvider(props) {
         }
     }
 
+    // STORES REVIEW WRITTEN
+    store.writeReview = async function (json) {
+        let response = await api.writeReview(json);
+        if(response.data.status === "OK") {
+            console.log("Review Stored");
+            history.push("/orders");
+        } else {
+            alert(response.data.errorMessage);
+        }
+    }
+
     // LOADS PRODUCT PAGE
     store.loadProduct = async function (id) {
         history.push("/product/" + id);
@@ -382,7 +393,10 @@ function GlobalStoreContextProvider(props) {
 
     // GETS PROFILE FROM USERNAME
     store.getProfile = async function (username) {
-        let response = await api.getProfileByUsername(username);
+        let json = {
+            username: username
+        }
+        let response = await api.getProfileByUsername(json);
         if(response.data.status === "OK") {
             let profile = response.data;
             storeReducer({
