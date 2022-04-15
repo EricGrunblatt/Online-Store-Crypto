@@ -30,6 +30,10 @@ export const getListingProductsForUser = () => api.post('/product/getListingProd
 export const getOrderedProductsForUser = () => api.post('/product/getOrderedProductsForUser');
 export const writeReview = (payload) => api.post('/user/writeReview', payload);
 
+// ALL REQUESTS FOR WALLET
+export const addWallet = (payload) => api.post('/wallet/addWallet', payload);
+export const removeWallet = (payload) => api.post('/wallet/removeWallet', payload);
+
 
 
 const apis = {
@@ -49,7 +53,10 @@ const apis = {
     getCatalog,
     addListingProduct,
     getListingProductsForUser,
-    writeReview
+    writeReview,
+
+    addWallet,
+    removeWallet
 }
 
 export default apis

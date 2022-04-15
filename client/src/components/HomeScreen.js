@@ -335,7 +335,7 @@ export default function HomeScreen() {
             pageProductAll.map((index) => (
                 <HomeProduct
                     style={{ position: 'absolute' }}
-                    key={index._id}
+                    key={index._id + "homeProduct"}
                     product={index}
                 />
             ))
@@ -373,7 +373,7 @@ export default function HomeScreen() {
                     </Button>
                     <div style={{ position: 'absolute', display: 'flex', margin: '0px 0vw 0px -8.5vw', left: '20vw', width: '70vw' }}>
                         {newItems.map((index) => (
-                            <div onClick={() => {history.push("/product/"+index._id)}} style={{ cursor: 'pointer', display: 'inline-block', margin: '-20px 10vw 0px 10vw' }}>
+                            <div key={index._id + "newItem"} onClick={() => {history.push("/product/"+index._id)}} style={{ cursor: 'pointer', display: 'inline-block', margin: '-20px 10vw 0px 10vw' }}>
                                 <img src={`data:${index.image.mimetype};base64,${Buffer.from(index.image.data).toString('base64')}`} alt="" style={{ width: '100px', height: '100px', border: 'black 1px solid', borderRadius: '10px' }}></img>
                             </div>
                         ))}    
@@ -385,7 +385,7 @@ export default function HomeScreen() {
                 </div>
                 <div style={{ marginTop: '75px', marginLeft: dotMarginRight, textAlign: 'center', display: 'inline-block', position: 'absolute' }}>
                     {dotsArray.map((dot) => (
-                        <div style={{ background: index === dot ? "black": "#FFBD59", width: '10px', height: '10px', border: 'black 1px solid', borderRadius: '50%', margin: '0px 10px 0px 10px', display: 'inline-block' }}></div>
+                        <div key={dot + "newItemDot"} style={{ background: index === dot ? "black": "#FFBD59", width: '10px', height: '10px', border: 'black 1px solid', borderRadius: '50%', margin: '0px 10px 0px 10px', display: 'inline-block' }}></div>
                     ))}
                 </div>
             </div>

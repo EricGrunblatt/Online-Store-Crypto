@@ -40,7 +40,7 @@ export default function Listings() {
 			{/* EACH ITEM CARDS */}
 			<div style={{ margin: '3% 0 3% 7%', display: 'grid', gridTemplateColumns: 'repeat(2, 35vw)' }}>
 				{items.map((index) => (
-					<div style={{ marginBottom: '5%', display: 'grid', gridTemplateColumns: 'repeat(2, 35vw)', width: '95%', height: '200px', border: 'black 2px solid', borderRadius: '20px' }}>
+					<div key={index._id + "_myListingsPage_" + index.name} style={{ marginBottom: '5%', display: 'grid', gridTemplateColumns: 'repeat(2, 35vw)', width: '95%', height: '200px', border: 'black 2px solid', borderRadius: '20px' }}>
 						{/* ITEM IMAGE */}
 						<div style={{ position: 'absolute', margin: '25px 0 0 25px'}}>
 							<img onClick={() => { history.push("/product/" + index._id) }} src={`data:${index.image.mimetype};base64,${Buffer.from(index.image.data).toString('base64')}`} 
@@ -53,7 +53,7 @@ export default function Listings() {
 							<div style={{ marginTop: '3px', fontSize: '30px' }}>{index.price}&nbsp;Algo</div>
 							<div style={{ marginTop: '3px', fontSize: '20px' }}>Seller:&nbsp;{index.sellerUsername}</div>
 							{index.dateSold === null ? <u onClick={() => { history.push("/editItem/" + index._id) }} style={{ marginTop: '3px', fontSize: '20px', cursor: 'pointer', color: 'red', }}>Edit</u>
-								: index.dateSold === undefined  ? 
+								: index.dateSold === undefined ? 
                                 <div style={{ display: 'flex', marginTop: '3px', fontSize: '20px'}}>
                                     <TextField id={"tracking" + index._id} placeholder="Tracking Number" style={{ width: '230px' }}></TextField>
                                     <Button onClick={() => handleTrackingNumber(index, document.getElementById("tracking" + index._id)) } style={{ background: 'blue', color: 'white', fontSize: '10px' }}>Submit <br></br> Tracking</Button>
