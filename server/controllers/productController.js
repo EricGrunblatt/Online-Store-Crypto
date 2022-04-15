@@ -672,6 +672,61 @@ getShippingPrice = async (req, res) => {
 	}
 }
 
+// TODO
+getShippingInfo = async (req, res) => {
+	console.log("getShippingInfo", req.body)
+	const {productId} = req.body
+	const userId = req.userId
+
+	const buyerUserSelect = {
+		_id: 0,
+		firstName: 1,
+		lastName: 1,
+		addressFirstLine: 1,
+		addressSecondLine: 1,
+		city: 1,
+		state: 1,
+		zipcode: 1,
+	}
+
+	let json = {}
+	let user = null
+	let product = null
+	let buyerUsername = null
+	let buyerUser = null
+	try {
+		if (!userId) {
+			throw constants.error.didNotGetUserId
+		}
+		if (!productId) {
+			json = { status: constants.status.ERROR, errorMessage: constants.product.missingRequiredField }
+		}
+		else if (!(user = await User.findById(userId))) {
+			json = { status: constants.status.ERROR, errorMessage: constants.product.userDoesNotExist }
+		}
+		else if (!(product = await Product.findById(productId))) {
+			json = { status: constants.status.ERROR, errorMessage: constants.product.productDoesNotExist }
+		}
+		else if (product.sellerUsername !== user.username) {
+			json = { status: constants.status.ERROR, errorMessage: constants.product.youAreNotTheSeller }
+		}
+		else if (!(buyerUsername = product.buyerUsername)) {
+			json = { status: constants.status.ERROR, errorMessage: constants.product.productHasNotSold }
+		}
+		else if (!(buyerUser = await User.find({username: buyerUsername}).select(buyerUserSelect))) {
+			json = { status: constants.status.ERROR, errorMessage: cosntants.product.buyerUserDoesNotExist }
+		}
+		else {
+			json = { status: constants.status.OK, user: buyerUser}
+		}
+		console.log("RESPONSE: ", json)
+		res.status(200).send(json)
+	} catch (err) {
+		console.log(err)
+		res.status(500).send(constants.status.FATAL_ERROR)
+	}
+}
+
 module.exports = {
 	getCatalog,
 	getProduct,
@@ -682,5 +737,6 @@ module.exports = {
 	addListingProduct,
 	updateListingProduct,
 	deleteListingProduct,
-	getShippingPrice
+	getShippingPrice,
+	getShippingInfo,
 }
