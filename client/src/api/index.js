@@ -8,6 +8,9 @@ const api = axios.create({
     baseURL: 'http://localhost:4000/api',
 })
 
+const options = {
+	headers: { 'content-type': 'application/x-www-form-urlencoded' }
+};
 
 // ALL REQUESTS FOR LOGIN/REGISTER/LOGOUT
 export const getLoggedIn = () => api.post('/auth/getLoggedIn');
@@ -30,11 +33,11 @@ export const getListingProductsForUser = () => api.post('/product/getListingProd
 export const getOrderedProductsForUser = () => api.post('/product/getOrderedProductsForUser');
 export const writeReview = (payload) => api.post('/user/writeReview', payload);
 export const getShippingInfo = (payload) => api.post('/product/getShippingInfo', payload);
+export const getShippingPrice = (payload) => api.post('/product/getShippingPrice', payload, options);
 
 // ALL REQUESTS FOR WALLET
 export const addWallet = (payload) => api.post('/wallet/addWallet', payload);
 export const removeWallet = (payload) => api.post('/wallet/removeWallet', payload);
-
 
 
 const apis = {
@@ -56,9 +59,11 @@ const apis = {
     getListingProductsForUser,
     writeReview,
     getShippingInfo,
+    getShippingPrice,
 
     addWallet,
     removeWallet
+
 }
 
 export default apis

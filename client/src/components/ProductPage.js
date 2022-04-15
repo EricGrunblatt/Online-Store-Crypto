@@ -23,35 +23,52 @@ export default function ProductPage() {
 	const [condition, setCondition] = useState("");
 	const [description, setDescription] = useState("");
 	const [seller, setSeller] = useState("");
-	const [cost, setCost] = useState("");
+	const [cost, setCost] = useState(0);
+	const [shippingService, setShippingService] = useState("");
 	const [itemImage0, setItemImage0] = useState(null);
 	const [itemImages, setItemImages] = useState([]);
-	const [alert, setAlert] = useState("");
+	const [cartAlert, setCartAlert] = useState("");
+	const [shippingPrice, setShippingPrice] = useState(null);
 
 	/* GET PRODUCTS BY USER ID */
     useEffect(() => {
         async function fetchData() {
             try{
                 // getListingProductsForUser
-                const url = 'http://localhost:4000/api/product/getProduct';
+                const urlGetProduct = 'http://localhost:4000/api/product/getProduct';
+				// getShippingPrice
+				const urlGetShippingPrice = 'http://localhost:4000/api/product/getShippingPrice';
                 // POST 
-                const data = { '_id': productId };
-                const options = {
-                    method: 'POST',
-                    headers: { 'content-type': 'application/x-www-form-urlencoded' },
-                    data: qs.stringify(data),
-                    url
-                };
-                axios(options).then(function(result) {
-					setProductName(result.data.product.name);
-					setProductNum(result.data.product._id);
-					setDescription(result.data.product.description);
-					setCondition(result.data.product.condition);
-					setSeller(result.data.product.sellerUsername);
-					setCost(result.data.product.price);
-					setItemImage0(result.data.product.images[0]);
-					setItemImages(result.data.product.images);
-                });
+				const options = {
+					headers: { 'content-type': 'application/x-www-form-urlencoded' }
+				};
+                const data = qs.stringify({ '_id': productId });
+				
+				const requestProduct = axios.post(urlGetProduct, data, options);
+				const requestShippingPrice = axios.post(urlGetShippingPrice, data, options);
+				axios.all([requestProduct, requestShippingPrice]).then(axios.spread((...responses) => {
+					const currProduct = responses[0].data.product;
+					const shippingPrice = responses[1];
+					// console.log("PRICE: ", shippingPrice.data.status);
+					if(shippingPrice.data.status === "ERROR") {
+						setCost(currProduct.price);
+						// setShippingAlert("(shipping not included)");
+					}
+					else {
+						setCost(currProduct.price);
+						setShippingPrice(shippingPrice.data.shippingPrice);
+						setShippingService(shippingPrice.data.shippingService);
+						// setShippingAlert("(shipping included)");
+					}
+					
+					setProductName(currProduct.name);
+					setProductNum(currProduct._id);
+					setDescription(currProduct.description);
+					setCondition(currProduct.condition);
+					setSeller(currProduct.sellerUsername);
+					setItemImage0(currProduct.images[0]);
+					setItemImages(currProduct.images);
+				}));
             }
             catch{
             }
@@ -66,28 +83,34 @@ export default function ProductPage() {
 
 	// ADD TO CART BUTTON
     const handleAddToCart = async function() {
-        const url = 'http://localhost:4000/api/purchase/addToCart';
-        // POST 
-        const data = { '_id': productId };
-        const options = {
-            method: 'POST',
-            headers: { 'content-type': 'application/x-www-form-urlencoded' },
-            data: qs.stringify(data),
-            url
-        };
-        axios(options).then(function(result){
-			if(result.data.status === "OK") {
-				history.push("/cart")
-			}
-			else {
-				if(result.data.errorMessage === "Unauthorized") {
-					store.setOpenLoginModal();
+		// USER CANNOT ADD THE ITEM IF WE CANNOT GET SHIPPING PRICE
+		if(!shippingPrice) {
+			setCartAlert(<Alert severity="error">Cannot be shipped to your location! </Alert>);
+		}
+		else {
+			const url = 'http://localhost:4000/api/purchase/addToCart';
+			// POST 
+			const data = { '_id': productId };
+			const options = {
+				method: 'POST',
+				headers: { 'content-type': 'application/x-www-form-urlencoded' },
+				data: qs.stringify(data),
+				url
+			};
+			axios(options).then(function(result){
+				if(result.data.status === "OK") {
+					history.push("/cart")
 				}
 				else {
-					setAlert(<Alert severity="error">{result.data.errorMessage}! </Alert>);
+					if(result.data.errorMessage === "Unauthorized") {
+						store.setOpenLoginModal();
+					}
+					else {
+						setCartAlert(<Alert severity="error">{result.data.errorMessage}! </Alert>);
+					}
 				}
-			}
-		});
+			});
+		}
     };
 
 
@@ -142,16 +165,19 @@ export default function ProductPage() {
                     	Condition: {condition}
 					</div>
 					<div style={{ paddingTop: '30px', textDecoration: 'none', fontFamily: 'Quicksand', fontSize: '20px', color: 'black' }}>
-                    	Seller: <div onClick={() => { handleViewProfile(seller) }} style={{ cursor: 'pointer', color: '#879ED9'}}><u>{seller}</u></div>
+                    	Seller: <div onClick={() => { handleViewProfile(seller) }} style={{ display: 'inline-block', cursor: 'pointer', color: '#879ED9'}}>{seller}</div>
 					</div>
 					
 					<div style={{ paddingTop: '60px', textDecoration: 'none', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '45px', color: 'black', textAlign: 'right' }}>
-                    	{cost} Algo
+						{cost} Algo 
 					</div>
-					<Button onClick={handleAddToCart} className="add-to-cart-button" style={{ background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
+					<div style={{ paddingBottom: '30px', fontSize: '20px', textAlign: 'right' }}>
+						{shippingPrice? "Shipping Price: $":"Shipping not included"}{shippingPrice}
+					</div>
+					<Button onClick={handleAddToCart} className="add-to-cart-button" style={{ background: 'black', color: 'white', width: '32vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
 						Add to Cart
 					</Button>
-					{alert}
+					{cartAlert}
 					<div style={{ paddingTop: '40px', fontFamily: 'Quicksand', fontWeight: '500', fontSize: '25px', color: 'black' }}>
                     	<u> Return &#38; Refund Policy </u>
 					</div>
@@ -163,7 +189,7 @@ export default function ProductPage() {
                     	<u> Shipping Info </u>
 					</div>
 					<div style={{ paddingTop: '10px', paddingBottom: '80px', fontFamily: 'Quicksand', fontSize: '20px', color: 'black', textAlign: 'right' }}>
-						Standard 3-Day Priority Shipping through USPS. Shipping costs varies based on location
+						{shippingService} Shipping through USPS. Shipping costs varies based on location
 					</div>
 				</div>
 			</div>

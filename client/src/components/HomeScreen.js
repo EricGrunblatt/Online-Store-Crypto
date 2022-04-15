@@ -1,9 +1,10 @@
 import React from "react";
-import { useState, useContext, useMemo } from "react";
+import { useState, useContext, useMemo, useEffect } from "react";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { Select, MenuItem, FormControl, InputLabel } from '@mui/material'
@@ -29,6 +30,28 @@ export default function HomeScreen() {
     const [minPrice, setMinPrice] = useState("");
     const [maxPrice, setMaxPrice] = useState("");
     const [sort, setSort] = useState("");
+    const [isVisible, setIsVisible] = useState(false);
+
+    useEffect(() => {
+        const toggleVisibility = () => {
+            if(window.pageYOffset > 50) {
+                setIsVisible(true);
+            } else {
+                setIsVisible(false);
+            }
+        };
+
+        window.addEventListener("scroll", toggleVisibility);
+
+        return () => window.removeEventListener("scroll", toggleVisibility);
+    }, []);
+
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    }
 
     /* MAKES AN ARRAY TO SHOW THE 3 NEWEST ITEMS */
     let fullNewItems = store.newItems;
@@ -101,7 +124,6 @@ export default function HomeScreen() {
         }
         setCheckedCon(updatedList);
     };
-
 
     /* OPEN/CLOSE FILTER BY CATEGORY SECTION */
     let catButton = "";
@@ -452,6 +474,13 @@ export default function HomeScreen() {
                     onPageChange={page => setCurrentPage(page)}
                 />
             </Box>
+            <div style={{ bottom: '25px', left: '25px', position: 'fixed' }}>
+                {isVisible && (
+                    <div style={{ justifyContent: 'center', textAlign: 'center', alignItems: 'center', borderRadius: '10px', background: 'black', color: 'white', width: '50px', height: '50px', boxShadow: '0px 1px 5px 1px rgba(0, 0, 0, 0.2)' }} onClick={() => { scrollToTop() }}>
+                        <ArrowUpwardIcon style={{ marginTop: '8px', color: 'white', fontSize: '30px' }}></ArrowUpwardIcon>
+                    </div>
+                )}
+            </div>
             <LoginModal />
             <RegisterModal />
             <AccountErrorModal />
