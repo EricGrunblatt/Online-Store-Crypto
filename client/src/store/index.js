@@ -331,10 +331,17 @@ function GlobalStoreContextProvider(props) {
 
     // SETS ID FOR BUYER ADDRESS MODAL
     store.markBuyerAddress = async function (id) {
-        storeReducer({
-            type: GlobalStoreActionType.MARK_BUYER_ADDRESS,
-            payload: id
-        });
+        let json = {
+            productId: id
+        }
+        let response = await api.getShippingInfo(json);
+        if(response.data.status === "OK") {
+            let user = response.data.user;
+            storeReducer({
+                type: GlobalStoreActionType.MARK_BUYER_ADDRESS,
+                payload: user
+            });
+        }
     }
 
     // NO BUYER ADDRESS BEING SHOWN

@@ -29,6 +29,7 @@ export const updateListingProduct = (payload) => api.post('/product/updateListin
 export const getListingProductsForUser = () => api.post('/product/getListingProductsForUser');
 export const getOrderedProductsForUser = () => api.post('/product/getOrderedProductsForUser');
 export const writeReview = (payload) => api.post('/user/writeReview', payload);
+export const getShippingInfo = (payload) => api.post('/product/getShippingInfo', payload);
 
 // ALL REQUESTS FOR WALLET
 export const addWallet = (payload) => api.post('/wallet/addWallet', payload);
@@ -54,6 +55,7 @@ const apis = {
     addListingProduct,
     getListingProductsForUser,
     writeReview,
+    getShippingInfo,
 
     addWallet,
     removeWallet

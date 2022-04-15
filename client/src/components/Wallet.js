@@ -9,11 +9,11 @@ export default function Wallet() {
     const [wallets, setWallets] = useState([]);
     const [accountAddress, setAccountAddress] = useState("");
 
-    /* GET PRODUCTS BY USER ID */
+    /* GET WALLET BY USER ID */
     useEffect(() => {
         async function fetchData() {
             try{
-                // getSellingProductsForUser
+                // getWalletForUser
                 const url = 'http://localhost:4000/api/wallet/getWallets';
                 // POST 
                 const options = {
@@ -32,8 +32,6 @@ export default function Wallet() {
         fetchData()
     },[]);
 
-    console.log(wallets);
-
     const handleAddWallet = async function () {
         let json = {
             name: "My Wallet",
@@ -43,6 +41,18 @@ export default function Wallet() {
         let response = await api.addWallet(json);
         if(response.data.status === "OK") {
             alert("My Wallet successfully added");
+            // getWalletForUser
+            const url = 'http://localhost:4000/api/wallet/getWallets';
+            // POST 
+            const options = {
+                method: 'POST',
+                headers: { 'content-type': 'application/x-www-form-urlencoded' },
+                url
+            };
+            axios(options).then(function(result) {
+                console.log(result.data.wallets);
+                setWallets(result.data.wallets);
+            });
         } else if (response.data.status === "ERROR") {
             alert(response.data.errorMessage);
         }
@@ -51,11 +61,25 @@ export default function Wallet() {
 
     const handleRemoveWallet = async function (id) {
         let json = {
-            walletId: ""
+            walletId: id
         };
         let response = await api.removeWallet(json);
         if(response.data.status === "OK") {
             alert("My Wallet successfully removed");
+            // getWalletForUser
+            const url = 'http://localhost:4000/api/wallet/getWallets';
+            // POST 
+            const options = {
+                method: 'POST',
+                headers: { 'content-type': 'application/x-www-form-urlencoded' },
+                url
+            };
+            axios(options).then(function(result) {
+                console.log(result.data.wallets);
+                setWallets(result.data.wallets);
+            });
+        } else if (response.data.status === "ERROR") {
+            alert(response.data.errorMessage);
         }
     }
 
@@ -65,21 +89,21 @@ export default function Wallet() {
                 <u> Wallet </u>
             </div>
             <div style={{ margin: '50px 0% 0px 5%', width: '90%', height: '500px', background: 'black', borderRadius: '20px', textAlign: 'center' }}>
-                {wallets.length > 0 ? 
-                    <div style={{ marginTop: '20px' }}>Account ID: </div>:
-                    <div style={{ alignContent: 'center' }}>
+                <div>
+                    {wallets.length > 0 ? 
+                        <div style={{ color: 'white', height: '40px', paddingTop: '35px', fontSize: '25px', fontFamily: 'Quicksand' }}>Account ID: {wallets[0]._id}</div>:
                         <TextField 
                             value={accountAddress}
                             onChange={(event) => { setAccountAddress(event.target.value) }}
                             style={{ marginTop: '20px', width: '350px', background: 'white' }}
                             placeholder="Enter Wallet ID">
-                        </TextField>
-                    </div>
-                }
+                        </TextField>        
+                    }
+                </div>
                 <img src={algo} alt="" style={{ margin: '50px 0px 0px 0%', width: '200px', height: '200px' }}></img>
                 <div className="add-remove-wallet" style={{ justifyContent: 'center', textAlign: 'center', margin: '90px 0px 0px 0px' }}>
                     {wallets.length > 0 ? 
-                        <Button onClick={() => { handleRemoveWallet("") }} style={{ background: 'white', color: 'black', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
+                        <Button onClick={() => { handleRemoveWallet(wallets[0]._id) }} style={{ background: 'white', color: 'black', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
                             Remove Wallet
                         </Button>:
                         <Button onClick={() => { handleAddWallet() }} style={{ background: 'white', color: 'black', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>

@@ -28,13 +28,16 @@ const style = {
     pb: 3,
   };
 
-function TrackingInfoModal(props) {
+function TrackingInfoModal() {
     const { store } = useContext(GlobalStoreContext);
 
     let isOpen = false;
+    let buyerInfo = "";
 
     if(store.buyerAddress) {
         isOpen = true;
+        buyerInfo = store.buyerAddress[0];
+        console.log(store.buyerAddress[0]);
     }
     
     function handleCloseModal() {
@@ -54,10 +57,10 @@ function TrackingInfoModal(props) {
                     <h1 className="dialog-header">
                         Shipping Label Information
                     </h1>
-                    <div style={{ color: 'black', fontFamily: 'Quicksand', fontSize: '25px'}}>Buyer Name: </div>
-                    <div style={{ color: 'black', fontFamily: 'Quicksand', fontSize: '25px'}}>Address Line 1: </div>
-                    <div style={{ color: 'black', fontFamily: 'Quicksand', fontSize: '25px'}}>Address Line 2: </div>
-                    <div style={{ color: 'black', fontFamily: 'Quicksand', fontSize: '25px'}}>City, State, Zip Code:</div>
+                    <div style={{ color: 'black', fontFamily: 'Quicksand', fontSize: '25px'}}>{buyerInfo.firstName + " " + buyerInfo.lastName}</div>
+                    <div style={{ color: 'black', fontFamily: 'Quicksand', fontSize: '25px'}}>{buyerInfo.addressFirstLine}</div>
+                    <div style={{ color: 'black', fontFamily: 'Quicksand', fontSize: '25px'}}>{buyerInfo.addressSecondLine}</div>
+                    <div style={{ color: 'black', fontFamily: 'Quicksand', fontSize: '25px'}}>{buyerInfo.city + ", " + buyerInfo.state + ", " + buyerInfo.zipcode}</div>
                     <div style={{ color: 'black', fontFamily: 'Quicksand', fontSize: '25px'}}>United States </div>
                     <Button 
                         style={{ margin: '30px 0px 30px 0px', background: 'black', color: 'white', fontFamily: 'Quicksand', fontSize: '18px', width: '150px' }}

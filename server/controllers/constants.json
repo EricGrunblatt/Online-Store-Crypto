@@ -38,7 +38,8 @@
 		"productIsSold": "PRODUCT IS SOLD",
 		"reviewSpecifiedButNotFound": "REVIEW SPECIFIED BUT NOT FOUND",
 		"failedToGetImages": "FAILED TO GET IMAGES",
-		"failedToGetShippingPrice":"FAILED TO GET SHIPPING PRICE"
+		"failedToGetShippingPrice":"FAILED TO GET SHIPPING PRICE",
+		"productHasNotSold": "PRODUCT HAS NOT SOLD"
 	},
 	"purchase": {
 		"missingRequiredField": "MISSING REQUIRED FIELD",
