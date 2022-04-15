@@ -474,10 +474,10 @@ export default function HomeScreen() {
                     onPageChange={page => setCurrentPage(page)}
                 />
             </Box>
-            <div style={{ bottom: '25px', left: '25px', position: 'fixed' }}>
+            <div style={{ cursor: 'pointer', bottom: '25px', left: '25px', position: 'fixed' }}>
                 {isVisible && (
-                    <div style={{ justifyContent: 'center', textAlign: 'center', alignItems: 'center', borderRadius: '10px', background: 'black', color: 'white', width: '50px', height: '50px', boxShadow: '0px 1px 5px 1px rgba(0, 0, 0, 0.2)' }} onClick={() => { scrollToTop() }}>
-                        <ArrowUpwardIcon style={{ marginTop: '8px', color: 'white', fontSize: '30px' }}></ArrowUpwardIcon>
+                    <div style={{ justifyContent: 'center', textAlign: 'center', alignItems: 'center', borderRadius: '10px', background: '#FFBD59', color: 'white', width: '50px', height: '50px', boxShadow: '0px 1px 5px 1px rgba(0, 0, 0, 0.2)' }} onClick={() => { scrollToTop() }}>
+                        <ArrowUpwardIcon style={{ marginTop: '8px', color: 'black', fontSize: '30px' }}></ArrowUpwardIcon>
                     </div>
                 )}
             </div>
