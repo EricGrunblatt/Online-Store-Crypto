@@ -71,6 +71,10 @@ getCatalog = async (req, res) => {
 		productQueryArray.push({price: {$lte: maxPrice}})
 	}
 
+	/** Insert additional checks for products here */
+
+	productQueryArray.push({buyerUsername: null})
+
 	if (productQueryArray.length > 0)
 		productQuery.$and = productQueryArray
 
@@ -105,7 +109,11 @@ getCatalog = async (req, res) => {
 	let json = {}
 	let products = {}
 	try {
-		products = await Product.find(productQuery).lean().sort(sortQuery).select(productSelect)
+		products = await Product
+			.find(productQuery)
+			.lean()
+			.sort(sortQuery)
+			.select(productSelect)
 
 		products = await Promise.all(products.map(async (product) => {
 			const image = await getProductFirstImage(product);
