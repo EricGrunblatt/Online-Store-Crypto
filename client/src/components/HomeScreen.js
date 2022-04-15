@@ -400,7 +400,7 @@ export default function HomeScreen() {
                             </div>
                         ))}    
                     </div>
-                    <Button data-right-new-arrow disabled={index===2} onClick={() => { handleNewRight() }} style={{ color: index === 2 ? "rgba(0, 0, 0, 0.3)" : "black", cursor: 'pointer', margin: '10px 0px 0px 92vw', display: 'flex', position: 'absolute', minWidth: '30px', maxWidth: '30px' }}>
+                    <Button data-right-new-arrow disabled={index===numPages-1} onClick={() => { handleNewRight() }} style={{ color: index === numPages-1 ? "rgba(0, 0, 0, 0.3)" : "black", cursor: 'pointer', margin: '10px 0px 0px 92vw', display: 'flex', position: 'absolute', minWidth: '30px', maxWidth: '30px' }}>
                         <ArrowForwardIosIcon></ArrowForwardIosIcon>
                     </Button>
                       

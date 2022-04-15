@@ -90,8 +90,7 @@ export default function NavigationBar() {
     }
 
     function handleHome() {
-        let json = {};
-        store.loadItems(json);
+        store.initialLoad();
         history.push("/");
     }
 

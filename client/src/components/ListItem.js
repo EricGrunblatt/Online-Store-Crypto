@@ -307,8 +307,12 @@ export default function ListItem(){
         formData.append("image6", file6);
         formData.append("image7", file7);
         const response = await api.addListingProduct(formData);
-        const id = response.data.product._id;
-        history.push(generatePath("/product/:id", { id }));
+        if(response.data.status === "OK") {
+            const id = response.data.product._id;
+            history.push(generatePath("/product/:id", { id }));
+        } else if (response.data.status === "ERROR") {
+            alert(response.data.errorMessage);
+        }
     }
 
     return (
