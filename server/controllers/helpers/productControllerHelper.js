@@ -1,7 +1,7 @@
 const {createAndSaveImage, upload} = require('../../handlers/imageHandler')
 const Image = require('../../models/imageModel')
 const Review = require('../../models/reviewModel')
-const Product = require('../../models/productModel')
+const {Product, ProductState} = require('../../models/productModel')
 
 const productImageFields = [
 	{name: 'image0', maxCount: 1},

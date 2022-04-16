@@ -329,6 +329,21 @@ function GlobalStoreContextProvider(props) {
         });
     }
 
+    // DELETES LISTING
+    store.deleteListing = async function (id) {
+        let json = {
+            _id: id
+        }
+        let response = await api.deleteListing(json);
+        if(response.data.status === "OK") {
+            alert("Listing deleted");
+            store.unmarkListingDelete();
+            history.push("/listings");
+        } else if (response.data.status === "ERROR") {
+            alert(response.data.errorMessage);
+        }
+    }
+
     // SETS ID FOR BUYER ADDRESS MODAL
     store.markBuyerAddress = async function (id) {
         let json = {

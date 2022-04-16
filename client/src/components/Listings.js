@@ -26,7 +26,10 @@ export default function Listings() {
                     url
                 };
                 axios(options).then(function(result) {
-                    setSellingItems(result.data.products);
+                    let array = result.data.products;
+                    array = array.filter(index => index.state === "LISTED");
+                    console.log(array);
+                    setSellingItems(array);
                 });
             }
             catch{
@@ -52,7 +55,7 @@ export default function Listings() {
 							<div onClick={() => { history.push("/product/" + index._id) }} style={{ fontSize: '50px', fontWeight: 'bold', cursor: 'pointer' }}> {index.name}</div>
 							<div style={{ marginTop: '3px', fontSize: '30px' }}>{index.price}&nbsp;Algo</div>
 							<div style={{ marginTop: '3px', fontSize: '20px' }}>Seller:&nbsp;{index.sellerUsername}</div>
-							{index.dateSold === undefined ? <u onClick={() => { history.push("/editItem/" + index._id) }} style={{ marginTop: '3px', fontSize: '20px', cursor: 'pointer', color: 'red', }}>Edit</u>
+							{index.dateSold === undefined || index.dateSold === null ? <u onClick={() => { history.push("/editItem/" + index._id) }} style={{ marginTop: '3px', fontSize: '20px', cursor: 'pointer', color: 'red', }}>Edit</u>
 								: index.buyerUsername !== null ? 
                                 <div style={{ display: 'flex', marginTop: '3px', fontSize: '20px'}}>
                                     <TextField id={"tracking" + index._id} placeholder="Tracking Number" style={{ width: '230px' }}></TextField>
@@ -74,9 +77,9 @@ export default function Listings() {
 
     let index = 0;
     while(index < sellingItems.length) {
-        if(sellingItems[index].dateSold === null) {
+        if(sellingItems[index].dateSold === null || sellingItems[index].dateSold === undefined) {
             index++;
-        } else if (sellingItems[index].dateSold === undefined) {
+        } else if (sellingItems[index].buyerUsername !== null) {
             let newArray = notShippedItems;
             newArray.push(sellingItems[index]);
             setNotShippedItems(newArray);

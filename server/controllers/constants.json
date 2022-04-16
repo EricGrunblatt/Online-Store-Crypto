@@ -27,7 +27,8 @@
 		"userDidNotPurchaseThisProduct": "USER DID NOT PURCHASE THIS PRODUCT",
 		"reviewAlreadyExists":"REVIEW ALREADY EXISTS",
 		"oldPasswordNotProvided": "OLD PASSWORD NOT PROVIDED",
-		"invalidEmail": "INVALID EMAIL"
+		"invalidEmail": "INVALID EMAIL",
+		"productIsNotSold": "PRODUCT IS NOT SOLD"
 	},
 	"product": {
 		"missingRequiredField": "MISSING REQUIRED FIELD",
@@ -39,7 +40,8 @@
 		"reviewSpecifiedButNotFound": "REVIEW SPECIFIED BUT NOT FOUND",
 		"failedToGetImages": "FAILED TO GET IMAGES",
 		"failedToGetShippingPrice":"FAILED TO GET SHIPPING PRICE",
-		"productHasNotSold": "PRODUCT HAS NOT SOLD"
+		"productIsNotSold": "PRODUCT HAS NOT SOLD",
+		"buyerUsernameIsNull": "BUYER USERNAME IS NULL"
 	},
 	"purchase": {
 		"missingRequiredField": "MISSING REQUIRED FIELD",
