@@ -73,7 +73,7 @@ getCatalog = async (req, res) => {
 
 	/** Insert additional checks for products here */
 
-	productQueryArray.push({buyerUsername: null})
+	productQueryArray.push({state: ProductState.LISTED})
 
 	if (productQueryArray.length > 0)
 		productQuery.$and = productQueryArray
@@ -574,7 +574,40 @@ updateListingProduct = async (req, res) => {
 
 // TODO
 deleteListingProduct = async (req, res) => {
-	console.log("deleteListingProduct")
+	console.log("deleteListingProduct", req.body)
+	const _id = req.body._id;
+	const userId = req.userId;
+
+	let json = {}
+	let user = null
+	let product = null
+	try {
+		if (!userId) {
+			throw "did not get a userId"
+		}
+		else if (!(user = await User.findOne({ _id: userId }))) {
+			json = { status: constants.status.ERROR, errorMessage: constants.product.userDoesNotExist };
+		}
+		else if (!(product = await Product.findOne({ _id: _id, state: ProductState.LISTED }))) {
+			json = { status: constants.status.ERROR, errorMessage: constants.product.productDoesNotExist }
+		}
+		else if (product.sellerUsername !== user.username) {
+			json = { status: constants.status.ERROR, errorMessage: constants.product.youAreNotTheSeller }
+		}
+		else {
+			product.state = ProductState.DELETED
+			await product.save()
+			json = { status: constants.status.OK }
+		}
+		console.log("RESPONSE: ", json);
+		res.status(200).json(json).send();
+	}
+	catch (err) {
+		console.log(err);
+		res.status(500).send(constants.status.FATAL_ERROR);
+	}
+
+
 }
 
 // TODO
@@ -717,14 +750,17 @@ getShippingInfo = async (req, res) => {
 		else if (product.sellerUsername !== user.username) {
 			json = { status: constants.status.ERROR, errorMessage: constants.product.youAreNotTheSeller }
 		}
+		else if (product.state !== ProductState.SOLD) {
+			json = { status: constants.status.ERROR, errorMessage: constants.product.productIsNotSold }
+		}
 		else if (!(buyerUsername = product.buyerUsername)) {
-			json = { status: constants.status.ERROR, errorMessage: constants.product.productHasNotSold }
+			json = { status: constants.status.ERROR, errorMessage: constants.product.buyerUsernameIsNull }
 		}
 		else if (!(buyerUser = await User.find({username: buyerUsername}).select(buyerUserSelect))) {
 			json = { status: constants.status.ERROR, errorMessage: cosntants.product.buyerUserDoesNotExist }
 		}
 		else {
-			json = { status: constants.status.OK, user: buyerUser}
+			json = { status: constants.status.OK, user: buyerUser }
 		}
 		console.log("RESPONSE: ", json)
 		res.status(200).send(json)

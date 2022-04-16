@@ -236,6 +236,9 @@ writeReview = async (req, res) => {
 		else if (!(product = await Product.findById(productId))) {
 			json = { status: constants.status.ERROR, errorMessage: constants.user.productDoesNotExist };
 		}
+		else if (product.state !== ProductState.SOLD) {
+			json = { status: constants.status.ERROR, errorMessage: constants.user.productIsNotSold };
+		}
 		else if (product.buyerUsername !== user.username) {
 			json = { status: constants.status.ERROR, errorMessage: constants.user.userDidNotPurchaseThisProduct };
 		}
