@@ -112,8 +112,6 @@ export default function NavigationBar() {
         }
     }
 
-
-
     /* MENU DISPLAY */
     const loggedInMenu = 
         <Menu
