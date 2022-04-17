@@ -323,6 +323,14 @@ getListingProductsForUser = async (req, res) => {
 			json = { status: constants.status.ERROR, errorMessage: constants.product.userDoesNotExist }
 		}
 		else {
+			const findOptions = {
+				sellerUsername: user.username,
+				$or: [
+					{state: ProductState.LISTED},
+					{state: ProductState.SOLD}
+				]
+			}
+
 			const selectOptions = {
 				_id: 1,
 				name: 1,
@@ -330,10 +338,11 @@ getListingProductsForUser = async (req, res) => {
 				shippingPrice: 1,
 				sellerUsername: 1,
 				imageIds: 1,
-				dateListed: "$createdAt"
+				dateListed: "$createdAt",
+				trackingNumber: 1,
 			}
 
-			let products = await Product.find({ sellerUsername: user.username }).lean().select(selectOptions)
+			let products = await Product.find(findOptions).lean().select(selectOptions)
 
 			products = await Promise.all(products.map(async (product) => {
 				const image = await getProductFirstImage(product);
