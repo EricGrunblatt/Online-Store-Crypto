@@ -774,6 +774,47 @@ getShippingInfo = async (req, res) => {
 	}
 }
 
+// TODO
+setTrackingNumber = async (req, res) => {
+	const userId = req.userId
+	const productId = req.body.productId
+	const trackingNumber = req.body.trackingNumber
+
+	let json = {}
+	let user = null
+	let product = null
+	try {
+		if (!userId) {
+			throw constants.error.didNotGetUserId
+		}
+		else if (!(user = await User.findById(userId))) {
+			json = { status: constants.status.ERROR, errorMessage: constants.product.userDoesNotExist }
+		}
+		else if (!(product = await Product.findById(productId))) {
+			json = { status: constants.status.ERROR, errorMessage: constants.product.productDoesNotExist }
+		}
+		else if (product.sellerUsername !== user.username) {
+			json = { status: constants.status.ERROR, errorMessage: constants.product.youAreNotTheSeller }
+		}
+		else if (product.state !== ProductState.SOLD) {
+			json = { status: constants.status.ERROR, errorMessage: constants.product.productIsNotSold }
+		}
+		else if (product.trackingNumber) {
+			json = { status: constants.status.ERROR, errorMessage: constants.product.trackingNumberIsAlreadySet }
+		}
+		else {
+			product.trackingNumber = trackingNumber
+			await product.save()
+			json = { status: constants.status.OK }
+		}
+		console.log("RESPONSE: ", json)
+		res.status(200).send(json)
+	} catch (err) {
+		console.log(err)
+		res.status(500).send(constants.status.FATAL_ERROR)
+	}
+}
+
 module.exports = {
 	getCatalog,
 	getProduct,
@@ -786,4 +827,5 @@ module.exports = {
 	deleteListingProduct,
 	getShippingPrice,
 	getShippingInfo,
+	setTrackingNumber,
 }

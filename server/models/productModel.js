@@ -27,7 +27,8 @@ const ProductSchema = new Schema(
 		reviewId:			{type: ObjectId, default: null},
 		imageIds:			{type: [ObjectId], required: true},
 		state:				{type: String, default: ProductState.LISTED},
-		reserverUsername:	{type: String, default: null}
+		reserverUsername:	{type: String, default: null},
+		trackingNumber:		{type: String, default: null}
 	},
 	{ timestamps: true },
 )
