@@ -699,9 +699,10 @@ getShippingPrice = async (req, res) => {
 				if (index!=-1){
 					service=service.substring(0,index);
 				}
+				let algo=1.35692;
 				json = {
 					status: constants.status.OK,
-					shippingPrice: price,
+					shippingPrice: price*algo,
 					shippingService: service
 				}
 			}
