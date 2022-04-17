@@ -323,6 +323,14 @@ getListingProductsForUser = async (req, res) => {
 			json = { status: constants.status.ERROR, errorMessage: constants.product.userDoesNotExist }
 		}
 		else {
+			const findOptions = {
+				sellerUsername: user.username,
+				$or: [
+					{state: ProductState.LISTED},
+					{state: ProductState.SOLD}
+				]
+			}
+
 			const selectOptions = {
 				_id: 1,
 				name: 1,
@@ -330,10 +338,11 @@ getListingProductsForUser = async (req, res) => {
 				shippingPrice: 1,
 				sellerUsername: 1,
 				imageIds: 1,
-				dateListed: "$createdAt"
+				dateListed: "$createdAt",
+				trackingNumber: 1,
 			}
 
-			let products = await Product.find({ sellerUsername: user.username }).lean().select(selectOptions)
+			let products = await Product.find(findOptions).lean().select(selectOptions)
 
 			products = await Promise.all(products.map(async (product) => {
 				const image = await getProductFirstImage(product);
@@ -775,6 +784,47 @@ getShippingInfo = async (req, res) => {
 	}
 }
 
+// TODO
+setTrackingNumber = async (req, res) => {
+	const userId = req.userId
+	const productId = req.body.productId
+	const trackingNumber = req.body.trackingNumber
+
+	let json = {}
+	let user = null
+	let product = null
+	try {
+		if (!userId) {
+			throw constants.error.didNotGetUserId
+		}
+		else if (!(user = await User.findById(userId))) {
+			json = { status: constants.status.ERROR, errorMessage: constants.product.userDoesNotExist }
+		}
+		else if (!(product = await Product.findById(productId))) {
+			json = { status: constants.status.ERROR, errorMessage: constants.product.productDoesNotExist }
+		}
+		else if (product.sellerUsername !== user.username) {
+			json = { status: constants.status.ERROR, errorMessage: constants.product.youAreNotTheSeller }
+		}
+		else if (product.state !== ProductState.SOLD) {
+			json = { status: constants.status.ERROR, errorMessage: constants.product.productIsNotSold }
+		}
+		else if (product.trackingNumber) {
+			json = { status: constants.status.ERROR, errorMessage: constants.product.trackingNumberIsAlreadySet }
+		}
+		else {
+			product.trackingNumber = trackingNumber
+			await product.save()
+			json = { status: constants.status.OK }
+		}
+		console.log("RESPONSE: ", json)
+		res.status(200).send(json)
+	} catch (err) {
+		console.log(err)
+		res.status(500).send(constants.status.FATAL_ERROR)
+	}
+}
+
 module.exports = {
 	getCatalog,
 	getProduct,
@@ -787,4 +837,5 @@ module.exports = {
 	deleteListingProduct,
 	getShippingPrice,
 	getShippingInfo,
+	setTrackingNumber,
 }
