@@ -227,6 +227,7 @@ getOrderedProductsForUser = async (req, res) => {
 
 			json = { status: constants.status.OK, products: products }
 		}
+		console.log("RESPONSE: ", json)
 		res.status(200).send(json)
 	} catch (err) {
 		console.log(err)
@@ -277,7 +278,7 @@ getCartProductsForUser = async (req, res) => {
 			}
 
 			let products = await getProducts(user.cartProductIds, selectOptions)
-
+			
 			products = await Promise.all(products.map(async (product) => {
 				const image = await getProductFirstImage(product);
 				product.image = image
@@ -287,6 +288,7 @@ getCartProductsForUser = async (req, res) => {
 
 			json = { status: constants.status.OK, products: products }
 		}
+		console.log("RESPONSE: ", json)
 		res.status(200).send(json)
 	} catch (err) {
 		console.log(err)
@@ -343,6 +345,7 @@ getListingProductsForUser = async (req, res) => {
 
 			json = { status: constants.status.OK, products: products }
 		}
+		console.log("RESPONSE: ", json)
 		res.status(200).send(json)
 	} catch (err) {
 		console.log(err)
@@ -399,6 +402,7 @@ getSellingProductsForUser = async (req, res) => {
 
 			json = { status: constants.status.OK, products: products }
 		}
+		console.log("RESPONSE: ", json)
 		res.status(200).send(json)
 	} catch (err) {
 		console.log(err)
@@ -696,9 +700,10 @@ getShippingPrice = async (req, res) => {
 				if (index!=-1){
 					service=service.substring(0,index);
 				}
+				let algo=1.35692;
 				json = {
 					status: constants.status.OK,
-					shippingPrice: price,
+					shippingPrice: price*algo,
 					shippingService: service
 				}
 			}

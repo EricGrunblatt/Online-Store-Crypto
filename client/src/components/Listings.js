@@ -26,10 +26,8 @@ export default function Listings() {
                     url
                 };
                 axios(options).then(function(result) {
-                    let array = result.data.products;
-                    array = array.filter(index => index.state === "LISTED");
-                    console.log(array);
-                    setSellingItems(array);
+                    console.log(result.data.products);
+                    setSellingItems(result.data.products);
                 });
             }
             catch{
