@@ -41,7 +41,8 @@
 		"failedToGetImages": "FAILED TO GET IMAGES",
 		"failedToGetShippingPrice":"FAILED TO GET SHIPPING PRICE",
 		"productIsNotSold": "PRODUCT HAS NOT SOLD",
-		"buyerUsernameIsNull": "BUYER USERNAME IS NULL"
+		"buyerUsernameIsNull": "BUYER USERNAME IS NULL",
+		"trackingNumberIsAlreadySet": "TRACKING NUMBER IS ALREADY SET"
 	},
 	"purchase": {
 		"missingRequiredField": "MISSING REQUIRED FIELD",
