@@ -693,7 +693,6 @@ getShippingPrice = async (req, res) => {
 			}
 			else {
 				let detail = result["RateV4Response"]["Package"][0]["Postage"][0];
-				console.log("detail:",JSON.stringify(result["RateV4Response"]));
 				let price=detail["Rate"][0];
 				let service=detail["MailService"][0];
 				let index=service.indexOf("&");
