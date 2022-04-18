@@ -44,16 +44,8 @@ export default function Cart() {
     },[]);
 
 	for(let i = 0; i < shippingPrices.length; i++) {
-        let price = shippingPrices[i].toString();
-        let array = price.split(".");
-        let newPrice = "";
-        if(array.length > 1) {
-            newPrice = array[0] + "." + array[1].substring(0,2);
-        } else {
-            newPrice = array[0];
-        }
-        newPrice = parseFloat(newPrice);
-        shippingPrices[i] = newPrice;
+        let price = parseFloat(shippingPrices[i]).toFixed(2);
+        shippingPrices[i] = price;
     }
 
 	async function handleDeleteCartItem(productId) {

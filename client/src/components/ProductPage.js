@@ -57,19 +57,8 @@ export default function ProductPage() {
 					else {
 						setCost(currProduct.price);
 
-						let price = shippingPrice.data.shippingPrice.toString();
-						let array = price.split(".");
-						let newPrice = "";
-						if(array.length > 1) {
-							newPrice = array[0] + "." + array[1].substring(0,2);
-							newPrice = parseFloat(newPrice);
-							console.log(newPrice);
-							setShippingPrice(newPrice);
-						} else {
-							newPrice = array[0];
-							newPrice = parseFloat(newPrice);
-							setShippingPrice(newPrice);
-						}
+						let price = parseFloat(shippingPrice.data.shippingPrice).toFixed(2);
+						setShippingPrice(price);
 						setShippingService(shippingPrice.data.shippingService);
 						// setShippingAlert("(shipping included)");
 					}
