@@ -1,8 +1,9 @@
 const {Product, ProductState} = require("../../models/productModel")
+const Cart = require("../../models/cartModel")
 
-calculatePriceOfCart = async (user) => {
+calculatePriceOfCart = async (cartProductIds) => {
 	let price = 0;
-	for (const productId of user.cartProductIds) {
+	for (const productId of cartProductIds) {
 		const product = await Product.findById(productId)
 		price += product.price + product.shippingPrice
 	}

@@ -4,6 +4,7 @@ const User = require('../models/userModel')
 const { coingateClient } = require('../handlers/purchaseHandler')
 const { calculatePriceOfCart } = require('./helpers/purchaseControllerHelper')
 const dotenv = require('dotenv')
+const Cart = require('../models/cartModel')
 
 dotenv.config()
 
@@ -29,16 +30,22 @@ addToCart = async (req, res) => {
 		else if (! (product = await Product.findById(_id))) {
 			json = {status: constants.status.ERROR, errorMessage: constants.purchase.productDoesNotExist}
 		}
-		else if (user.cartProductIds.includes(_id)) {
-			json = {status: constants.status.ERROR, errorMessage: constants.purchase.cartAlreadyIncludesProduct}
-		}
 		else if (product.sellerUsername === user.username) {
 			json = {status: constants.status.ERROR, errorMessage: constants.purchase.userOwnsThisItem}
 		}
 		else {
-			user.cartProductIds.push(_id)
-			user.save()
-			json = {status: constants.status.OK}
+			const cart = new Cart({buyerUsername: user.username, productId: _id})
+			try {
+				await cart.save()
+				json = {status: constants.status.OK}
+			} catch (err) {
+				if (err.name === "MongoServerError" && err.code === 11000) {
+					json = {status: constants.status.ERROR, errorMessage: constants.purchase.cartAlreadyIncludesProduct}
+				}
+				else {
+					json = {status: constants.status.ERROR, errorMessage: "errorCode=" + err.code}
+				}
+			}
 		}
 		console.log("RESPONSE: ", json)
 		res.status(200).json(json)
@@ -56,6 +63,7 @@ removeFromCart = async (req, res) => {
 
 	let json = {}
 	let user = null
+	let cartItem = null
 	try {
 		if (!userId) {
 			throw constants.error.didNotGetUserId
@@ -69,13 +77,10 @@ removeFromCart = async (req, res) => {
 		else if (! (await Product.findById(_id))) {
 			json = {status: constants.status.ERROR, errorMessage: constants.purchase.productDoesNotExist}
 		}
-		else if (! user.cartProductIds.includes(_id)) {
-			json = {status: constants.status.ERROR, errorMessage: constants.purchase.cartDoesNotIncludeProduct}
+		else if (! (cartItem = await Cart.findOneAndRemove({buyerUsername: user.username, productId: _id}))) {
+			json = {status: constants.status.ERROR, errorMessage: constants.purchase.cartItemDoesNotExist}
 		}
 		else {
-			const indexOfProductId = user.cartProductIds.indexOf(_id)
-			user.cartProductIds.splice(indexOfProductId, 1)
-			user.save()
 			json = {status: constants.status.OK}
 		}
 		console.log("RESPONSE: ", json)
@@ -94,6 +99,7 @@ purchaseFromCart = async (req, res) => {
 	
 	let json = {}
 	let user = null
+	let cartItems = null
 	try {
 		if (!userId) {
 			throw constants.error.didNotGetUserId
@@ -101,7 +107,10 @@ purchaseFromCart = async (req, res) => {
 		else if (! (user = await User.findById(userId))) {
 			json = {status: constants.status.ERROR, errorMessage: constants.purchase.userDoesNotExist}
 		}
-		else if (user.cartProductIds.length === 0) {
+		else if (! (cartItems = await Cart.find({buyerUsername: user.username}))) {
+			json = {status: constants.status.ERROR, errorMessage: constants.purchase.cartIsEmpty}
+		}
+		else if (cartItems.length === 0) {
 			json = {status: constants.status.ERROR, errorMessage: constants.purchase.cartIsEmpty}
 		}
 		else {
