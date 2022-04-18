@@ -5,6 +5,7 @@ import axios from 'axios';
 import ListingsDeleteModal from "./ListingsDeleteModal";
 import { TextField, Button } from "@mui/material";
 import TrackingInfoModal from "./TrackingInfoModal";
+import api from '../api';
 
 export default function Listings() {
     const { store } = useContext(GlobalStoreContext);
@@ -89,10 +90,6 @@ export default function Listings() {
             sellingItems.splice(index, 1);
         }
     }
-
-    console.log(sellingItems);
-    console.log(notShippedItems);
-    console.log(soldItems);
     
     if(sellingItems.length === 0) {
         sellingItemsCards = 
@@ -110,13 +107,20 @@ export default function Listings() {
         soldItemsCards = showListCards(soldItems);
     }
 
-    const handleTrackingNumber = (index, trackingNumber) => {
+    const handleTrackingNumber = async function (index, trackingNumber) {
         let trackingString = trackingNumber.value;
+        let productId = index._id;
         if((trackingString.startsWith("94001") && trackingString.length === 22) || (trackingNumber.startsWith("92055") && trackingNumber.length === 22)) {
-            // TODO 
-            // Submit tracking number
-            // Change date so its sold
-            console.log("Tracking Number Success");
+            let json = {
+                productId: productId,
+                trackingNumber: trackingString
+            }
+            let response = await api.setTrackingNumber(json);
+            if(response.data.status === "OK") {
+                console.log("Tracking Number Success");
+            } else if (response.data.status === "ERROR") {
+                alert(response.data.errorMessage);
+            }
         } else {
             alert("Invalid Tracking Number");
         }

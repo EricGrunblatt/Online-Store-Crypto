@@ -35,6 +35,7 @@ export const writeReview = (payload) => api.post('/user/writeReview', payload);
 export const getShippingInfo = (payload) => api.post('/product/getShippingInfo', payload);
 export const getShippingPrice = (payload) => api.post('/product/getShippingPrice', payload, options);
 export const deleteListing = (payload) => api.post('/product/deleteListingProduct', payload);
+export const setTrackingNumber = (payload) => api.post('/product/setTrackingNumber', payload);
 
 // ALL REQUESTS FOR WALLET
 export const addWallet = (payload) => api.post('/wallet/addWallet', payload);
@@ -62,6 +63,7 @@ const apis = {
     getShippingInfo,
     getShippingPrice,
     deleteListing,
+    setTrackingNumber,
 
     addWallet,
     removeWallet
