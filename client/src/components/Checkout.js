@@ -33,7 +33,8 @@ export default function Checkout() {
 					const unresolvedShippingPrices = result.data.products.map(async(product) => {
 						const data = { '_id': product._id };
 						const res = await api.getShippingPrice(qs.stringify(data));
-						return res.data.shippingPrice;
+						return Math.round(+res.data.shippingPrice * 100) / 100;
+						// return res.data.shippingPrice;
 					});
 					setShippingPrices(await Promise.all(unresolvedShippingPrices));
 				});

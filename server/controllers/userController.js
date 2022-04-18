@@ -1,7 +1,7 @@
 const { application } = require('express')
 const bcryptjs = require('bcryptjs')
 const User = require('../models/userModel')
-const Product = require('../models/productModel')
+const {Product, ProductState} = require('../models/productModel')
 const Review = require('../models/reviewModel')
 const constants = require('./constants.json')
 const Image = require('../models/imageModel')
@@ -35,7 +35,7 @@ getProfileByUsername = async (req, res) => {
 			const profileImage = await Image.findById(user.profileImageId)
 				.select({ "_id": 0, "data": 1, "contentType": 1 })
 			// GET USER'S SELLING PRODUCTS
-			const sellingProducts = await Product.find({ sellerUsername: username, buyerUsername: null })
+			const sellingProducts = await Product.find({ sellerUsername: username, state: ProductState.LISTED })
 				.lean()
 				.select({ "_id": 1, "name": 1, "price": 1, "sellerUsername": 1, "dateListed": 1, "imageIds": 1})
 			
@@ -236,6 +236,9 @@ writeReview = async (req, res) => {
 		else if (!(product = await Product.findById(productId))) {
 			json = { status: constants.status.ERROR, errorMessage: constants.user.productDoesNotExist };
 		}
+		else if (product.state !== ProductState.SOLD) {
+			json = { status: constants.status.ERROR, errorMessage: constants.user.productIsNotSold };
+		}
 		else if (product.buyerUsername !== user.username) {
 			json = { status: constants.status.ERROR, errorMessage: constants.user.userDidNotPurchaseThisProduct };
 		}
@@ -257,7 +260,7 @@ writeReview = async (req, res) => {
 			await product.save();
 			json = { "status": constants.status.OK};
 		}
-		console.log("RESPONSE: ", json).send();
+		console.log("RESPONSE: ", json);
 		res.status(200).json(json);
 	}
 	catch (err) {

@@ -52,6 +52,10 @@ router.post('/product/updateListingProduct', auth.verify, productController.upda
 router.post('/product/deleteListingProduct', auth.verify, productController.deleteListingProduct)
 // Get Product Shipping Price
 router.post('/product/getShippingPrice', auth.verify, productController.getShippingPrice)
+// Get Shipping Info
+router.post('/product/getShippingInfo', auth.verify, productController.getShippingInfo)
+// Set Tracking Number
+router.post('/product/setTrackingNumber', auth.verify, productController.setTrackingNumber)
 
 // Add Product to Cart
 router.post('/purchase/addToCart', auth.verify, purchaseController.addToCart)

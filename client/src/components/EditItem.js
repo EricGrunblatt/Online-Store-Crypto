@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect, useRef, useContext } from "react";
-import { TextareaAutosize, TextField, Box, Select, MenuItem } from '@mui/material';
+import { TextareaAutosize, TextField, Box, Select, MenuItem, Alert } from '@mui/material';
 import { FormControl, InputLabel, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useHistory, generatePath } from "react-router-dom";
@@ -31,6 +31,7 @@ export default function EditItem(){
     const [width, setWidth] = useState("");
     const [height, setHeight] = useState("");
     const [weight, setWeight] = useState("");
+	const [editItemAlert, setEditItemAlert] = useState("");
 
     const [image0, setImage0] = useState(null);
     const [image1, setImage1] = useState(null);
@@ -374,57 +375,71 @@ export default function EditItem(){
 
     /* POST EDIT ITEM */
     const handleEditItem = async function() {
+		if(!name || !description || !condition || !categoryTxt || !price || !length || !width || !height ||!weight) {
+			setEditItemAlert(<Alert severity="error">Missing requeired field!</Alert>);
+		}
+		else if(+price > 25.315) {
+			setEditItemAlert(<Alert severity="error">The price cannot exceed 25.315 BTC</Alert>);
+		}
+		else if(+weight > 70) {
+			setEditItemAlert(<Alert severity="error">The package weight cannot exceed 70 pounds.</Alert>);
+		}
+		// TEMP VALUE
+		else if(+length *  +width * +height > 1000) {
+			setEditItemAlert(<Alert severity="error">The package package is too large to be mailed.</Alert>);
+		}
+		else {
+			var categoryTxt = categoryTxts[category - 1]
+			var formData = new FormData();
+			formData.append("_id", productId)
+			formData.append("name", name);
+			formData.append("description", description);
+			formData.append("condition", condition);
+			formData.append("category", categoryTxt);
+			formData.append("price", price);
+			formData.append("boxLength", length);
+			formData.append("boxWidth", width);
+			formData.append("boxHeight", height);
+			formData.append("boxWeight", weight);
 
-        var categoryTxt = categoryTxts[category - 1]
-        var formData = new FormData();
-        formData.append("_id", productId)
-        formData.append("name", name);
-        formData.append("description", description);
-        formData.append("condition", condition);
-        formData.append("category", categoryTxt);
-        formData.append("price", price);
-        formData.append("boxLength", length);
-        formData.append("boxWidth", width);
-        formData.append("boxHeight", height);
-        formData.append("boxWeight", weight);
+			const element0 = document.getElementById('image0')
+			const file0 = element0.files[0]
 
-        const element0 = document.getElementById('image0')
-        const file0 = element0.files[0]
+			const element1 = document.getElementById('image1')
+			const file1 = element1.files[0]
 
-        const element1 = document.getElementById('image1')
-        const file1 = element1.files[0]
+			const element2 = document.getElementById('image2')
+			const file2 = element2.files[0]
 
-        const element2 = document.getElementById('image2')
-        const file2 = element2.files[0]
+			const element3 = document.getElementById('image3')
+			const file3 = element3.files[0]
 
-        const element3 = document.getElementById('image3')
-        const file3 = element3.files[0]
+			const element4 = document.getElementById('image4')
+			const file4 = element4.files[0]
 
-        const element4 = document.getElementById('image4')
-        const file4 = element4.files[0]
+			const element5 = document.getElementById('image5')
+			const file5 = element5.files[0]
 
-        const element5 = document.getElementById('image5')
-        const file5 = element5.files[0]
+			const element6 = document.getElementById('image6')
+			const file6 = element6.files[0]
 
-        const element6 = document.getElementById('image6')
-        const file6 = element6.files[0]
+			const element7 = document.getElementById('image7')
+			const file7 = element7.files[0]
 
-        const element7 = document.getElementById('image7')
-        const file7 = element7.files[0]
+			// HTML file input, chosen by user
+			formData.append("image0", file0);
+			formData.append("image1", file1);
+			formData.append("image2", file2);
+			formData.append("image3", file3);
+			formData.append("image4", file4);
+			formData.append("image5", file5);
+			formData.append("image6", file6);
+			formData.append("image7", file7);
 
-        // HTML file input, chosen by user
-        formData.append("image0", file0);
-        formData.append("image1", file1);
-        formData.append("image2", file2);
-        formData.append("image3", file3);
-        formData.append("image4", file4);
-        formData.append("image5", file5);
-        formData.append("image6", file6);
-        formData.append("image7", file7);
-
-        const response = await api.updateListingProduct(formData);
-        const id = response.data.product._id;
-        history.push(generatePath("/product/:id", { id }));
+			const response = await api.updateListingProduct(formData);
+			const id = response.data.product._id;
+			history.push(generatePath("/product/:id", { id }));
+		}
     }
 
     return (
@@ -535,7 +550,8 @@ export default function EditItem(){
                     </div> 
                     <div className="list-item-button" style={{ margin: 'auto', borderRadius: '10px', textAlign: 'center' }}>
                         <Button type="submit" onClick={handleEditItem} style={{ textAlign: 'center', background: 'white', color: 'black', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '20px', width: '150px', border: 'black 1px solid' }}>Save</Button>
-                    </div> 
+						{editItemAlert}
+					</div> 
                 </div>
             <ListingsDeleteModal></ListingsDeleteModal>
         </div>

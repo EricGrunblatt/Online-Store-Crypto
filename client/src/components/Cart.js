@@ -32,7 +32,8 @@ export default function Cart() {
 					const unresolvedShippingPrices = result.data.products.map(async(product) => {
 						const data = { '_id': product._id };
 						const res = await api.getShippingPrice(qs.stringify(data));
-						return res.data.shippingPrice;
+						return Math.round(+res.data.shippingPrice * 100) / 100;
+						// return res.data.shippingPrice;
 					});
 					setShippingPrices(await Promise.all(unresolvedShippingPrices));
 				});
@@ -90,7 +91,7 @@ export default function Cart() {
 						<div style={{position: 'absolute', margin: '0 0 0 15%'}}>
 							<div onClick={() => { history.push("/product/" + index._id) }} style={{ fontSize: '50px', fontWeight: 'bold', cursor: 'pointer' }}> {index.name}</div>
 							<div style={{ marginTop: '2px', fontSize: '30px' }}>{index.price}&nbsp;Algo</div>
-							<div style={{ marginTop: '3px', fontSize: '15px' }}>(Shipping Price: ${shippingPrices[i]})</div>
+							<div style={{ marginTop: '3px', fontSize: '15px' }}>(Shipping Price: {shippingPrices[i]}Algo)</div>
 							<div style={{ marginTop: '3px', fontSize: '20px' }}>Seller:&nbsp;{index.sellerUsername}</div>
 							<div id={index._id} onClick={handleDeleteModalOpen} style={{ marginTop: '3px', fontSize: '20px', cursor: 'pointer', color: 'red' }}>Remove</div>
 						</div>

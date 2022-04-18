@@ -48,17 +48,15 @@ export default function ProductPage() {
 				const requestShippingPrice = axios.post(urlGetShippingPrice, data, options);
 				axios.all([requestProduct, requestShippingPrice]).then(axios.spread((...responses) => {
 					const currProduct = responses[0].data.product;
-					const shippingPrice = responses[1];
+					const shippingPriceRes = responses[1];
 					// console.log("PRICE: ", shippingPrice.data.status);
-					if(shippingPrice.data.status === "ERROR") {
+					if(shippingPriceRes.data.status === "ERROR") {
 						setCost(currProduct.price);
-						// setShippingAlert("(shipping not included)");
 					}
 					else {
 						setCost(currProduct.price);
-						setShippingPrice(shippingPrice.data.shippingPrice);
-						setShippingService(shippingPrice.data.shippingService);
-						// setShippingAlert("(shipping included)");
+						setShippingPrice(shippingPriceRes.data.shippingPrice);
+						setShippingService(shippingPriceRes.data.shippingService);
 					}
 					
 					setProductName(currProduct.name);
@@ -113,8 +111,6 @@ export default function ProductPage() {
 		}
     };
 
-
-
 	let showImages = 
         <div style={{ width: '40%', margin: '3% 0 0 3%', display: 'grid', gridTemplateColumns: 'repeat(4, 10vw)' }}>
             {itemImages.map((index, indexNum) => (
@@ -135,6 +131,11 @@ export default function ProductPage() {
 		store.getProfile(json);
 	}
 	
+	let showShippingPrice = "Shipping not included";
+	if(shippingPrice) {
+		showShippingPrice = "Shipping Price: " + Math.round(+shippingPrice * 100) / 100 + "Algo";
+	}
+
     return (
 		<Box style={{ position: 'absolute', marginLeft: '10%', marginRight: '10%', marginTop: '60px', width: '79%', minHeight: '450px'}}>
 			<div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 40vw)' }}>
@@ -172,7 +173,7 @@ export default function ProductPage() {
 						{cost} Algo 
 					</div>
 					<div style={{ paddingBottom: '30px', fontSize: '20px', textAlign: 'right' }}>
-						{shippingPrice? "Shipping Price: $":"Shipping not included"}{shippingPrice}
+						{showShippingPrice}
 					</div>
 					<Button onClick={handleAddToCart} className="add-to-cart-button" style={{ background: 'black', color: 'white', width: '32vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
 						Add to Cart

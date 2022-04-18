@@ -1,7 +1,7 @@
 const {createAndSaveImage, upload} = require('../../handlers/imageHandler')
 const Image = require('../../models/imageModel')
 const Review = require('../../models/reviewModel')
-const Product = require('../../models/productModel')
+const {Product, ProductState} = require('../../models/productModel')
 
 const productImageFields = [
 	{name: 'image0', maxCount: 1},
@@ -94,9 +94,10 @@ getProductReview = async (product) => {
 }
 
 getProducts = async (productIds, selectOptions) => {
-	return await Promise.all(productIds.map(async (productId) => {
+	let products = await Promise.all(productIds.map(async (productId) => {
 		return Product.findById(productId).lean().select(selectOptions)
 	}))
+	return products.filter(product => product)
 }
 
 module.exports = {

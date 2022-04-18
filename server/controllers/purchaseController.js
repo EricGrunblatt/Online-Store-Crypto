@@ -1,5 +1,5 @@
 const constants = require('./constants.json')
-const Product = require('../models/productModel')
+const {Product, ProductState} = require('../models/productModel')
 const User = require('../models/userModel')
 const { coingateClient } = require('../handlers/purchaseHandler')
 const { calculatePriceOfCart } = require('./helpers/purchaseControllerHelper')
