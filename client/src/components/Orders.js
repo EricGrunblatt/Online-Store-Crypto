@@ -16,7 +16,7 @@ export default function Orders() {
     useEffect(() => {
         async function fetchData() {
             try{
-                // getListingProductsForUser
+                // getOrderedProductsForUser
                 const url = 'http://localhost:4000/api/product/getOrderedProductsForUser';
                 // POST 
                 const options = {
@@ -65,9 +65,21 @@ export default function Orders() {
                 comment: newComment,
                 productId: productId
             }
-            store.writeReview(json);
-            let submitButtons = document.getElementById(index._id + "submit");
-            submitButtons.style.visibility = 'hidden';
+            store.writeReview(json).then(() => {
+                // getOrderedProductsForUser
+                const url = 'http://localhost:4000/api/product/getOrderedProductsForUser';
+                // POST 
+                const options = {
+                    method: 'POST',
+                    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+                    url
+                };
+                axios(options).then(function(result) {
+                    setItems(result.data.products);
+                    console.log(result.data.products);
+                });
+            });
+            
         }
         
     }
@@ -133,7 +145,7 @@ export default function Orders() {
                                     <StarIcon data-star id={index._id + "5"} onClick={() => {handleStars("5", index)}} style={{ cursor: index.review === null ? 'pointer' : 'default', fontSize: '25px', color: index.review !== null && index.review.stars >= 5 ? '#FFBD59' : '#C4C4C4' }}>5</StarIcon>
                                 </div>
                                 { console.log(index) }
-                                { index.review === null ? <Button data-submit id={index._id + "submit"} onClick={() => {handleSubmit(index, index._id)}} style={{ visibility: "", marginTop: '25px', color: 'black', border: 'black 1px solid', borderRadius: '10px', width: '110px', height: '35px', fontSize: '13px' }}>Submit</Button>: ""}
+                                { index.review === null ? <Button data-submit id={index._id + "submit"} onClick={() => {handleSubmit(index, index._id)}} style={{ marginTop: '25px', color: 'black', border: 'black 1px solid', borderRadius: '10px', width: '110px', height: '35px', fontSize: '13px' }}>Submit</Button>: ""}
                                 
                             </div>
                             <div className="leave-comment" style={{ margin: '15px 0vw 0vw 20px', display: 'inline-block', float: 'right', fontSize: '15px' }}>
