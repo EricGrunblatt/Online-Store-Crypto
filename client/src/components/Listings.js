@@ -13,6 +13,7 @@ export default function Listings() {
     const [sellingItems, setSellingItems] = useState([]);
 	const [soldItems, setSoldItems] = useState([]);
 	const [notShippedItems, setNotShippedItems] = useState([]);
+    const [wallets, setWallets] = useState([]);
 
     /* GET PRODUCTS BY USER ID */
     useEffect(() => {
@@ -29,6 +30,19 @@ export default function Listings() {
                 axios(options).then(function(result) {
                     console.log(result.data.products);
                     setSellingItems(result.data.products);
+
+                    // getWalletForUser
+                    const url = 'http://localhost:4000/api/wallet/getWallets';
+                    // POST 
+                    const options = {
+                        method: 'POST',
+                        headers: { 'content-type': 'application/x-www-form-urlencoded' },
+                        url
+                    };
+                    axios(options).then(function(result) {
+                        console.log(result.data.wallets);
+                        setWallets(result.data.wallets);
+                    });
                 });
             }
             catch{
@@ -125,6 +139,15 @@ export default function Listings() {
             alert("Invalid Tracking Number");
         }
     }
+
+    const handleGoToListItem = () =>  {
+        if(wallets.length === 0) {
+            alert("You must set up a wallet before listing an item");
+        } else {
+            history.push("/listitem");
+        }
+        
+    }
 	
     return (
         <div>
@@ -134,7 +157,7 @@ export default function Listings() {
                 </div>
                 {sellingItemsCards}
                 <div style={{ textAlign: 'center' }}>
-                    <Button onClick={() => {history.push("/listitem")}} style={{ margin: '100px', background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
+                    <Button onClick={() => { handleGoToListItem() }} style={{ margin: '100px', background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
                         List Item
                     </Button>
                 </div>
