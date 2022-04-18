@@ -36,13 +36,15 @@ function TrackingInfoModal() {
 
     if(store.buyerAddress) {
         isOpen = true;
-        console.log(store.buyerAddress);
+        buyerInfo = store.buyerAddress[0];
     }
     
     function handleCloseModal() {
 		store.unmarkBuyerAddress();
         isOpen=false;
     }
+
+    console.log(buyerInfo);
     
     return (
         <div>
