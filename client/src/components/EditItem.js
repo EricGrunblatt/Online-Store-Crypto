@@ -375,6 +375,7 @@ export default function EditItem(){
 
     /* POST EDIT ITEM */
     const handleEditItem = async function() {
+		var categoryTxt = categoryTxts[category - 1]
 		if(!name || !description || !condition || !categoryTxt || !price || !length || !width || !height ||!weight) {
 			setEditItemAlert(<Alert severity="error">Missing requeired field!</Alert>);
 		}
@@ -384,12 +385,10 @@ export default function EditItem(){
 		else if(+weight > 70) {
 			setEditItemAlert(<Alert severity="error">The package weight cannot exceed 70 pounds.</Alert>);
 		}
-		// TEMP VALUE
-		else if(+length *  +width * +height > 1000) {
+		else if(+length > 21 || +width > 21 || +height > 21) {
 			setEditItemAlert(<Alert severity="error">The package package is too large to be mailed.</Alert>);
 		}
 		else {
-			var categoryTxt = categoryTxts[category - 1]
 			var formData = new FormData();
 			formData.append("_id", productId)
 			formData.append("name", name);
@@ -558,7 +557,7 @@ export default function EditItem(){
                         }} className="weight" placeholder="Weight (lbs)" style={{ margin: '-40px 41.5vw 0px 0px', float: 'right', width: '20vw' }}></TextField>
                     </div>
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'row', margin: '8% 20% 10% 20%' }}>
+                <div style={{ display: 'flex', flexDirection: 'row', margin: '8% 20% 10% 30%' }}>
                     <div className="delete-item-button" style={{ margin: '20px', borderRadius: '10px', textAlign: 'center' }}>
                         <Button type="submit" onClick={() => { handleDeleteItem() }} style={{ textAlign: 'center', background: 'white', color: 'red', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '20px', width: '220px', border: 'black 1px solid' }}>Delete Listing</Button>
                     </div> 

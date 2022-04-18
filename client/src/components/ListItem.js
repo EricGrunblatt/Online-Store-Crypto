@@ -272,9 +272,8 @@ export default function ListItem(){
 		else if(+weight > 70) {
 			setListItemAlert(<Alert severity="error">The package weight cannot exceed 70 pounds.</Alert>);
 		}
-		// TEMP VALUE
-		else if(+length *  +width * +height > 1000) {
-			setListItemAlert(<Alert severity="error">The package package is too large to be mailed.</Alert>);
+		else if(+length > 21 || +width > 21 || +height > 21) {
+			setEditItemAlert(<Alert severity="error">The package package is too large to be mailed.</Alert>);
 		}
 		else {
 			formData.append("name", name);
