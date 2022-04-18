@@ -43,6 +43,19 @@ export default function Cart() {
         fetchData()
     },[]);
 
+	for(let i = 0; i < shippingPrices.length; i++) {
+        let price = shippingPrices[i].toString();
+        let array = price.split(".");
+        let newPrice = "";
+        if(array.length > 1) {
+            newPrice = array[0] + "." + array[1].substring(0,2);
+        } else {
+            newPrice = array[0];
+        }
+        newPrice = parseFloat(newPrice);
+        shippingPrices[i] = newPrice;
+    }
+
 	async function handleDeleteCartItem(productId) {
 		console.log("DELETE HERE", productId);
 		// removeFromCart
@@ -90,7 +103,7 @@ export default function Cart() {
 						<div style={{position: 'absolute', margin: '0 0 0 15%'}}>
 							<div onClick={() => { history.push("/product/" + index._id) }} style={{ fontSize: '50px', fontWeight: 'bold', cursor: 'pointer' }}> {index.name}</div>
 							<div style={{ marginTop: '2px', fontSize: '30px' }}>{index.price}&nbsp;Algo</div>
-							<div style={{ marginTop: '3px', fontSize: '15px' }}>(Shipping Price: ${shippingPrices[i]})</div>
+							<div style={{ marginTop: '3px', fontSize: '15px' }}>(Shipping Price: {shippingPrices[i]} Algo)</div>
 							<div style={{ marginTop: '3px', fontSize: '20px' }}>Seller:&nbsp;{index.sellerUsername}</div>
 							<div id={index._id} onClick={handleDeleteModalOpen} style={{ marginTop: '3px', fontSize: '20px', cursor: 'pointer', color: 'red' }}>Remove</div>
 						</div>

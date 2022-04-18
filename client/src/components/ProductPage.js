@@ -56,7 +56,20 @@ export default function ProductPage() {
 					}
 					else {
 						setCost(currProduct.price);
-						setShippingPrice(shippingPrice.data.shippingPrice);
+
+						let price = shippingPrice.data.shippingPrice.toString();
+						let array = price.split(".");
+						let newPrice = "";
+						if(array.length > 1) {
+							newPrice = array[0] + "." + array[1].substring(0,2);
+							newPrice = parseFloat(newPrice);
+							console.log(newPrice);
+							setShippingPrice(newPrice);
+						} else {
+							newPrice = array[0];
+							newPrice = parseFloat(newPrice);
+							setShippingPrice(newPrice);
+						}
 						setShippingService(shippingPrice.data.shippingService);
 						// setShippingAlert("(shipping included)");
 					}
@@ -172,7 +185,7 @@ export default function ProductPage() {
 						{cost} Algo 
 					</div>
 					<div style={{ paddingBottom: '30px', fontSize: '20px', textAlign: 'right' }}>
-						{shippingPrice? "Shipping Price: $":"Shipping not included"}{shippingPrice}
+						{shippingPrice ? "Shipping Price: " + shippingPrice + " Algo" : "Shipping not included"}
 					</div>
 					<Button onClick={handleAddToCart} className="add-to-cart-button" style={{ background: 'black', color: 'white', width: '32vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
 						Add to Cart

@@ -61,12 +61,23 @@ export default function Checkout() {
         fetchWalletData()
     },[]);
 
-	let totalPrice = 0;
+    let totalPrice = 0;
     for(let i = 0; i < items.length; i++) {
         totalPrice += +items[i].price;
     }
+    
 	for(let i = 0; i < shippingPrices.length; i++) {
-        totalPrice += +shippingPrices[i];
+        let price = shippingPrices[i].toString();
+        let array = price.split(".");
+        let newPrice = "";
+        if(array.length > 1) {
+            newPrice = array[0] + "." + array[1].substring(0,2);
+        } else {
+            newPrice = array[0];
+        }
+        newPrice = parseFloat(newPrice);
+        shippingPrices[i] = newPrice;
+        totalPrice += +newPrice;
     }
 
     const handleScrollDown = () => {
@@ -74,6 +85,13 @@ export default function Checkout() {
             top: 880,
             behavior: "smooth"
         });
+    }
+
+    const handlePlaceOrder = () => {
+        if(wallets.length === 0) {
+            alert("You must set up a wallet to checkout. You are now being redirected");
+            history.push("/wallet");
+        }
     }
 
     return (
@@ -111,7 +129,7 @@ export default function Checkout() {
                         <div key={index._id} className="order-outer" style={{ margin: '20px 0vw 20px 1.25vw', width: '75.5vw', height: '250px', border: 'black 2px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>
                             <div className="order-photo" style={{ display: 'inline-block', float: 'left', margin: '15px 0px 15px 15px', width: '220px', height: '220px', border: 'black 1px solid', borderRadius: '10px' }}>
 								<img src={`data:${index.image.mimetype};base64,${Buffer.from(index.image.data).toString('base64')}`} 
-								alt="" width="220px" height="220px" style={{ borderRadius: '10%', cursor: 'pointer' }} ></img>
+								alt="" width="220px" height="220px" style={{ borderRadius: '10px', cursor: 'pointer' }} ></img>
                             </div>
                             <div className="right-of-photo" style={{ padding: '0px 50px 0px 0px', display: 'inline-block', float: 'right' }}>
                                 <div className="product-data" style={{margin: '15px 0vw 0vw 15px', width: '40vw', height: '220px', border: 'white 1px solid' }}>
@@ -147,7 +165,7 @@ export default function Checkout() {
                 </div>
             </div>
             <div className="place-order" style={{ textAlign: 'center' }}>
-                <Button className="place-order-button" style={{ margin: '0px 0px 50px 0px', background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>Place Order</Button>
+                <Button onClick={() => { handlePlaceOrder() }} className="place-order-button" style={{ margin: '0px 0px 50px 0px', background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>Place Order</Button>
             </div>
         </div>
     )

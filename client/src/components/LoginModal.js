@@ -99,7 +99,7 @@ function LoginModal() {
                             value={password}
                             onChange={(event) => { setPassword(event.target.value) }}
                             style={{ margin: '15px 0px 0px 0px', float: 'left', width: '500px' }}></TextField>
-                        <h5 style={{ padding: '0px 0px 0px 0px', color: '#879ED9', fontSize: '20px' }}>Forgot Password?</h5>
+                        <h5 style={{ padding: '0px 0px 0px 0px', color: 'white', fontSize: '20px' }}>Forgot Password?</h5>
 						<Button onClick={handleCloseModal} style={{ marginRight: '10px', color: 'white', background: 'black', width: '150px', height: '40px', fontSize: '8px', borderRadius: '10px' }}><h1>Close</h1></Button>
                         <Button onClick={handleLogin} style={{ color: 'white', background: 'black', width: '150px', height: '40px', fontSize: '8px', borderRadius: '10px' }}><h1>Login</h1></Button>
                     </Box>
