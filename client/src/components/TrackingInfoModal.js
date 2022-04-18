@@ -28,24 +28,19 @@ const style = {
     pb: 3,
   };
 
-function ListingsDeleteModal() {
+function TrackingInfoModal() {
     const { store } = useContext(GlobalStoreContext);
-    
-    let name = "";
+
     let isOpen = false;
+    let buyerInfo = "";
 
-    if(store.listingItemDelete) {
+    if(store.buyerAddress) {
         isOpen = true;
+        console.log(store.buyerAddress);
     }
-
-    function handleDeleteListing() {
-        console.log("the product id: ", store.listingItemDelete);
-        store.deleteListing(store.listingItemDelete);
-        isOpen=false;
-    }
-
+    
     function handleCloseModal() {
-        store.unmarkListingDelete();
+		store.unmarkBuyerAddress();
         isOpen=false;
     }
     
@@ -56,25 +51,26 @@ function ListingsDeleteModal() {
                 aria-labelledby="delete-modal">
                 <Box 
                     className="modal-dialog"
-                    sx={{ ...style, width: 400 }}
+                    sx={{ ...style, width: 600 }}
                 >
-                    <h2 className="dialog-header">
-                        Remove {name} from Listings?
-                    </h2>
+                    <h1 className="dialog-header">
+                        Shipping Label Information
+                    </h1>
+                    <div style={{ color: 'black', fontFamily: 'Quicksand', fontSize: '25px'}}>{buyerInfo.firstName + " " + buyerInfo.lastName}</div>
+                    <div style={{ color: 'black', fontFamily: 'Quicksand', fontSize: '25px'}}>{buyerInfo.addressFirstLine}</div>
+                    <div style={{ color: 'black', fontFamily: 'Quicksand', fontSize: '25px'}}>{buyerInfo.addressSecondLine}</div>
+                    <div style={{ color: 'black', fontFamily: 'Quicksand', fontSize: '25px'}}>{buyerInfo.city + ", " + buyerInfo.state + ", " + buyerInfo.zipcode}</div>
+                    <div style={{ color: 'black', fontFamily: 'Quicksand', fontSize: '25px'}}>United States </div>
                     <Button 
-                        id="dialog-confirm-button"
-                        className="modal-button"
-                        onClick={handleDeleteListing}
-                    >Confirm</Button>
-                    <Button 
+                        style={{ margin: '30px 0px 30px 0px', background: 'black', color: 'white', fontFamily: 'Quicksand', fontSize: '18px', width: '150px' }}
                         id="dialog-cancel-button"
                         className="modal-button" 
                         onClick={handleCloseModal}
-                    >Cancel</Button>
+                    >Close</Button>
                 </Box>
             </Modal>
         </div>
     );
 }
 
-export default ListingsDeleteModal;
+export default TrackingInfoModal;

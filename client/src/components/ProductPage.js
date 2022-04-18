@@ -55,8 +55,21 @@ export default function ProductPage() {
 					}
 					else {
 						setCost(currProduct.price);
-						setShippingPrice(shippingPriceRes.data.shippingPrice);
-						setShippingService(shippingPriceRes.data.shippingService);
+						let price = shippingPrice.data.shippingPrice.toString();
+						let array = price.split(".");
+						let newPrice = "";
+						if(array.length > 1) {
+							newPrice = array[0] + "." + array[1].substring(0,2);
+							newPrice = parseFloat(newPrice);
+							console.log(newPrice);
+							setShippingPrice(newPrice);
+						} else {
+							newPrice = array[0];
+							newPrice = parseFloat(newPrice);
+							setShippingPrice(newPrice);
+						}
+						setShippingService(shippingPrice.data.shippingService);
+						// setShippingAlert("(shipping included)");
 					}
 					
 					setProductName(currProduct.name);
@@ -130,11 +143,6 @@ export default function ProductPage() {
 		console.log(json);
 		store.getProfile(json);
 	}
-	
-	let showShippingPrice = "Shipping not included";
-	if(shippingPrice) {
-		showShippingPrice = "Shipping Price: " + Math.round(+shippingPrice * 100) / 100 + "Algo";
-	}
 
     return (
 		<Box style={{ position: 'absolute', marginLeft: '10%', marginRight: '10%', marginTop: '60px', width: '79%', minHeight: '450px'}}>
@@ -173,7 +181,7 @@ export default function ProductPage() {
 						{cost} Algo 
 					</div>
 					<div style={{ paddingBottom: '30px', fontSize: '20px', textAlign: 'right' }}>
-						{showShippingPrice}
+						{shippingPrice ? "Shipping Price: " + shippingPrice + " Algo" : "Shipping not included"}
 					</div>
 					<Button onClick={handleAddToCart} className="add-to-cart-button" style={{ background: 'black', color: 'white', width: '32vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
 						Add to Cart

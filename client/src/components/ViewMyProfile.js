@@ -31,16 +31,6 @@ export default function ViewMyProfile() {
 
     let items = store.userProfile.sellingProducts;
 
-    /*
-	let items = [
-		{name: "Hoodie", img: "https://dummyimage.com/160x160/000/fff", price: 45, sellerUsername: "user1", dateListed: "02/20/2022"},
-		{name: "Hoodie", img: "https://dummyimage.com/160x160/000/fff", price: 45, sellerUsername: "user1", dateListed: "02/20/2022"},
-		{name: "Hoodie", img: "https://dummyimage.com/160x160/000/fff", price: 45, sellerUsername: "user1", dateListed: "02/20/2022"},
-		{name: "Hoodie", img: "https://dummyimage.com/160x160/000/fff", price: 45, sellerUsername: "user1", dateListed: "02/20/2022"},
-		{name: "Hoodie", img: "https://dummyimage.com/160x160/000/fff", price: 45, sellerUsername: "user1", dateListed: "02/20/2022"},
-		{name: "Hoodie", img: "https://dummyimage.com/160x160/000/fff", price: 45, sellerUsername: "user1", dateListed: "02/20/2022"}
-	]*/
-
 	function stars(num, fontSize) {
 		let ratingStar = "";
         if(num === 0) {
@@ -90,7 +80,7 @@ export default function ViewMyProfile() {
 					<Grid item xs={2}><StarRateIcon style={{ color: '#FFBD59', fontSize: fontSize }}></StarRateIcon></Grid>
 					<Grid item xs={2}><StarRateIcon style={{ color: '#FFBD59', fontSize: fontSize }}></StarRateIcon></Grid>
 					<Grid item xs={2}><StarRateIcon style={{ color: '#FFBD59', fontSize: fontSize }}></StarRateIcon></Grid>
-					<Grid item xs={2}><StarRateIcon style={{ color: '#C4C4C4', fontSize: '30px' }}></StarRateIcon></Grid>
+					<Grid item xs={2}><StarRateIcon style={{ color: '#C4C4C4', fontSize: fontSize }}></StarRateIcon></Grid>
 				</Grid>
 		}
 		else if(num === 5) {
@@ -115,7 +105,7 @@ export default function ViewMyProfile() {
 					<u> My Profile </u>
 					<div style={{ fontFamily: 'Quicksand', fontWeight: '300',fontSize: '30px' }}>Joined: {joined}</div>
 					<div style={{ fontFamily: 'Quicksand', fontWeight: '300',fontSize: '30px' }}>{userStars}/5 Stars </div>
-					{stars(userStars, '3vw')}
+					{stars(userStars, '2.5vw')}
 					<div style={{ display: 'flex' }}>
 						{userImage}
 					</div>
@@ -124,14 +114,15 @@ export default function ViewMyProfile() {
             	<Grid item xs={6} style={{ overflowY: 'scroll', margin: '50px 0px 0px 70px', width: '90%', height: '600px', border: 'black 2px solid', borderRadius: '20px' }}>
 					<div style={{ margin: '20px 0% 0px 5%', fontFamily: 'Quicksand', fontSize: '35px', color: 'black'  }}><u>Reviews</u></div>
 					{reviews.map((index) => (
-						<Grid item container xs style={{ margin: '15px auto 15px auto', width: '90%', height: '120px', border: 'black 2px solid', borderRadius: '20px' }}>
+						<Grid key={index.stars + "_" + index.comment + "_myProfile"} item container xs style={{ margin: '15px auto 15px auto', width: '90%', height: '150px', border: 'black 2px solid', borderRadius: '20px' }}>
 							<Grid item xs={3} style={{ marginLeft: '20px'}}>
 								<div style={{ fontSize: '30px' }}><a href="https://example.com/faq.html" rel="noreferrer"> {index.byUsername} </a></div>
-								<div style={{ marginTop: '5px', fontSize: '20px' }}>{index.stars}/5 Stars</div>
-								{stars(index.stars, '1.5vw')}
+								<div style={{ marginTop: '15px', fontSize: '1.25vw' }}>{index.stars}/5 Stars</div>
+								<div style={{ marginTop: '15px' }}>{stars(index.stars, '1.25vw')}</div>
 							</Grid>
-							<Grid item xs={6} style={{ marginTop: '10px'}}>
-								<div>{index.comment}</div>
+							<Grid item xs={6} style={{ margin: '7px 0px 0px 2vw'}}>
+								<div style={{ fontSize: '25px' }}><u>Comment:</u></div>
+								<div style={{ border: 'black 1px solid', borderRadius: '10px', overflowY: 'auto', width: '21vw', height: '90px', marginTop: '5px' }}><div style={{ margin: '0px 5px 0px 5px' }}>{index.comment}</div></div>
 							</Grid>
 						</Grid>
 					))}
@@ -145,7 +136,7 @@ export default function ViewMyProfile() {
 				{/* EACH ITEM CARDS */}
 				<Grid item container xs >
 					{items.map((index) => (
-						<Grid item xs={5} style={{ margin: '10px auto 10px auto'}}>
+						<Grid key={index._id + "myListing"} item xs={5} style={{ margin: '10px auto 10px auto'}}>
 							<Grid item container xs style={{ margin: '10px auto 10px auto', width: '100%', minHeight: '200px', border: 'black 2px solid', borderRadius: '20px' }}>
 								{/* ITEM IMAGE */}
 								<Grid item xs={3} style={{ margin: '20px'}}>

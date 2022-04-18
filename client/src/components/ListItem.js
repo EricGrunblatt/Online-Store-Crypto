@@ -259,7 +259,6 @@ export default function ListItem(){
     }
 
     const handleListItem = async function() {
-
         var categoryTxts = ["Clothing", "Electronics", "Fashion", "Furniture", "Hardware",
         "Home & Garden", "Music", "Office Supplies", "Other", "Photography & Video", "Sports Equipment", "Toys", "Video Games"]
         var categoryTxt = categoryTxts[category - 1]
@@ -322,11 +321,14 @@ export default function ListItem(){
 			formData.append("image6", file6);
 			formData.append("image7", file7);
 			const response = await api.addListingProduct(formData);
-			const id = response.data.product._id;
-			history.push(generatePath("/product/:id", { id }));
-		}
-    }
-
+			if(response.data.status === "OK") {
+				const id = response.data.product._id;
+				history.push(generatePath("/product/:id", { id }));
+			} else if (response.data.status === "ERROR") {
+				alert(response.data.errorMessage);
+			}
+    	}
+	}
     return (
         <div className="list-item">
             <div className="item-name" style={{ margin: '20px 0px 0px 10%' }}>

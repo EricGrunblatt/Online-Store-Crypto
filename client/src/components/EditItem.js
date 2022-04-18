@@ -436,11 +436,25 @@ export default function EditItem(){
 			formData.append("image6", file6);
 			formData.append("image7", file7);
 
+			// HTML file input, chosen by user
+			formData.append("image0", file0);
+			formData.append("image1", file1);
+			formData.append("image2", file2);
+			formData.append("image3", file3);
+			formData.append("image4", file4);
+			formData.append("image5", file5);
+			formData.append("image6", file6);
+			formData.append("image7", file7);
+
 			const response = await api.updateListingProduct(formData);
-			const id = response.data.product._id;
-			history.push(generatePath("/product/:id", { id }));
+			if(response.data.status === "OK") {
+				const id = response.data.product._id;
+				history.push(generatePath("/product/:id", { id }));
+			} else if (response.data.status === "ERROR") {
+				alert(response.data.errorMessage);
+			}
 		}
-    }
+	}
 
     return (
         <div className="list-item">
@@ -546,7 +560,7 @@ export default function EditItem(){
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'row', margin: '8% 20% 10% 20%' }}>
                     <div className="delete-item-button" style={{ margin: '20px', borderRadius: '10px', textAlign: 'center' }}>
-                        <Button type="submit" onClick={handleDeleteItem} style={{ textAlign: 'center', background: 'white', color: 'red', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '20px', width: '180px', border: 'black 1px solid' }}>Delete Listing</Button>
+                        <Button type="submit" onClick={() => { handleDeleteItem() }} style={{ textAlign: 'center', background: 'white', color: 'red', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '20px', width: '220px', border: 'black 1px solid' }}>Delete Listing</Button>
                     </div> 
                     <div className="list-item-button" style={{ margin: 'auto', borderRadius: '10px', textAlign: 'center' }}>
                         <Button type="submit" onClick={handleEditItem} style={{ textAlign: 'center', background: 'white', color: 'black', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '20px', width: '150px', border: 'black 1px solid' }}>Save</Button>

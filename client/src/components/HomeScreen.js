@@ -1,9 +1,10 @@
 import React from "react";
-import { useState, useContext, useMemo } from "react";
+import { useState, useContext, useMemo, useEffect } from "react";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { Select, MenuItem, FormControl, InputLabel } from '@mui/material'
@@ -29,6 +30,28 @@ export default function HomeScreen() {
     const [minPrice, setMinPrice] = useState("");
     const [maxPrice, setMaxPrice] = useState("");
     const [sort, setSort] = useState("");
+    const [isVisible, setIsVisible] = useState(false);
+
+    useEffect(() => {
+        const toggleVisibility = () => {
+            if(window.pageYOffset > 50) {
+                setIsVisible(true);
+            } else {
+                setIsVisible(false);
+            }
+        };
+
+        window.addEventListener("scroll", toggleVisibility);
+
+        return () => window.removeEventListener("scroll", toggleVisibility);
+    }, []);
+
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    }
 
     /* MAKES AN ARRAY TO SHOW THE 3 NEWEST ITEMS */
     let fullNewItems = store.newItems;
@@ -101,7 +124,6 @@ export default function HomeScreen() {
         }
         setCheckedCon(updatedList);
     };
-
 
     /* OPEN/CLOSE FILTER BY CATEGORY SECTION */
     let catButton = "";
@@ -330,12 +352,12 @@ export default function HomeScreen() {
 
 
     let productCard = 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 19vw)', gridTemplateRows: 'repeat(4, 25.5vw)' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 19vw)', gridTemplateRows: 'auto' }}>
         {
             pageProductAll.map((index) => (
                 <HomeProduct
                     style={{ position: 'absolute' }}
-                    key={index._id}
+                    key={index._id + "homeProduct"}
                     product={index}
                 />
             ))
@@ -373,19 +395,19 @@ export default function HomeScreen() {
                     </Button>
                     <div style={{ position: 'absolute', display: 'flex', margin: '0px 0vw 0px -8.5vw', left: '20vw', width: '70vw' }}>
                         {newItems.map((index) => (
-                            <div onClick={() => {history.push("/product/"+index._id)}} style={{ cursor: 'pointer', display: 'inline-block', margin: '-20px 10vw 0px 10vw' }}>
+                            <div key={index._id + "newItem"} onClick={() => {history.push("/product/"+index._id)}} style={{ cursor: 'pointer', display: 'inline-block', margin: '-20px 10vw 0px 10vw' }}>
                                 <img src={`data:${index.image.mimetype};base64,${Buffer.from(index.image.data).toString('base64')}`} alt="" style={{ width: '100px', height: '100px', border: 'black 1px solid', borderRadius: '10px' }}></img>
                             </div>
                         ))}    
                     </div>
-                    <Button data-right-new-arrow disabled={index===2} onClick={() => { handleNewRight() }} style={{ color: index === 2 ? "rgba(0, 0, 0, 0.3)" : "black", cursor: 'pointer', margin: '10px 0px 0px 92vw', display: 'flex', position: 'absolute', minWidth: '30px', maxWidth: '30px' }}>
+                    <Button data-right-new-arrow disabled={index===numPages-1} onClick={() => { handleNewRight() }} style={{ color: index === numPages-1 ? "rgba(0, 0, 0, 0.3)" : "black", cursor: 'pointer', margin: '10px 0px 0px 92vw', display: 'flex', position: 'absolute', minWidth: '30px', maxWidth: '30px' }}>
                         <ArrowForwardIosIcon></ArrowForwardIosIcon>
                     </Button>
                       
                 </div>
                 <div style={{ marginTop: '75px', marginLeft: dotMarginRight, textAlign: 'center', display: 'inline-block', position: 'absolute' }}>
                     {dotsArray.map((dot) => (
-                        <div style={{ background: index === dot ? "black": "#FFBD59", width: '10px', height: '10px', border: 'black 1px solid', borderRadius: '50%', margin: '0px 10px 0px 10px', display: 'inline-block' }}></div>
+                        <div key={dot + "newItemDot"} style={{ background: index === dot ? "black": "#FFBD59", width: '10px', height: '10px', border: 'black 1px solid', borderRadius: '50%', margin: '0px 10px 0px 10px', display: 'inline-block' }}></div>
                     ))}
                 </div>
             </div>
@@ -435,15 +457,16 @@ export default function HomeScreen() {
                     </Select>
                 </FormControl>
             </Box>
-            <Box style={{ position: 'absolute', margin: '10px 0px 50px 20vw', background: 'white', top: '450px', width: '79%', minHeight: '1010px' }}>
-                    <div>
-                    {
-                        productCard
-                    }
-                    </div>
+            <Box style={{ zIndex: 1, margin: '-150px 0px 50px 20vw', background: 'white', top: '450px', width: '79%', minHeight: '350px' }}>
+                <div>
+                {
+                    productCard
+                }
+                </div>
             </Box>
-            <Box style={{ margin: '100vw 0px 5vw 0vw', textAlign: 'center', alignContent: 'center', fontSize: '35px', width: '99%' }}>
+            <Box style={{ zIndex: 1, whiteSpace: 'nowrap', margin: '10vw 0px 5vw 0vw', justifyContent: 'center', fontSize: '35px', width: '100%' }}>
                 <Pagination
+                    key="pagination"
                     className="pagination-bar"
                     currentPage={currentPage}
                     totalCount={allProducts.length}
@@ -451,6 +474,13 @@ export default function HomeScreen() {
                     onPageChange={page => setCurrentPage(page)}
                 />
             </Box>
+            <div style={{ cursor: 'pointer', bottom: '25px', left: '25px', position: 'fixed' }}>
+                {isVisible && (
+                    <div style={{ justifyContent: 'center', textAlign: 'center', alignItems: 'center', borderRadius: '10px', background: '#FFBD59', color: 'white', width: '50px', height: '50px', boxShadow: '0px 1px 5px 1px rgba(0, 0, 0, 0.2)' }} onClick={() => { scrollToTop() }}>
+                        <ArrowUpwardIcon style={{ marginTop: '8px', color: 'black', fontSize: '30px' }}></ArrowUpwardIcon>
+                    </div>
+                )}
+            </div>
             <LoginModal />
             <RegisterModal />
             <AccountErrorModal />

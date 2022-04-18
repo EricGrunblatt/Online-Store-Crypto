@@ -90,8 +90,7 @@ export default function NavigationBar() {
     }
 
     function handleHome() {
-        let json = {};
-        store.loadItems(json);
+        store.initialLoad();
         history.push("/");
     }
 
@@ -112,8 +111,6 @@ export default function NavigationBar() {
             store.loadItems(json);
         }
     }
-
-
 
     /* MENU DISPLAY */
     const loggedInMenu = 
