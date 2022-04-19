@@ -457,7 +457,7 @@ export default function HomeScreen() {
                     </Select>
                 </FormControl>
             </Box>
-            <Box style={{ zIndex: 1, margin: '-150px 0px 50px 20vw', background: 'white', top: '450px', width: '79%', minHeight: '350px' }}>
+            <Box style={{ position: 'absolute', zIndex: 1, margin: '0px 0px 50px 20vw', background: 'white', top: '450px', width: '79%', minHeight: '350px' }}>
                 <div>
                 {
                     productCard
