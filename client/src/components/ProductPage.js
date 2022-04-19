@@ -23,6 +23,7 @@ export default function ProductPage() {
 	const [condition, setCondition] = useState("");
 	const [description, setDescription] = useState("");
 	const [seller, setSeller] = useState("");
+	const [isSold, setIsSold] = useState(false);
 	const [cost, setCost] = useState(0);
 	const [shippingService, setShippingService] = useState("");
 	const [itemImage0, setItemImage0] = useState(null);
@@ -65,6 +66,7 @@ export default function ProductPage() {
 					setProductNum(currProduct._id);
 					setDescription(currProduct.description);
 					setCondition(currProduct.condition);
+					setIsSold(currProduct.isSold);
 					setSeller(currProduct.sellerUsername);
 					setItemImage0(currProduct.images[0]);
 					setItemImages(currProduct.images);
@@ -172,9 +174,11 @@ export default function ProductPage() {
 					<div style={{ paddingBottom: '30px', fontSize: '20px', textAlign: 'right' }}>
 						{shippingPrice ? "Shipping Price: " + shippingPrice + " Algo" : "Shipping not included"}
 					</div>
-					<Button onClick={handleAddToCart} className="add-to-cart-button" style={{ background: 'black', color: 'white', width: '32vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
+					{isSold ? <Button className="add-to-cart-button" disabled={true} style={{ background: 'grey', color: 'white', width: '32vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
+						Sold Out
+					</Button> : <Button onClick={handleAddToCart} className="add-to-cart-button" style={{ background: 'black', color: 'white', width: '32vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
 						Add to Cart
-					</Button>
+					</Button>}
 					{cartAlert}
 					<div style={{ paddingTop: '40px', fontFamily: 'Quicksand', fontWeight: '500', fontSize: '25px', color: 'black' }}>
                     	<u> Return &#38; Refund Policy </u>

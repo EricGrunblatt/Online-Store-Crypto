@@ -147,13 +147,13 @@ export default function Checkout() {
                                     <div className="price-divider-line">
                                         <hr style={{ width: '40vw', float: 'right', margin: '10px 0vw 0px 0px' }}></hr>
                                     </div>
-                                    <div className="added-price" style={{ float: 'right', margin: '0px 20px 0px 0px', fontSize: '40px' }}>{+index.price + +shippingPrices[i]} Algo</div> 
+                                    <div className="added-price" style={{ float: 'right', margin: '0px 20px 0px 0px', fontSize: '40px' }}>{Math.round((+index.price + +shippingPrices[i]) * 100) / 100} Algo</div> 
                                 </div>
                             </div>
                         </div>
                     ))}
                     <div className="total-payment" style={{ float: 'right', margin: '0px 20px 20px 20px', fontFamily: 'Quicksand', fontSize: '35px', color: '#FFBD59' }}>
-                        Total: {totalPrice} Algo
+                        Total: {Math.round(+totalPrice * 100) / 100} Algo
                     </div>
                 </div>
             </div>
