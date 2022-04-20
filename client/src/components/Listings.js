@@ -28,7 +28,6 @@ export default function Listings() {
                     url
                 };
                 axios(options).then(function(result) {
-                    console.log(result.data.products);
                     setSellingItems(result.data.products);
 
                     // getWalletForUser
@@ -40,7 +39,6 @@ export default function Listings() {
                         url
                     };
                     axios(options).then(function(result) {
-                        console.log(result.data.wallets);
                         setWallets(result.data.wallets);
                     });
                 });
@@ -69,7 +67,7 @@ export default function Listings() {
 							<div style={{ marginTop: '3px', fontSize: '30px' }}>{index.price}&nbsp;Algo</div>
 							<div style={{ marginTop: '3px', fontSize: '20px' }}>Seller:&nbsp;{index.sellerUsername}</div>
 							{index.buyerUsername === undefined || index.buyerUsername === null ? <u onClick={() => { history.push("/editItem/" + index._id) }} style={{ marginTop: '3px', fontSize: '20px', cursor: 'pointer', color: 'red', }}>Edit</u>
-								: index.trackingNumber === null ? 
+								: index.trackingNumber === null || index.trackingNumber === undefined ? 
                                 <div style={{ display: 'flex', marginTop: '3px', fontSize: '20px'}}>
                                     <TextField id={"tracking" + index._id} placeholder="Tracking Number" style={{ width: '230px' }}></TextField>
                                     <Button onClick={() => handleTrackingNumber(index, document.getElementById("tracking" + index._id)) } style={{ background: 'blue', color: 'white', fontSize: '10px' }}>Submit <br></br> Tracking</Button>
@@ -83,6 +81,36 @@ export default function Listings() {
 			</div>
 		</div>;
 		}
+    
+    const handleTrackingNumber = async function (index, trackingNumber) {
+        let trackingString = trackingNumber.value.toString();
+        let productId = index._id;
+        if((trackingString.startsWith("94001") && trackingString.length === 22) || (trackingString.startsWith("92055") && trackingString.length === 22)) {
+            let json = {
+                productId: productId,
+                trackingNumber: trackingString
+            }
+            let response = await api.setTrackingNumber(json);
+            if(response.data.status === "OK") {
+                console.log("Tracking Number Success");
+                // getSellingProductsForUser
+                const url = 'http://localhost:4000/api/product/getListingProductsForUser';
+                // POST 
+                const options = {
+                    method: 'POST',
+                    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+                    url
+                };
+                axios(options).then(function(result) {
+                    setSellingItems(result.data.products);
+                });
+            } else if (response.data.status === "ERROR") {
+                alert(response.data.errorMessage);
+            }
+        } else {
+            alert("Invalid Tracking Number");
+        }
+    }
 
     let sellingItemsCards = "";
 	let soldItemsCards = "";
@@ -104,6 +132,8 @@ export default function Listings() {
             sellingItems.splice(index, 1);
         }
     }
+    console.log(notShippedItems);
+    console.log(soldItems);
     
     if(sellingItems.length === 0) {
         sellingItemsCards = 
@@ -119,25 +149,6 @@ export default function Listings() {
 
 	if(soldItems.length > 0) {
         soldItemsCards = showListCards(soldItems);
-    }
-
-    const handleTrackingNumber = async function (index, trackingNumber) {
-        let trackingString = trackingNumber.value;
-        let productId = index._id;
-        if((trackingString.startsWith("94001") && trackingString.length === 22) || (trackingNumber.startsWith("92055") && trackingNumber.length === 22)) {
-            let json = {
-                productId: productId,
-                trackingNumber: trackingString
-            }
-            let response = await api.setTrackingNumber(json);
-            if(response.data.status === "OK") {
-                console.log("Tracking Number Success");
-            } else if (response.data.status === "ERROR") {
-                alert(response.data.errorMessage);
-            }
-        } else {
-            alert("Invalid Tracking Number");
-        }
     }
 
     const handleGoToListItem = () =>  {

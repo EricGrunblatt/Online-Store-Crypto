@@ -43,8 +43,6 @@ function TrackingInfoModal() {
 		store.unmarkBuyerAddress();
         isOpen=false;
     }
-
-    console.log(buyerInfo);
     
     return (
         <div>
