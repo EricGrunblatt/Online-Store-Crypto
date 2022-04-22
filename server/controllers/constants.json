@@ -52,7 +52,10 @@
 		"cartAlreadyIncludesProduct": "CART ALREADY INCLUDES PRODUCT",
 		"userOwnsThisItem": "USER OWNS THIS ITEM",
 		"cartIsEmpty": "CART IS EMPTY",
-		"cartItemDoesNotExist": "CART ITEM DOES NOT EXIST"
+		"cartItemDoesNotExist": "CART ITEM DOES NOT EXIST",
+		"couldNotGetCartItems": "COULD NOT GET CART ITEMS",
+		"failedToReserveCartProducts": "FAILED TO RESERVE CART PRODUCTS",
+		"noProductsWereReserved": "NO PRODUCTS WERE RESERVED"
 	},
 	"review":{
 		"missingRequiredField": "MISSING REQUIRED FIELD",

@@ -2,9 +2,11 @@ const constants = require('./constants.json')
 const {Product, ProductState} = require('../models/productModel')
 const User = require('../models/userModel')
 const { coingateClient } = require('../handlers/purchaseHandler')
-const { calculatePriceOfCart } = require('./helpers/purchaseControllerHelper')
+const { calculatePriceOfReserved, reserveCartProducts } = require('./helpers/purchaseControllerHelper')
 const dotenv = require('dotenv')
 const Cart = require('../models/cartModel')
+const {Order, OrderState} = require('../models/orderModel')
+const {Purchase, PurchaseState} = require('../models/purchaseModel')
 
 dotenv.config()
 
@@ -100,6 +102,8 @@ purchaseFromCart = async (req, res) => {
 	let json = {}
 	let user = null
 	let cartItems = null
+	let reservedProductIds = []
+	let failedToReserveIds = []
 	try {
 		if (!userId) {
 			throw constants.error.didNotGetUserId
@@ -113,11 +117,14 @@ purchaseFromCart = async (req, res) => {
 		else if (cartItems.length === 0) {
 			json = {status: constants.status.ERROR, errorMessage: constants.purchase.cartIsEmpty}
 		}
+		else if (! ({reservedProductIds, failedToReserveIds} = await reserveCartProducts(user.username))) {
+			json = {status: constants.status.ERROR, errorMessage: constants.purchase.failedToReserveCartProducts}
+		}
 		else {
 
 			// TODO: Mark shopping cart items as "reserved"
 
-			const price_amount = await calculatePriceOfCart(user)
+			const price_amount = await calculatePriceOfReserved(user.username)
 
 			// TODO: Check price is not over 25 BTC
 
@@ -152,9 +159,130 @@ purchaseCallback = async (req, res) => {
 	
 }
 
+// TODO - Remove when done
+purchaseFromCartTest = async (req, res) => {
+	console.log("purchaseFromCartTest", req.body)
+	const userId = req.userId
+	
+	let json = {}
+	let user = null
+	let reservedProducts = []
+	let failedToReserve = []
+	let purchase = null
+	try {
+		if (!userId) {
+			throw constants.error.didNotGetUserId
+		}
+		else if (! (user = await User.findById(userId))) {
+			json = {status: constants.status.ERROR, errorMessage: constants.purchase.userDoesNotExist}
+		}
+		else if (! (cartItems = await Cart.find({buyerUsername: user.username}))) {
+			json = {status: constants.status.ERROR, errorMessage: constants.purchase.couldNotGetCartItems}
+		}
+		else if (! ({reservedProductIds, failedToReserveIds} = await reserveCartProducts(user.username))) {
+			json = {status: constants.status.ERROR, errorMessage: constants.purchase.failedToReserveCartProducts}
+		}
+		else if (reservedProductIds.length === 0) {
+			json = {status: constants.status.ERROR, errorMessage: constants.purchase.noProductsWereReserved}
+		}
+		else {
+			const price = await calculatePriceOfReserved(user.username)
+			
+			// TODO: create invoice
+			
+			// TODO: send invoice
+			
+			// FOR TESTING: 
+			const thirdPartyOrderId = Math.floor(1 + Math.random() * 1000)
+			const token = Math.floor(1 + Math.random() * 1000)
+			// const token = 123
+			console.log(reservedProductIds)
+			const purchase = new Purchase({
+				buyerUsername: user.username,
+				thirdPartyOrderId: thirdPartyOrderId,
+				token: token,
+				productIds: reservedProductIds,
+			})
+			purchase.save()
+
+			const invoice = `http://localhost:4000/api/purchase/purchaseCallbackTest/${thirdPartyOrderId}/${token}`
+			
+			json = {
+				status: constants.status.OK, 
+				reservedProducts: reservedProducts, 
+				failedToReserve: failedToReserve,
+				price: price, 
+				invoice: invoice
+			}
+		}
+		console.log("RESPONSE: ", json)
+		res.status(200).json(json)
+	} catch (err) {
+		console.log(err)
+		// console.log(err.response.response.data)
+		res.status(500).send(constants.status.FATAL_ERROR)
+	}
+}
+
+// TODO
+purchaseCallbackTest = async (req, res) => {
+	console.log("purchaseCallbackTest", req.body)
+	const order_id = req.params.order_id
+	const token = req.params.token
+	
+	console.log("TOKEN: ", token)
+
+	let json = {}
+	let purchase = null
+	try {
+		if (! (purchase = await Purchase.findOne({ thirdPartyOrderId: order_id }))) {
+			json = {status: constants.status.ERROR, errorMessage: "purchase entry doesn't exist"}
+		}
+		else if (purchase.token !== token) {
+			json = {status: constants.status.ERROR, errorMessage: "purchase token incorrect"}
+		}
+		else {
+			console.log("PURCHASE: ", purchase)
+
+			for(const productId of purchase.productIds) {
+				console.log("PRODUCTID: ", productId)
+				const order = await Order.findOneAndUpdate(
+					{productId: productId}, 
+					{state: OrderState.SUCCESSFUL}
+				)
+				const product = await Product.findOneAndUpdate(
+					{productId: productId}, 
+					{state: ProductState.SOLD}
+				)
+			}
+
+			// await Promise.all(productIds.forEach(async (productId) => {
+			// 	const order = await Order.findOneAndUpdate(
+			// 		{productId: productId}, 
+			// 		{state: OrderState.SUCCESSFUL}
+			// 	)
+			// 	const product = await Product.findOneAndUpdate(
+			// 		{productId: productId}, 
+			// 		{state: ProductState.SOLD}
+			// 	)
+			// }));
+
+			purchase.state = PurchaseState.SUCCESSFUL
+			await purchase.save()
+		}
+		res.status(200).send({status: constants.status.OK})
+	} catch (err) {
+		console.log(err)
+		res.status(500).send(constants.status.FATAL_ERROR)
+	}
+}
+
 module.exports = {
 	addToCart,
 	removeFromCart,
 	purchaseFromCart,
 	purchaseCallback,
+
+	purchaseFromCartTest,
+	purchaseCallbackTest,
 }
