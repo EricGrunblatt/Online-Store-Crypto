@@ -15,4 +15,12 @@ CartSchema.index({
 	productId: 1
 }, {unique: true})
 
-module.exports = mongoose.model('Cart', CartSchema)
+const Cart = mongoose.model('Cart', CartSchema)
+
+Cart.on('index', error => {
+	if (error) {
+		console.log(error)
+	}
+})
+
+module.exports = Cart

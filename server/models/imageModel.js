@@ -11,4 +11,12 @@ const ImageSchema = new Schema(
 	{ timestamps: true },
 )
 
-module.exports = mongoose.model('Image', ImageSchema)
+const Image = mongoose.model('Image', ImageSchema)
+
+Image.on('index', error => {
+	if (error) {
+		console.log(error)
+	}
+})
+
+module.exports = Image

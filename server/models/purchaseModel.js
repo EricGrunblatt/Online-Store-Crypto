@@ -19,7 +19,15 @@ const PurchaseSchema = new Schema(
 	{ timestamps: true },
 )
 
+const Purchase = mongoose.model('Purchase', PurchaseSchema)
+
+Purchase.on('index', error => {
+	if (error) {
+		console.log(error)
+	}
+})
+
 module.exports = {
-	Purchase: mongoose.model('Purchase', PurchaseSchema),
+	Purchase: Purchase,
 	PurchaseState: PurchaseState,
 }

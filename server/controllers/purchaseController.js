@@ -230,6 +230,7 @@ purchaseCallbackTest = async (req, res) => {
 	const order_id = req.params.order_id
 	const token = req.params.token
 	
+	console.log("ORDER_ID: ", order_id)
 	console.log("TOKEN: ", token)
 
 	let json = {}
@@ -243,9 +244,7 @@ purchaseCallbackTest = async (req, res) => {
 		}
 		else {
 			console.log("PURCHASE: ", purchase)
-
 			for(const productId of purchase.productIds) {
-				console.log("PRODUCTID: ", productId)
 				const order = await Order.findOneAndUpdate(
 					{productId: productId}, 
 					{state: OrderState.SUCCESSFUL}
@@ -255,17 +254,6 @@ purchaseCallbackTest = async (req, res) => {
 					{state: ProductState.SOLD}
 				)
 			}
-
-			// await Promise.all(productIds.forEach(async (productId) => {
-			// 	const order = await Order.findOneAndUpdate(
-			// 		{productId: productId}, 
-			// 		{state: OrderState.SUCCESSFUL}
-			// 	)
-			// 	const product = await Product.findOneAndUpdate(
-			// 		{productId: productId}, 
-			// 		{state: ProductState.SOLD}
-			// 	)
-			// }));
 
 			purchase.state = PurchaseState.SUCCESSFUL
 			await purchase.save()

@@ -22,10 +22,17 @@ OrderSchema.index({
 	status: 1,
 }, {
 	unique: true,
-	partialFilterExpression: {status: {$neq: OrderState.FAILED}},
+})
+
+const Order = mongoose.model('Order', OrderSchema)
+
+Order.on('index', error => {
+	if (error) {
+		console.log(error)
+	}
 })
 
 module.exports = {
-	Order: mongoose.model('Order', OrderSchema),
+	Order: Order,
 	OrderState: OrderState,
 }
