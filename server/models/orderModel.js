@@ -19,7 +19,6 @@ const OrderSchema = new Schema(
 
 OrderSchema.index({
 	productId: 1,
-	status: 1,
 }, {
 	unique: true,
 })
