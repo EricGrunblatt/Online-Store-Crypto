@@ -4,10 +4,9 @@ const User = require('../models/userModel')
 const {Product, ProductState} = require('../models/productModel')
 const Review = require('../models/reviewModel')
 const constants = require('./constants.json')
-const Image = require('../models/imageModel')
 const fs = require('fs')
 const path = require('path')
-const { createAndSaveImage, upload } = require('../handlers/imageHandler')
+const { upload, parseImageId, generateImageUrl } = require('../handlers/imageHandler')
 const { json } = require('body-parser')
 const {
 	getProductFirstImage
@@ -32,8 +31,7 @@ getProfileByUsername = async (req, res) => {
 		}
 		else {
 			// GET PROFILE IMAGE
-			const profileImage = await Image.findById(user.profileImageId)
-				.select({ "_id": 0, "data": 1, "contentType": 1 })
+			const profileImage = generateImageUrl(user.profileImageId)
 			// GET USER'S SELLING PRODUCTS
 			const sellingProducts = await Product.find({ sellerUsername: username, state: ProductState.LISTED })
 				.lean()
@@ -200,7 +198,7 @@ updateProfileImage = async (req, res) => {
 				json = { status: constants.status.ERROR, errorMessage: constants.user.userDoesNotExist }
 			}
 			else {
-				const fileId = await createAndSaveImage(file, "profileImage for " + user.username);
+				const fileId = parseImageId(file)
 				user.profileImageId = fileId
 				await user.save()
 				json = { status: constants.status.OK }

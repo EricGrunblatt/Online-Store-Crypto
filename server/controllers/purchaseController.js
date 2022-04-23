@@ -33,6 +33,9 @@ addToCart = async (req, res) => {
 		else if (! (product = await Product.findById(_id))) {
 			json = {status: constants.status.ERROR, errorMessage: constants.purchase.productDoesNotExist}
 		}
+		else if (product.state === ProductState.SOLD) {
+			json = {status: constants.status.ERROR, errorMessage: constants.purchase.productIsSold}
+		}
 		else if (product.sellerUsername === user.username) {
 			json = {status: constants.status.ERROR, errorMessage: constants.purchase.userOwnsThisItem}
 		}
@@ -222,6 +225,22 @@ purchaseFromCartTest = async (req, res) => {
 			reservedProducts = await getProducts(reservedProductIds, selectOptions)
 			failedToReserve = await getProducts(failedToReserveIds, selectOptions)
 
+			await Promise.all(reservedProducts.map(async (product) => {
+				const image = await getProductFirstImage(product);
+				product.image = image
+				delete product.imageIds
+
+				return product;
+			}))
+
+			await Promise.all(failedToReserve.map(async (product) => {
+				const image = await getProductFirstImage(product);
+				product.image = image
+				delete product.imageIds
+
+				return product;
+			}))
+
 			const invoice = `http://localhost:4000/api/purchase/purchaseCallbackTest/${thirdPartyOrderId}/${token}`
 			
 			json = {
@@ -266,10 +285,12 @@ purchaseCallbackTest = async (req, res) => {
 					{productId: productId}, 
 					{state: OrderState.SUCCESSFUL}
 				)
+				console.log("ORDER: ", order)
 				const product = await Product.findOneAndUpdate(
-					{productId: productId}, 
+					{_id: productId}, 
 					{state: ProductState.SOLD}
 				)
+				console.log("PRODUCT: ", product)
 			}
 
 			purchase.state = PurchaseState.SUCCESSFUL

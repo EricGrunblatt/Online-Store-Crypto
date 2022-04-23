@@ -21,12 +21,18 @@ reserveCartProducts = async (username) => {
 	const cartItems = await Cart.find({buyerUsername: username})
 	const cartProductIds = cartItems.map((cartItem) => cartItem.productId)
 	for (const productId of cartProductIds) {
+		let order = null;
 		try {
-			const reservation = new Order({buyerUsername: username, productId: productId})
-			await reservation.save()
-			reservedProductIds.push(productId)
-			await Cart.findOneAndRemove({buyerUsername: username, productId: productId})
-			await Product.findOneAndUpdate({_id: productId}, {state: ProductState.RESERVED})
+			if (await Order.findOne({productId: productId})) {
+				failedToReserveIds.push(productId)
+			}
+			else {
+				const reservation = new Order({buyerUsername: username, productId: productId})
+				await reservation.save()
+				reservedProductIds.push(productId)
+				await Cart.findOneAndRemove({buyerUsername: username, productId: productId})
+				await Product.findOneAndUpdate({_id: productId}, {state: ProductState.RESERVED})
+			}
 		} catch (err) {
 			failedToReserveIds.push(productId)
 		}
