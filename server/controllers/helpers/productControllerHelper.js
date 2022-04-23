@@ -1,7 +1,8 @@
-const {createAndSaveImage, upload} = require('../../handlers/imageHandler')
-const Image = require('../../models/imageModel')
+const { upload } = require('../../handlers/imageHandler')
 const Review = require('../../models/reviewModel')
 const {Product, ProductState} = require('../../models/productModel')
+const { parseImageId, generateImageUrl } = require('../../handlers/imageHandler')
+const mongoose = require('mongoose')
 
 const productImageFields = [
 	{name: 'image0', maxCount: 1},
@@ -24,7 +25,8 @@ updateProductImageFields = async (images, oldImageIds, productId) => {
 		let imageId = null
 		if (Object.keys(images).includes(imageKey)) {
 			const imageValue = images[imageKey][0]
-			imageId = await createAndSaveImage(imageValue, "product image key=" + imageKey + " for productId=" + productId)
+			const imageIdStr = parseImageId(imageValue)
+			imageId = mongoose.Types.ObjectId(imageIdStr)
 		}
 		imageIds[fieldIndex] = imageId || oldImageIds[fieldIndex]
 		fieldIndex++
@@ -44,7 +46,7 @@ getProductImages = async (product) => {
 	try {
 		for (let imageId of product.imageIds) {
 			if (imageId) {
-				const image = await Image.findById(imageId).select(imageSelect);
+				const image = generateImageUrl(imageId)
 				images.push(image)
 			}
 			else {
@@ -68,7 +70,7 @@ getProductFirstImage = async (product) => {
 
 	try {
 		const firstImageId = product.imageIds.find(imageId => imageId !== null)
-		const image = await Image.findById(firstImageId).select(imageSelect);
+		const image = generateImageUrl(firstImageId)
 		return image
 	}
 	catch (err) {

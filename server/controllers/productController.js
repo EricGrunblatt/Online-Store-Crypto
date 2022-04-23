@@ -1,4 +1,4 @@
-const { upload, createAndSaveImage } = require("../handlers/imageHandler")
+const { upload } = require("../handlers/imageHandler")
 const {Product, ProductState} = require("../models/productModel")
 const User = require('../models/userModel')
 const Review = require('../models/reviewModel')

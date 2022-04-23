@@ -5,7 +5,8 @@ const authController = require('../controllers/authController');
 const userController = require('../controllers/userController');
 const productController = require('../controllers/productController');
 const purchaseController = require('../controllers/purchaseController');
-const walletController = require('../controllers/walletController')
+const walletController = require('../controllers/walletController');
+const imageController = require('../controllers/imageController');
 
 const {upload} = require('../handlers/imageHandler')
 
@@ -76,5 +77,8 @@ router.post('/wallet/getWallets', auth.verify, walletController.getWallets)
 router.post('/wallet/addWallet', auth.verify, walletController.addWallet)
 // Remove Wallet
 router.post('/wallet/removeWallet', auth.verify, walletController.removeWallet)
+
+// Image
+router.get('/image/:id', imageController.image)
 
 module.exports = router

@@ -1,8 +1,8 @@
 const User = require('../models/userModel')
-const Image = require('../models/imageModel')
 const constants = require('./constants.json')
 const bcryptjs = require('bcryptjs')
 const auth = require('../auth')
+const { generateImageUrl } = require('../handlers/imageHandler')
 
 register = async (req, res) => {
 	console.log("register", req.body);
@@ -149,7 +149,6 @@ getLoggedIn = async (req, res) => {
 	const userId = req.userId
 
 	const userSelect = {"_id": 0, "firstName": 1, "lastName": 1, "username": 1, "email": 1, "profileImageId": 1}
-	const imageSelect = { "_id": 0, "data": 1, "contentType": 1 }
 
 	let json = {}
 	let user = null
@@ -161,9 +160,7 @@ getLoggedIn = async (req, res) => {
 			json = {status: constants.status.ERROR, errorMessage: constants.auth.userDoesNotExist}
 		}
 		else {
-			const profileImage = await Image.findById(user.profileImageId).select(imageSelect)
-
-			user.profileImage = profileImage
+			user.profileImage = generateImageUrl(user.profileImageId)
 			delete user.profileImageId
 
 			json = {status: constants.status.OK, user: user, loggedIn: true}
