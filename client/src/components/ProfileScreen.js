@@ -41,8 +41,8 @@ export default function ProfileScreen() {
             setConfirmNewPassword("");
 
             let image = store.userProfile.profileImage;
-            let url = `data:${image.mimetype};base64,${Buffer.from(image.data).toString('base64')}`;
-            setProfileImage(url);
+            // let url = `data:${image.mimetype};base64,${Buffer.from(image.data).toString('base64')}`;
+            setProfileImage(image);
 
             console.log("ProfileScreen.js");
         }  catch (err) {

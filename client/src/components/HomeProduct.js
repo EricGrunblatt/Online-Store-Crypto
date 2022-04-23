@@ -8,14 +8,14 @@ export default function HomeProduct(props) {
     const history = useHistory();
     const { product } = props;
     let image = product.image;
-    let url = `data:${image.mimetype};base64,${Buffer.from(image.data).toString('base64')}`;
+    // let url = image.data;
     let width = "17vw";
     let height = "120px";
 
     return (
         <div className="home-product">
             <div onClick={() => { store.loadProduct(product._id) }} className="home-product-picture" style={{ cursor: 'pointer', margin: '20px 0px 0px 20px', width: width, height: width, border: 'black 1px solid', borderRadius: '10px', boxShadow: '0px 2px 5px 2px rgba(0, 0, 0, 0.2)' }}>
-                <img src={url} alt="" style={{ width: width, height: width, borderRadius: '10px'}}></img>
+                <img src={image} alt="" style={{ width: width, height: width, borderRadius: '10px'}}></img>
             </div>
             <div onClick={() => {history.push("/product")}} className="home-product-information" style={{ cursor: 'pointer', margin: '0px 0px 0px 20px', width: width, height: height, background: '#E1E1E1', border: 'grey 1px solid', borderRadius: '10px', boxShadow: '0px 2px 5px 2px rgba(0, 0, 0, 0.2)' }}>
                 <div className="product-name" style={{ margin: '0px 5px 20px 5px', fontFamily: 'Quicksand', fontSize: '25px'}}>

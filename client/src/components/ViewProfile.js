@@ -18,8 +18,8 @@ export default function ViewMyProfile() {
     let profilePic = store.userProfile.profileImage;
     let userImage = "";
     if(profilePic !== null) {
-        let url = `data:${profilePic.mimetype};base64,${Buffer.from(profilePic.data).toString('base64')}`;
-        userImage = <img src={url} alt="" style={{ margin: '20px 0px 0px 0px', width: '250px', height: '250px', borderRadius: '50%' }}></img>
+        // let url = `data:${profilePic.mimetype};base64,${Buffer.from(profilePic.data).toString('base64')}`;
+        userImage = <img src={profilePic} alt="" style={{ margin: '20px 0px 0px 0px', width: '250px', height: '250px', borderRadius: '50%' }}></img>
     } else {
         userImage = <AccountCircleRoundedIcon style={{ margin: '20px 0px 0px 0px', fontSize: '300px' }} />;
     }

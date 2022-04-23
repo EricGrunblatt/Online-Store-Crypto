@@ -120,7 +120,7 @@ export default function ProductPage() {
             {itemImages.map((index, indexNum) => (
                 index? 
                     <div key={indexNum} style={{cursor: "pointer", marginBottom: '20px' }}>
-                        <img id={indexNum} src={`data:${index.mimetype};base64,${Buffer.from(index.data).toString('base64')}`} alt="" 
+                        <img id={indexNum} src={index} alt="" 
                         onClick={handleImage} title={index.title} width="100px" height="100px" style={{ borderRadius: '10%', border: "black 2px" }} ></img>
                     </div>:<div key={indexNum}></div>
             ))}
@@ -141,7 +141,7 @@ export default function ProductPage() {
 				{/* LEFT IMAGES & DESCRIPTION */}
 				<div>
 					{/* THE MAIN IMAGE */}
-					{itemImage0? <img src={`data:${itemImage0.mimetype};base64,${Buffer.from(itemImage0.data).toString('base64')}`} width="600px" height="400px" alt="" style={{ borderRadius: '10%' }} ></img>
+					{itemImage0? <img src={itemImage0} width="600px" height="400px" alt="" style={{ borderRadius: '10%' }} ></img>
 						:<img src="https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg" width="600px" height="600px" alt="" style={{ borderRadius: '10%' }} ></img>}
 					{/* THE 8 IMAGES */}
 					{showImages}

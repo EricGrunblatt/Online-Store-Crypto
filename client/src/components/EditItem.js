@@ -89,47 +89,13 @@ export default function EditItem(){
                     setWidth(result.data.product.boxWidth);
                     setHeight(result.data.product.boxHeight);
                     setWeight(result.data.product.boxWeight);
-
-                    if(result.data.product.images[0]) {
-                        let image0 = result.data.product.images[0];
-                        let url0 = `data:${image0.mimetype};base64,${Buffer.from(image0.data).toString('base64')}`;
-                        setImage0(url0);
-                    }
-                    if(result.data.product.images[1]) {
-                        let image1 = result.data.product.images[1];
-                        let url1 = `data:${image1.mimetype};base64,${Buffer.from(image1.data).toString('base64')}`;
-                        setImage1(url1);
-                    }
-                    if(result.data.product.images[2]) {
-                        let image2 = result.data.product.images[2];
-                        let url2 = `data:${image2.mimetype};base64,${Buffer.from(image2.data).toString('base64')}`;
-                        setImage2(url2);
-                    }
-                    if(result.data.product.images[3]) {
-                        let image3 = result.data.product.images[3];
-                        let url3 = `data:${image3.mimetype};base64,${Buffer.from(image3.data).toString('base64')}`;
-                        setImage3(url3);
-                    }
-                    if(result.data.product.images[4]) {
-                        let image4 = result.data.product.images[4];
-                        let url4 = `data:${image4.mimetype};base64,${Buffer.from(image4.data).toString('base64')}`;
-                        setImage4(url4);
-                    }
-                    if(result.data.product.images[5]) {
-                        let image5 = result.data.product.images[5];
-                        let url5 = `data:${image5.mimetype};base64,${Buffer.from(image5.data).toString('base64')}`;
-                        setImage5(url5);
-                    }
-                    if(result.data.product.images[6]) {
-                        let image6 = result.data.product.images[6];
-                        let url6 = `data:${image6.mimetype};base64,${Buffer.from(image6.data).toString('base64')}`;
-                        setImage6(url6);
-                    }
-                    if(result.data.product.images[7]) {
-                        let image7 = result.data.product.images[7];
-                        let url7 = `data:${image7.mimetype};base64,${Buffer.from(image7.data).toString('base64')}`;
-                        setImage7(url7);
-                    }
+					let setImages = [setImage0, setImage1, setImage2, setImage3, setImage4, setImage5, setImage6, setImage7]
+					// SET THE PRODUCT IMAGES 
+					for(let i = 0; i < result.data.product.images.length; i++) {
+						if(result.data.product.images[i]) {
+							setImages[i](result.data.product.images[i]);
+						}
+					}
                 });
             }
             catch{
@@ -424,16 +390,6 @@ export default function EditItem(){
 
 			const element7 = document.getElementById('image7')
 			const file7 = element7.files[0]
-
-			// HTML file input, chosen by user
-			formData.append("image0", file0);
-			formData.append("image1", file1);
-			formData.append("image2", file2);
-			formData.append("image3", file3);
-			formData.append("image4", file4);
-			formData.append("image5", file5);
-			formData.append("image6", file6);
-			formData.append("image7", file7);
 
 			// HTML file input, chosen by user
 			formData.append("image0", file0);

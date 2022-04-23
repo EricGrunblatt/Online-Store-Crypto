@@ -42,12 +42,12 @@ export default function NavigationBar() {
     }
     else {
         let profilePicture = "";
-        if(auth.user.profileImage === null || auth.user.profileImage === undefined) {
+        if(auth.user.profileImage === null || auth.user.profileImage === undefined || auth.user.profileImage === "http://localhost:4000/api/image/null") {
             profilePicture = <AccountCircleRoundedIcon onClick={handleProfileMenuOpen} style={{ cursor: 'pointer', color: 'white', fontSize: '45px' }}></AccountCircleRoundedIcon>; 
         } else {
             let image = auth.user.profileImage;
             let url = `data:${image.mimetype};base64,${Buffer.from(image.data).toString('base64')}`;
-            profilePicture = <img src={url} alt={<AccountCircleRoundedIcon style={{ cursor: 'pointer', color: 'white', fontSize: '45px' }}></AccountCircleRoundedIcon>} onClick={handleProfileMenuOpen} style={{ cursor: 'pointer', width: '45px', height: '45px', border: 'white 1px solid', borderRadius: '50%'}}/>
+            profilePicture = <img src={image} alt={<AccountCircleRoundedIcon style={{ cursor: 'pointer', color: 'white', fontSize: '45px' }}></AccountCircleRoundedIcon>} onClick={handleProfileMenuOpen} style={{ cursor: 'pointer', width: '45px', height: '45px', border: 'white 1px solid', borderRadius: '50%'}}/>
         }
         navBarLoggedIn = 
         <Box style={{ display: 'flex', float: 'right', margin: '60px 1vw 0px 7vw' }}>

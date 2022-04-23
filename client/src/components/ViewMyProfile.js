@@ -17,8 +17,8 @@ export default function ViewMyProfile() {
     let profilePic = store.userProfile.profileImage;
     let userImage = "";
     if(profilePic !== null) {
-        let url = `data:${profilePic.mimetype};base64,${Buffer.from(profilePic.data).toString('base64')}`;
-        userImage = <img src={url} alt="" style={{ margin: '20px 0px 0px 0px', width: '250px', height: '250px', borderRadius: '50%' }}></img>
+        // let url = `data:${profilePic.mimetype};base64,${Buffer.from(profilePic.data).toString('base64')}`;
+        userImage = <img src={profilePic} alt="" style={{ margin: '20px 0px 0px 0px', width: '250px', height: '250px', borderRadius: '50%' }}></img>
     } else {
         userImage = <AccountCircleRoundedIcon style={{ margin: '20px 0px 0px 0px', fontSize: '300px' }} />;
     }
@@ -140,7 +140,7 @@ export default function ViewMyProfile() {
 						<div style={{ marginBottom: '5%', display: 'grid', gridTemplateColumns: 'repeat(2, 35vw)', width: '95%', height: '200px', border: 'black 2px solid', borderRadius: '20px' }}>
 							{/* ITEM IMAGE */}
 							<div style={{ position: 'absolute', margin: '25px 0 0 25px'}}>
-								<img onClick={() => { history.push("/product/" + index._id) }} src={`data:${index.image.mimetype};base64,${Buffer.from(index.image.data).toString('base64')}`} alt="" style={{ cursor: 'pointer', width: '150px', height: '150px', borderRadius: '10%' }} ></img>
+								<img onClick={() => { history.push("/product/" + index._id) }} src={index.image} alt="" style={{ cursor: 'pointer', width: '150px', height: '150px', borderRadius: '10%' }} ></img>
 							</div>
 							{/* ITEM INFO */}
 							<div style={{position: 'absolute', margin: '3px 0 0 200px'}}>
