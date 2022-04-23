@@ -3,6 +3,7 @@ const {Product, ProductState} = require('../models/productModel')
 const User = require('../models/userModel')
 const { coingateClient } = require('../handlers/purchaseHandler')
 const { calculatePriceOfReserved, reserveCartProducts } = require('./helpers/purchaseControllerHelper')
+const { getProducts } = require('./helpers/productControllerHelper')
 const dotenv = require('dotenv')
 const Cart = require('../models/cartModel')
 const {Order, OrderState} = require('../models/orderModel')
@@ -34,6 +35,9 @@ addToCart = async (req, res) => {
 		}
 		else if (product.sellerUsername === user.username) {
 			json = {status: constants.status.ERROR, errorMessage: constants.purchase.userOwnsThisItem}
+		}
+		else if (await Cart.findOne({buyerUsername: user.username, productId: _id})) {
+			json = {status: constants.status.ERROR, errorMessage: constants.purchase.cartAlreadyIncludesProduct}
 		}
 		else {
 			const cart = new Cart({buyerUsername: user.username, productId: _id})
@@ -204,6 +208,19 @@ purchaseFromCartTest = async (req, res) => {
 				productIds: reservedProductIds,
 			})
 			purchase.save()
+
+			const selectOptions = {
+				_id: 1,
+				name: 1,
+				price: 1,
+				shippingPrice: 1,
+				sellerUsername: 1,
+				imageIds: 1,
+				dateListed: "$createdAt"
+			}
+
+			reservedProducts = await getProducts(reservedProductIds, selectOptions)
+			failedToReserve = await getProducts(failedToReserveIds, selectOptions)
 
 			const invoice = `http://localhost:4000/api/purchase/purchaseCallbackTest/${thirdPartyOrderId}/${token}`
 			

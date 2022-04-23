@@ -68,7 +68,7 @@ router.post('/purchase/purchaseCallback', purchaseController.purchaseCallback)
 
 // TESTING
 router.post('/purchase/purchaseFromCartTest', auth.verify, purchaseController.purchaseFromCartTest)
-router.post('/purchase/purchaseCallbackTest/:order_id/:token', purchaseController.purchaseCallbackTest)
+router.get('/purchase/purchaseCallbackTest/:order_id/:token', purchaseController.purchaseCallbackTest)
 
 // Get Wallets
 router.post('/wallet/getWallets', auth.verify, walletController.getWallets)

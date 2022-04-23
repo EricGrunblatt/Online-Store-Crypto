@@ -4,7 +4,7 @@ const { Order, OrderState } = require("../../models/orderModel")
 
 calculatePriceOfReserved = async (username) => {
 	let price = 0;
-	const reservations = await Order.find({ buyerUsername: username, state: OrderState.RESERVED })
+	const reservations = await Order.find({ buyerUsername: username, state: OrderState.PENDING })
 	const productIds = reservations.map(reservation => reservation.productId)
 	for (const productId of productIds) {
 		const product = await Product.findById(productId)
