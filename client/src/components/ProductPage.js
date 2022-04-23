@@ -23,6 +23,7 @@ export default function ProductPage() {
 	const [condition, setCondition] = useState("");
 	const [description, setDescription] = useState("");
 	const [seller, setSeller] = useState("");
+	const [isSold, setIsSold] = useState(false);
 	const [cost, setCost] = useState(0);
 	const [shippingService, setShippingService] = useState("");
 	const [itemImage0, setItemImage0] = useState(null);
@@ -48,18 +49,16 @@ export default function ProductPage() {
 				const requestShippingPrice = axios.post(urlGetShippingPrice, data, options);
 				axios.all([requestProduct, requestShippingPrice]).then(axios.spread((...responses) => {
 					const currProduct = responses[0].data.product;
-					const shippingPrice = responses[1];
+					const shippingPriceRes = responses[1];
 					// console.log("PRICE: ", shippingPrice.data.status);
-					if(shippingPrice.data.status === "ERROR") {
+					if(shippingPriceRes.data.status === "ERROR") {
 						setCost(currProduct.price);
-						// setShippingAlert("(shipping not included)");
 					}
 					else {
 						setCost(currProduct.price);
-
-						let price = parseFloat(shippingPrice.data.shippingPrice).toFixed(2);
+						let price = parseFloat(shippingPriceRes.data.shippingPrice).toFixed(2);
 						setShippingPrice(price);
-						setShippingService(shippingPrice.data.shippingService);
+						setShippingService(shippingPriceRes.data.shippingService);
 						// setShippingAlert("(shipping included)");
 					}
 					
@@ -67,6 +66,7 @@ export default function ProductPage() {
 					setProductNum(currProduct._id);
 					setDescription(currProduct.description);
 					setCondition(currProduct.condition);
+					setIsSold(currProduct.isSold);
 					setSeller(currProduct.sellerUsername);
 					setItemImage0(currProduct.images[0]);
 					setItemImages(currProduct.images);
@@ -115,14 +115,12 @@ export default function ProductPage() {
 		}
     };
 
-
-
 	let showImages = 
         <div style={{ width: '40%', margin: '3% 0 0 3%', display: 'grid', gridTemplateColumns: 'repeat(4, 10vw)' }}>
             {itemImages.map((index, indexNum) => (
                 index? 
                     <div key={indexNum} style={{cursor: "pointer", marginBottom: '20px' }}>
-                        <img id={indexNum} src={`data:${index.mimetype};base64,${Buffer.from(index.data).toString('base64')}`} alt="" 
+                        <img id={indexNum} src={index} alt="" 
                         onClick={handleImage} title={index.title} width="100px" height="100px" style={{ borderRadius: '10%', border: "black 2px" }} ></img>
                     </div>:<div key={indexNum}></div>
             ))}
@@ -136,14 +134,14 @@ export default function ProductPage() {
 		console.log(json);
 		store.getProfile(json);
 	}
-	
+
     return (
 		<Box style={{ position: 'absolute', marginLeft: '10%', marginRight: '10%', marginTop: '60px', width: '79%', minHeight: '450px'}}>
 			<div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 40vw)' }}>
 				{/* LEFT IMAGES & DESCRIPTION */}
 				<div>
 					{/* THE MAIN IMAGE */}
-					{itemImage0? <img src={`data:${itemImage0.mimetype};base64,${Buffer.from(itemImage0.data).toString('base64')}`} width="600px" height="400px" alt="" style={{ borderRadius: '10%' }} ></img>
+					{itemImage0? <img src={itemImage0} width="600px" height="400px" alt="" style={{ borderRadius: '10%' }} ></img>
 						:<img src="https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg" width="600px" height="600px" alt="" style={{ borderRadius: '10%' }} ></img>}
 					{/* THE 8 IMAGES */}
 					{showImages}
@@ -176,9 +174,11 @@ export default function ProductPage() {
 					<div style={{ paddingBottom: '30px', fontSize: '20px', textAlign: 'right' }}>
 						{shippingPrice ? "Shipping Price: " + shippingPrice + " Algo" : "Shipping not included"}
 					</div>
-					<Button onClick={handleAddToCart} className="add-to-cart-button" style={{ background: 'black', color: 'white', width: '32vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
+					{isSold ? <Button className="add-to-cart-button" disabled={true} style={{ background: 'grey', color: 'white', width: '32vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
+						Sold Out
+					</Button> : <Button onClick={handleAddToCart} className="add-to-cart-button" style={{ background: 'black', color: 'white', width: '32vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
 						Add to Cart
-					</Button>
+					</Button>}
 					{cartAlert}
 					<div style={{ paddingTop: '40px', fontFamily: 'Quicksand', fontWeight: '500', fontSize: '25px', color: 'black' }}>
                     	<u> Return &#38; Refund Policy </u>

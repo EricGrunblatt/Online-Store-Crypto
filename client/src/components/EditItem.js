@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect, useRef, useContext } from "react";
-import { TextareaAutosize, TextField, Box, Select, MenuItem } from '@mui/material';
+import { TextareaAutosize, TextField, Box, Select, MenuItem, Alert } from '@mui/material';
 import { FormControl, InputLabel, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useHistory, generatePath } from "react-router-dom";
@@ -31,6 +31,7 @@ export default function EditItem(){
     const [width, setWidth] = useState("");
     const [height, setHeight] = useState("");
     const [weight, setWeight] = useState("");
+	const [editItemAlert, setEditItemAlert] = useState("");
 
     const [image0, setImage0] = useState(null);
     const [image1, setImage1] = useState(null);
@@ -88,47 +89,13 @@ export default function EditItem(){
                     setWidth(result.data.product.boxWidth);
                     setHeight(result.data.product.boxHeight);
                     setWeight(result.data.product.boxWeight);
-
-                    if(result.data.product.images[0]) {
-                        let image0 = result.data.product.images[0];
-                        let url0 = `data:${image0.mimetype};base64,${Buffer.from(image0.data).toString('base64')}`;
-                        setImage0(url0);
-                    }
-                    if(result.data.product.images[1]) {
-                        let image1 = result.data.product.images[1];
-                        let url1 = `data:${image1.mimetype};base64,${Buffer.from(image1.data).toString('base64')}`;
-                        setImage1(url1);
-                    }
-                    if(result.data.product.images[2]) {
-                        let image2 = result.data.product.images[2];
-                        let url2 = `data:${image2.mimetype};base64,${Buffer.from(image2.data).toString('base64')}`;
-                        setImage2(url2);
-                    }
-                    if(result.data.product.images[3]) {
-                        let image3 = result.data.product.images[3];
-                        let url3 = `data:${image3.mimetype};base64,${Buffer.from(image3.data).toString('base64')}`;
-                        setImage3(url3);
-                    }
-                    if(result.data.product.images[4]) {
-                        let image4 = result.data.product.images[4];
-                        let url4 = `data:${image4.mimetype};base64,${Buffer.from(image4.data).toString('base64')}`;
-                        setImage4(url4);
-                    }
-                    if(result.data.product.images[5]) {
-                        let image5 = result.data.product.images[5];
-                        let url5 = `data:${image5.mimetype};base64,${Buffer.from(image5.data).toString('base64')}`;
-                        setImage5(url5);
-                    }
-                    if(result.data.product.images[6]) {
-                        let image6 = result.data.product.images[6];
-                        let url6 = `data:${image6.mimetype};base64,${Buffer.from(image6.data).toString('base64')}`;
-                        setImage6(url6);
-                    }
-                    if(result.data.product.images[7]) {
-                        let image7 = result.data.product.images[7];
-                        let url7 = `data:${image7.mimetype};base64,${Buffer.from(image7.data).toString('base64')}`;
-                        setImage7(url7);
-                    }
+					let setImages = [setImage0, setImage1, setImage2, setImage3, setImage4, setImage5, setImage6, setImage7]
+					// SET THE PRODUCT IMAGES 
+					for(let i = 0; i < result.data.product.images.length; i++) {
+						if(result.data.product.images[i]) {
+							setImages[i](result.data.product.images[i]);
+						}
+					}
                 });
             }
             catch{
@@ -374,62 +341,75 @@ export default function EditItem(){
 
     /* POST EDIT ITEM */
     const handleEditItem = async function() {
+		var categoryTxt = categoryTxts[category - 1]
+		if(!name || !description || !condition || !categoryTxt || !price || !length || !width || !height ||!weight) {
+			setEditItemAlert(<Alert severity="error">Missing requeired field!</Alert>);
+		}
+		else if(+price > 25.315) {
+			setEditItemAlert(<Alert severity="error">The price cannot exceed 25.315 BTC</Alert>);
+		}
+		else if(+weight > 70) {
+			setEditItemAlert(<Alert severity="error">The package weight cannot exceed 70 pounds.</Alert>);
+		}
+		else if(+length > 21 || +width > 21 || +height > 21) {
+			setEditItemAlert(<Alert severity="error">The package package is too large to be mailed.</Alert>);
+		}
+		else {
+			var formData = new FormData();
+			formData.append("_id", productId)
+			formData.append("name", name);
+			formData.append("description", description);
+			formData.append("condition", condition);
+			formData.append("category", categoryTxt);
+			formData.append("price", price);
+			formData.append("boxLength", length);
+			formData.append("boxWidth", width);
+			formData.append("boxHeight", height);
+			formData.append("boxWeight", weight);
 
-        var categoryTxt = categoryTxts[category - 1]
-        var formData = new FormData();
-        formData.append("_id", productId)
-        formData.append("name", name);
-        formData.append("description", description);
-        formData.append("condition", condition);
-        formData.append("category", categoryTxt);
-        formData.append("price", price);
-        formData.append("boxLength", length);
-        formData.append("boxWidth", width);
-        formData.append("boxHeight", height);
-        formData.append("boxWeight", weight);
+			const element0 = document.getElementById('image0')
+			const file0 = element0.files[0]
 
-        const element0 = document.getElementById('image0')
-        const file0 = element0.files[0]
+			const element1 = document.getElementById('image1')
+			const file1 = element1.files[0]
 
-        const element1 = document.getElementById('image1')
-        const file1 = element1.files[0]
+			const element2 = document.getElementById('image2')
+			const file2 = element2.files[0]
 
-        const element2 = document.getElementById('image2')
-        const file2 = element2.files[0]
+			const element3 = document.getElementById('image3')
+			const file3 = element3.files[0]
 
-        const element3 = document.getElementById('image3')
-        const file3 = element3.files[0]
+			const element4 = document.getElementById('image4')
+			const file4 = element4.files[0]
 
-        const element4 = document.getElementById('image4')
-        const file4 = element4.files[0]
+			const element5 = document.getElementById('image5')
+			const file5 = element5.files[0]
 
-        const element5 = document.getElementById('image5')
-        const file5 = element5.files[0]
+			const element6 = document.getElementById('image6')
+			const file6 = element6.files[0]
 
-        const element6 = document.getElementById('image6')
-        const file6 = element6.files[0]
+			const element7 = document.getElementById('image7')
+			const file7 = element7.files[0]
 
-        const element7 = document.getElementById('image7')
-        const file7 = element7.files[0]
+			// HTML file input, chosen by user
+			formData.append("image0", file0);
+			formData.append("image1", file1);
+			formData.append("image2", file2);
+			formData.append("image3", file3);
+			formData.append("image4", file4);
+			formData.append("image5", file5);
+			formData.append("image6", file6);
+			formData.append("image7", file7);
 
-        // HTML file input, chosen by user
-        formData.append("image0", file0);
-        formData.append("image1", file1);
-        formData.append("image2", file2);
-        formData.append("image3", file3);
-        formData.append("image4", file4);
-        formData.append("image5", file5);
-        formData.append("image6", file6);
-        formData.append("image7", file7);
-
-        const response = await api.updateListingProduct(formData);
-        if(response.data.status === "OK") {
-            const id = response.data.product._id;
-            history.push(generatePath("/product/:id", { id }));
-        } else if (response.data.status === "ERROR") {
-            alert(response.data.errorMessage);
-        }
-    }
+			const response = await api.updateListingProduct(formData);
+			if(response.data.status === "OK") {
+				const id = response.data.product._id;
+				history.push(generatePath("/product/:id", { id }));
+			} else if (response.data.status === "ERROR") {
+				alert(response.data.errorMessage);
+			}
+		}
+	}
 
     return (
         <div className="list-item">
@@ -533,13 +513,14 @@ export default function EditItem(){
                         }} className="weight" placeholder="Weight (lbs)" style={{ margin: '-40px 41.5vw 0px 0px', float: 'right', width: '20vw' }}></TextField>
                     </div>
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'row', margin: '8% 20% 10% 20%' }}>
+                <div style={{ display: 'flex', flexDirection: 'row', margin: '8% 20% 10% 30%' }}>
                     <div className="delete-item-button" style={{ margin: '20px', borderRadius: '10px', textAlign: 'center' }}>
                         <Button type="submit" onClick={() => { handleDeleteItem() }} style={{ textAlign: 'center', background: 'white', color: 'red', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '20px', width: '220px', border: 'black 1px solid' }}>Delete Listing</Button>
                     </div> 
                     <div className="list-item-button" style={{ margin: 'auto', borderRadius: '10px', textAlign: 'center' }}>
-                        <Button type="submit" onClick={handleEditItem} style={{ textAlign: 'center', background: 'white', color: 'black', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '20px', width: '220px', border: 'black 1px solid' }}>Save</Button>
-                    </div> 
+                        <Button type="submit" onClick={handleEditItem} style={{ textAlign: 'center', background: 'white', color: 'black', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '20px', width: '150px', border: 'black 1px solid' }}>Save</Button>
+						{editItemAlert}
+					</div> 
                 </div>
             <ListingsDeleteModal></ListingsDeleteModal>
         </div>

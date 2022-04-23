@@ -31,7 +31,6 @@ const style = {
 function ListingsDeleteModal() {
     const { store } = useContext(GlobalStoreContext);
     
-    let name = "";
     let isOpen = false;
 
     if(store.listingItemDelete) {
@@ -59,7 +58,7 @@ function ListingsDeleteModal() {
                     sx={{ ...style, width: 400 }}
                 >
                     <h2 className="dialog-header">
-                        Remove {name} from Listings?
+                        Remove this item from Listings?
                     </h2>
                     <Button 
                         id="dialog-confirm-button"

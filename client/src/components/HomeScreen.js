@@ -341,7 +341,7 @@ export default function HomeScreen() {
 
     /* CUSTOM PAGINATION SETUP */
     let allProducts = store.catalogItems;
-    let PageSize = 1;
+    let PageSize = 5;
     const [currentPage, setCurrentPage] = useState(1);
  
     let pageProductAll = useMemo(() => {
@@ -396,7 +396,7 @@ export default function HomeScreen() {
                     <div style={{ position: 'absolute', display: 'flex', margin: '0px 0vw 0px -8.5vw', left: '20vw', width: '70vw' }}>
                         {newItems.map((index) => (
                             <div key={index._id + "newItem"} onClick={() => {history.push("/product/"+index._id)}} style={{ cursor: 'pointer', display: 'inline-block', margin: '-20px 10vw 0px 10vw' }}>
-                                <img src={`data:${index.image.mimetype};base64,${Buffer.from(index.image.data).toString('base64')}`} alt="" style={{ width: '100px', height: '100px', border: 'black 1px solid', borderRadius: '10px' }}></img>
+                                <img src={index.image} alt="" style={{ width: '100px', height: '100px', border: 'black 1px solid', borderRadius: '10px' }}></img>
                             </div>
                         ))}    
                     </div>
@@ -457,22 +457,22 @@ export default function HomeScreen() {
                     </Select>
                 </FormControl>
             </Box>
-            <Box style={{ zIndex: 1, margin: '-150px 0px 50px 20vw', background: 'white', top: '450px', width: '79%', minHeight: '350px' }}>
+            <Box style={{ position: 'absolute', zIndex: 1, margin: '10px 0px 50px 20vw', background: 'white', top: '450px', width: '79%', minHeight: '350px' }}>
                 <div>
                 {
                     productCard
                 }
                 </div>
-            </Box>
-            <Box style={{ zIndex: 1, whiteSpace: 'nowrap', margin: '10vw 0px 5vw 0vw', justifyContent: 'center', fontSize: '35px', width: '100%' }}>
-                <Pagination
-                    key="pagination"
-                    className="pagination-bar"
-                    currentPage={currentPage}
-                    totalCount={allProducts.length}
-                    pageSize={PageSize}
-                    onPageChange={page => setCurrentPage(page)}
-                />
+                <Box style={{ zIndex: 1, whiteSpace: 'nowrap', margin: '10vw 0px 5vw -12.5vw', justifyContent: 'center', fontSize: '35px', width: '100%' }}>
+                    <Pagination
+                        key="pagination"
+                        className="pagination-bar"
+                        currentPage={currentPage}
+                        totalCount={allProducts.length}
+                        pageSize={PageSize}
+                        onPageChange={page => setCurrentPage(page)}
+                    />
+                </Box>
             </Box>
             <div style={{ cursor: 'pointer', bottom: '25px', left: '25px', position: 'fixed' }}>
                 {isVisible && (

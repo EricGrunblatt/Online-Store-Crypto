@@ -4,10 +4,12 @@ import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import StarRateIcon from '@mui/icons-material/StarRate';
 import { GlobalStoreContext } from '../store'
 import { useContext } from "react";
+import { useHistory } from "react-router-dom";
 
 
 export default function ViewMyProfile() {
     const { store } = useContext(GlobalStoreContext);
+	const history = useHistory();
 
 	let username = store.userProfile.username;
 	let joined = store.userProfile.dateJoined.substring(0,10);
@@ -16,8 +18,8 @@ export default function ViewMyProfile() {
     let profilePic = store.userProfile.profileImage;
     let userImage = "";
     if(profilePic !== null) {
-        let url = `data:${profilePic.mimetype};base64,${Buffer.from(profilePic.data).toString('base64')}`;
-        userImage = <img src={url} alt="" style={{ margin: '20px 0px 0px 0px', width: '250px', height: '250px', borderRadius: '50%' }}></img>
+        // let url = `data:${profilePic.mimetype};base64,${Buffer.from(profilePic.data).toString('base64')}`;
+        userImage = <img src={profilePic} alt="" style={{ margin: '20px 0px 0px 0px', width: '250px', height: '250px', borderRadius: '50%' }}></img>
     } else {
         userImage = <AccountCircleRoundedIcon style={{ margin: '20px 0px 0px 0px', fontSize: '300px' }} />;
     }
@@ -116,7 +118,7 @@ export default function ViewMyProfile() {
 					{reviews.map((index) => (
 						<Grid key={index.stars + "_" + index.comment + "_viewProfile"} item container xs style={{ margin: '15px auto 15px auto', width: '90%', height: '150px', border: 'black 2px solid', borderRadius: '20px' }}>
 							<Grid item xs={3} style={{ marginLeft: '20px'}}>
-								<div style={{ fontSize: '30px' }}><a href="https://example.com/faq.html" rel="noreferrer"> {index.byUsername} </a></div>
+								<div style={{ fontSize: '30px' }}><u onClick={() => { store.getProfile(index.byUsername) }} style={{ cursor: 'pointer', color: 'lightblue' }}> {index.byUsername} </u></div>
 								<div style={{ marginTop: '15px', fontSize: '1.25vw' }}>{index.stars}/5 Stars</div>
 								<div style={{ marginTop: '15px' }}>{stars(index.stars, '1.25vw')}</div>
 							</Grid>
@@ -131,7 +133,7 @@ export default function ViewMyProfile() {
 			{/* LISTED ITEMS */}
 			<div style={{ overflowY: 'scroll', margin: '50px 0% 50px 10%', width: '80%', height: '700px', border: 'black 2px solid', borderRadius: '20px' }}>
 				<div style={{ margin: '50px 0% 0px 5%', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '50px' }}>
-					<u>{username}'s' Listings</u>
+					<u>{username}'s Listings</u>
 				</div>
 				{/* EACH ITEM CARDS */}
 				<Grid item container xs >
@@ -140,11 +142,11 @@ export default function ViewMyProfile() {
 							<Grid item container xs style={{ margin: '10px auto 10px auto', width: '100%', minHeight: '200px', border: 'black 2px solid', borderRadius: '20px' }}>
 								{/* ITEM IMAGE */}
 								<Grid item xs={3} style={{ margin: '20px'}}>
-									<img src={`data:${index.image.mimetype};base64,${Buffer.from(index.image.data).toString('base64')}`} alt="" style={{ width: '200px', height: '200px', borderRadius: '10%' }} ></img>
+									<img onClick={() => { history.push("/product/" + index._id) }} src={`data:${index.image.mimetype};base64,${Buffer.from(index.image.data).toString('base64')}`} alt="" style={{ cursor: 'pointer', width: '200px', height: '200px', borderRadius: '10%' }} ></img>
 								</Grid>
 								{/* ITEM INFO */}
 								<Grid item xs={5} style={{ margin: '10px auto auto 40px'}}>
-									<div style={{ fontSize: '50px', fontWeight: 'bold' }}> {index.name}</div>
+									<div onClick={() => { history.push("/product/" + index._id) }} style={{ cursor: 'pointer', fontSize: '50px', fontWeight: 'bold' }}> {index.name}</div>
 									<div style={{ marginTop: '3px', fontSize: '30px' }}>{index.price}&nbsp;Algo</div>
 									<div style={{ marginTop: '3px', fontSize: '20px' }}>Seller:&nbsp;{index.sellerUsername}</div>
 									<div style={{ marginTop: '3px', fontSize: '20px' }}>Listed:&nbsp;{index.dateListed}</div>

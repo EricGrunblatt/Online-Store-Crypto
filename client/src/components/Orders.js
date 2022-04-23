@@ -106,7 +106,7 @@ export default function Orders() {
                 {items.map((index) => (
                     <div key={index.id} className="order-outer" style={{ margin: '20px 0vw 0px 1.25vw', width: '75.5vw', height: '160px', border: 'black 2px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>
                         <div className="order-photo" style={{ display: 'inline-block', float: 'left', margin: '10px 0px 10px 10px', width: '140px', height: '140px', border: 'black 1px solid', borderRadius: '10px' }}>
-                            <img src={`data:${index.image.mimetype};base64,${Buffer.from(index.image.data).toString('base64')}`} alt="" style={{ width: '140px', height: '140px'}}></img>
+                            <img src={index.image} alt="" style={{ width: '140px', height: '140px'}}></img>
                         </div>
                         <div className="right-of-photo" style={{ zIndex: 0, position: 'absolute', display: 'inline-block', float: 'left' }}>
                             <div className="product-data" style={{margin: '10px 0vw 0vw 10px' }}>

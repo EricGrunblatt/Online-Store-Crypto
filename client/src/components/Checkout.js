@@ -30,7 +30,8 @@ export default function Checkout() {
 					const unresolvedShippingPrices = result.data.products.map(async(product) => {
 						const data = { '_id': product._id };
 						const res = await api.getShippingPrice(qs.stringify(data));
-						return res.data.shippingPrice;
+						return Math.round(+res.data.shippingPrice * 100) / 100;
+						// return res.data.shippingPrice;
 					});
 					setShippingPrices(await Promise.all(unresolvedShippingPrices));      
 				});
@@ -120,7 +121,7 @@ export default function Checkout() {
                     {items.map((index, i) => (
                         <div key={index._id} className="order-outer" style={{ margin: '20px 0vw 20px 1.25vw', width: '75.5vw', height: '250px', border: 'black 2px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>
                             <div className="order-photo" style={{ display: 'inline-block', float: 'left', margin: '15px 0px 15px 15px', width: '220px', height: '220px', border: 'black 1px solid', borderRadius: '10px' }}>
-								<img src={`data:${index.image.mimetype};base64,${Buffer.from(index.image.data).toString('base64')}`} 
+								<img src={index.image} 
 								alt="" width="220px" height="220px" style={{ borderRadius: '10px', cursor: 'pointer' }} ></img>
                             </div>
                             <div className="right-of-photo" style={{ padding: '0px 50px 0px 0px', display: 'inline-block', float: 'right' }}>
@@ -146,13 +147,13 @@ export default function Checkout() {
                                     <div className="price-divider-line">
                                         <hr style={{ width: '40vw', float: 'right', margin: '10px 0vw 0px 0px' }}></hr>
                                     </div>
-                                    <div className="added-price" style={{ float: 'right', margin: '0px 20px 0px 0px', fontSize: '40px' }}>{+index.price + +shippingPrices[i]} Algo</div> 
+                                    <div className="added-price" style={{ float: 'right', margin: '0px 20px 0px 0px', fontSize: '40px' }}>{Math.round((+index.price + +shippingPrices[i]) * 100) / 100} Algo</div> 
                                 </div>
                             </div>
                         </div>
                     ))}
                     <div className="total-payment" style={{ float: 'right', margin: '0px 20px 20px 20px', fontFamily: 'Quicksand', fontSize: '35px', color: '#FFBD59' }}>
-                        Total: {totalPrice} Algo
+                        Total: {Math.round(+totalPrice * 100) / 100} Algo
                     </div>
                 </div>
             </div>
