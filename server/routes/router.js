@@ -5,7 +5,8 @@ const authController = require('../controllers/authController');
 const userController = require('../controllers/userController');
 const productController = require('../controllers/productController');
 const purchaseController = require('../controllers/purchaseController');
-const walletController = require('../controllers/walletController')
+const walletController = require('../controllers/walletController');
+const imageController = require('../controllers/imageController');
 
 const {upload} = require('../handlers/imageHandler')
 
@@ -66,11 +67,18 @@ router.post('/purchase/purchaseFromCart', auth.verify, purchaseController.purcha
 // Process Purchase Callbacks
 router.post('/purchase/purchaseCallback', purchaseController.purchaseCallback)
 
+// TESTING
+router.post('/purchase/purchaseFromCartTest', auth.verify, purchaseController.purchaseFromCartTest)
+router.get('/purchase/purchaseCallbackTest/:order_id/:token', purchaseController.purchaseCallbackTest)
+
 // Get Wallets
 router.post('/wallet/getWallets', auth.verify, walletController.getWallets)
 // Add Wallet
 router.post('/wallet/addWallet', auth.verify, walletController.addWallet)
 // Remove Wallet
 router.post('/wallet/removeWallet', auth.verify, walletController.removeWallet)
+
+// Image
+router.get('/image/:id', imageController.image)
 
 module.exports = router

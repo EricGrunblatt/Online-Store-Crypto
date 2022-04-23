@@ -1,8 +1,12 @@
 const {Product, ProductState} = require("../../models/productModel")
+const Cart = require("../../models/cartModel")
+const { Order, OrderState } = require("../../models/orderModel")
 
-calculatePriceOfCart = async (user) => {
+calculatePriceOfReserved = async (username) => {
 	let price = 0;
-	for (const productId of user.cartProductIds) {
+	const reservations = await Order.find({ buyerUsername: username, state: OrderState.PENDING })
+	const productIds = reservations.map(reservation => reservation.productId)
+	for (const productId of productIds) {
 		const product = await Product.findById(productId)
 		price += product.price + product.shippingPrice
 	}
@@ -11,18 +15,32 @@ calculatePriceOfCart = async (user) => {
 }
 
 // TODO
-reserveCartProducts = async (user) => {
-	for (const productId of user.cartProductIds) {
-		let product = await Product.findById(productId)
-		if (product.state !== ProductState.RESERVED) {
-			product.state = ProductState.RESERVED
-			product.reserverUsername = user.username
-			product.save()
+reserveCartProducts = async (username) => {
+	let reservedProductIds = []
+	let failedToReserveIds = []
+	const cartItems = await Cart.find({buyerUsername: username})
+	const cartProductIds = cartItems.map((cartItem) => cartItem.productId)
+	for (const productId of cartProductIds) {
+		let order = null;
+		try {
+			if (await Order.findOne({productId: productId})) {
+				failedToReserveIds.push(productId)
+			}
+			else {
+				const reservation = new Order({buyerUsername: username, productId: productId})
+				await reservation.save()
+				reservedProductIds.push(productId)
+				await Cart.findOneAndRemove({buyerUsername: username, productId: productId})
+				await Product.findOneAndUpdate({_id: productId}, {state: ProductState.RESERVED})
+			}
+		} catch (err) {
+			failedToReserveIds.push(productId)
 		}
 	}
+	return {reservedProductIds, failedToReserveIds}
 }
 
 module.exports = {
-	calculatePriceOfCart,
+	calculatePriceOfReserved,
 	reserveCartProducts
 }

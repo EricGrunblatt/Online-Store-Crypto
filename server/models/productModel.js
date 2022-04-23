@@ -33,7 +33,15 @@ const ProductSchema = new Schema(
 	{ timestamps: true },
 )
 
+const Product = mongoose.model('Product', ProductSchema)
+
+Product.on('index', error => {
+	if (error) {
+		console.log(error)
+	}
+})
+
 module.exports = {
-	Product: mongoose.model('Product', ProductSchema),
+	Product: Product,
 	ProductState: ProductState,
 }

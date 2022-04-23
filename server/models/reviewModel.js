@@ -12,4 +12,12 @@ const ReviewSchema = new Schema(
 	{ timestamps: true },
 )
 
-module.exports = mongoose.model('Review', ReviewSchema)
+const Review = mongoose.model('Review', ReviewSchema)
+
+Review.on('index', error => {
+	if (error) {
+		console.log(error)
+	}
+})
+
+module.exports = Review
