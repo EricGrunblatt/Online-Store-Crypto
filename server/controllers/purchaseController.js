@@ -33,6 +33,9 @@ addToCart = async (req, res) => {
 		else if (! (product = await Product.findById(_id))) {
 			json = {status: constants.status.ERROR, errorMessage: constants.purchase.productDoesNotExist}
 		}
+		else if (product.state === ProductState.SOLD) {
+			json = {status: constants.status.ERROR, errorMessage: constants.purchase.productIsSold}
+		}
 		else if (product.sellerUsername === user.username) {
 			json = {status: constants.status.ERROR, errorMessage: constants.purchase.userOwnsThisItem}
 		}

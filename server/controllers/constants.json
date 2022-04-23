@@ -55,7 +55,8 @@
 		"cartItemDoesNotExist": "CART ITEM DOES NOT EXIST",
 		"couldNotGetCartItems": "COULD NOT GET CART ITEMS",
 		"failedToReserveCartProducts": "FAILED TO RESERVE CART PRODUCTS",
-		"noProductsWereReserved": "NO PRODUCTS WERE RESERVED"
+		"noProductsWereReserved": "NO PRODUCTS WERE RESERVED", 
+		"productIsSold": "PRODUCT IS SOLD"
 	},
 	"review":{
 		"missingRequiredField": "MISSING REQUIRED FIELD",
