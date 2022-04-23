@@ -6,8 +6,8 @@ const UserSchema = new Schema(
 	{
 		firstName:			{type: String, required: true},
 		lastName:			{type: String, required: true},
-		username:			{type: String, required: true},
-		email:				{type: String, required: true},
+		username:			{type: String, required: true, index:{ unique: true}},
+		email:				{type: String, required: true, index:{ unique: true}},
 		passwordHash: 		{type: String, required: true},
 		phoneNumber: 		{type: String, required: true},
 		addressFirstLine: 	{type: String, required: true},
@@ -16,10 +16,17 @@ const UserSchema = new Schema(
 		state: 				{type: String, required: true},
 		zipcode: 			{type: String, required: true},
 		profileImageId: 	{type: ObjectId, default: null},
-		cartProductIds:		{type: [ObjectId], default: []},
 		wallets: 			{type:[Object], default:[]}
 	},
 	{ timestamps: true },
 )
 
-module.exports = mongoose.model('User', UserSchema)
+const User = mongoose.model('User', UserSchema)
+
+User.on('index', error => {
+	if (error) {
+		console.log(error)
+	}
+})
+
+module.exports = User

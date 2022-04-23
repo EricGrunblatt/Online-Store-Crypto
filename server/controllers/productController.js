@@ -5,6 +5,7 @@ const Review = require('../models/reviewModel')
 const constants = require('./constants.json')
 const xml2js= require('xml2js')
 const axios=require("axios")
+const Cart = require('../models/cartModel')
 
 const {
 	productImageMiddleware,
@@ -277,7 +278,11 @@ getCartProductsForUser = async (req, res) => {
 				dateListed: "$createdAt"
 			}
 
-			let products = await getProducts(user.cartProductIds, selectOptions)
+			let cartItems = await Cart.find({buyerUsername: user.username})
+
+			let cartProductIds = cartItems.map(cartItem => cartItem.productId)
+
+			let products = await getProducts(cartProductIds, selectOptions)
 			
 			products = await Promise.all(products.map(async (product) => {
 				const image = await getProductFirstImage(product);
