@@ -15,9 +15,9 @@ export default function ViewMyProfile() {
 	let userStars = 0
     let reviews = store.userProfile.reviews;
     let profilePic = store.userProfile.profileImage;
+	console.log(store.userProfile);
     let userImage = "";
     if(profilePic !== null) {
-        // let url = `data:${profilePic.mimetype};base64,${Buffer.from(profilePic.data).toString('base64')}`;
         userImage = <img src={profilePic} alt="" style={{ margin: '20px 0px 0px 0px', width: '250px', height: '250px', borderRadius: '50%' }}></img>
     } else {
         userImage = <AccountCircleRoundedIcon style={{ margin: '20px 0px 0px 0px', fontSize: '300px' }} />;
@@ -135,23 +135,26 @@ export default function ViewMyProfile() {
 					<u>My Listings</u>
 				</div>
 				{/* EACH ITEM CARDS */}
-				<div style={{ margin: '3% 0 3% 7%', display: 'grid', gridTemplateColumns: 'repeat(2, 35vw)' }}>
+				<Grid item container xs >
 					{items.map((index) => (
-						<div style={{ marginBottom: '5%', display: 'grid', gridTemplateColumns: 'repeat(2, 35vw)', width: '95%', height: '200px', border: 'black 2px solid', borderRadius: '20px' }}>
-							{/* ITEM IMAGE */}
-							<div style={{ position: 'absolute', margin: '25px 0 0 25px'}}>
-								<img onClick={() => { history.push("/product/" + index._id) }} src={index.image} alt="" style={{ cursor: 'pointer', width: '150px', height: '150px', borderRadius: '10%' }} ></img>
-							</div>
-							{/* ITEM INFO */}
-							<div style={{position: 'absolute', margin: '3px 0 0 200px'}}>
-								<div onClick={() => { history.push("/product/" + index._id) }} style={{ cursor: 'pointer', fontSize: '50px', fontWeight: 'bold' }}> {index.name}</div>
-								<div style={{ marginTop: '3px', fontSize: '30px' }}>{index.price}&nbsp;Algo</div>
-								<div style={{ marginTop: '3px', fontSize: '20px' }}>Seller:&nbsp;{index.sellerUsername}</div>
-								<div style={{ marginTop: '3px', fontSize: '20px' }}>Listed:&nbsp;{index.dateListed}</div>
-							</div>
-						</div>
+						<Grid key={index._id + "myListing"} item xs={5} style={{ margin: '10px auto 10px auto'}}>
+							<Grid item container xs style={{ margin: '10px auto 10px auto', width: '100%', minHeight: '200px', border: 'black 2px solid', borderRadius: '20px' }}>
+								{/* ITEM IMAGE */}
+								<Grid item xs={3} style={{ margin: '20px'}}>
+									<img onClick={() => { history.push("/product/" + index._id) }} src={index.image} alt="" style={{ cursor: 'pointer', width: '200px', height: '200px', borderRadius: '10%' }} ></img>
+								</Grid>
+								{/* ITEM INFO */}
+								<Grid item xs={5} style={{ margin: '10px auto auto 40px'}}>
+									<div onClick={() => { history.push("/product/" + index._id) }} style={{ cursor: 'pointer', fontSize: '50px', fontWeight: 'bold' }}> {index.name}</div>
+									<div style={{ marginTop: '3px', fontSize: '30px' }}>{index.price}&nbsp;Algo</div>
+									<div style={{ marginTop: '3px', fontSize: '20px' }}>Seller:&nbsp;{index.sellerUsername}</div>
+									<div style={{ marginTop: '3px', fontSize: '20px' }}>Listed:&nbsp;{index.dateListed}</div>
+								</Grid>
+							</Grid>	
+						</Grid>
+						
 					))}
-				</div>
+				</Grid>
 			</div>
             <div style={{ margin: '0px 0px 50px 0px', textAlign: 'center' }}>
                 <Button className="edit-account-button" onClick={() => { store.getAccount() }} style={{ background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>

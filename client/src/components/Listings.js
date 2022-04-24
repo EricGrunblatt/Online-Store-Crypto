@@ -152,14 +152,11 @@ export default function Listings() {
     }
 
     const handleGoToListItem = () =>  {
-        /*
         if(wallets.length === 0) {
             alert("You must set up a wallet before listing an item");
         } else {
             history.push("/listitem");
         }
-        */
-        history.push("/listitem");
     }
 	
     return (
