@@ -33,9 +33,17 @@ getProfileByUsername = async (req, res) => {
 			// GET PROFILE IMAGE
 			const profileImage = generateImageUrl(user.profileImageId)
 			// GET USER'S SELLING PRODUCTS
+			selectOptions = {
+				id: 1,
+				name: 1, 
+				price: 1, 
+				sellerUsername: 1,
+				imageIds: 1,
+				dateListed: "$createdAt",
+			}
 			const sellingProducts = await Product.find({ sellerUsername: username, state: ProductState.LISTED })
 				.lean()
-				.select({ "_id": 1, "name": 1, "price": 1, "sellerUsername": 1, "dateListed": 1, "imageIds": 1})
+				.select(selectOptions)
 			
 			await Promise.all(sellingProducts.map(async (product) => {
 				const image = await getProductFirstImage(product);
