@@ -100,11 +100,10 @@ export default function Cart() {
 							<div style={{ marginTop: '3px', fontSize: '20px' }}>Seller:&nbsp;{index.sellerUsername}</div>
 							<div id={index._id} onClick={handleDeleteModalOpen} style={{ marginTop: '3px', fontSize: '20px', cursor: 'pointer', color: 'red' }}>Remove</div>
 						</div>
-                    </div>
-                    
+                    </div>     
                 ))}
             </div>
-            <div className="go-to-checkout" style={{ justifyContent: 'center', textAlign: 'center', margin: '150px 0px 40px 0px' }}>
+            <div className="go-to-checkout" style={{ justifyContent: 'center', textAlign: 'center', margin: '50px 0px 40px 0px' }}>
                 <Button onClick={() => { history.push("/checkout") }} className="back-to-profile-button" style={{ background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
                     Checkout
                 </Button>
@@ -121,7 +120,7 @@ export default function Cart() {
 
     return (
         <div>
-            <div className="cart" style={{ margin: '50px 0% 50px 10%', width: '80%', minHeight: '600px', border: 'black 2px solid', borderRadius: '20px' }}>
+            <div className="cart" style={{ margin: '50px 0% 50px 10%', width: '80%', minHeight: '400px', border: 'black 2px solid', borderRadius: '20px' }}>
                 <div className="display-name-cart" style={{ margin: '20px 0% 0px 5%', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '65px', color: 'black' }}>
                     <u> Cart </u>
                 </div>
