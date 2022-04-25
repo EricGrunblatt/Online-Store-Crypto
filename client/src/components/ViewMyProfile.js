@@ -144,8 +144,10 @@ export default function ViewMyProfile() {
 									<img onClick={() => { history.push("/product/" + index._id) }} src={index.image} alt="" style={{ cursor: 'pointer', width: '200px', height: '200px', borderRadius: '10%' }} ></img>
 								</Grid>
 								{/* ITEM INFO */}
-								<Grid item xs={5} style={{ margin: '10px auto auto 40px'}}>
-									<div onClick={() => { history.push("/product/" + index._id) }} style={{ cursor: 'pointer', fontSize: '50px', fontWeight: 'bold' }}> {index.name}</div>
+								<Grid item xs={7} style={{ margin: '10px auto auto 40px'}}>
+									<div onClick={() => { history.push("/product/" + index._id) }} style={{ cursor: 'pointer', fontSize: '50px', fontWeight: 'bold' }}> 
+										{index.name.length > 11 ? index.name.substring(0,12) + "..." : index.name}
+									</div>
 									<div style={{ marginTop: '3px', fontSize: '30px' }}>{index.price}&nbsp;Algo</div>
 									<div style={{ marginTop: '3px', fontSize: '20px' }}>Seller:&nbsp;{index.sellerUsername}</div>
 									<div style={{ marginTop: '3px', fontSize: '20px' }}>Listed:&nbsp;{index.dateListed}</div>

@@ -8,7 +8,6 @@ export default function HomeProduct(props) {
     const history = useHistory();
     const { product } = props;
     let image = product.image;
-    // let url = image.data;
     let width = "17vw";
     let height = "120px";
 
