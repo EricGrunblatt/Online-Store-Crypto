@@ -341,7 +341,7 @@ export default function HomeScreen() {
 
     /* CUSTOM PAGINATION SETUP */
     let allProducts = store.catalogItems;
-    let PageSize = 5;
+    let PageSize = 16;
     const [currentPage, setCurrentPage] = useState(1);
  
     let pageProductAll = useMemo(() => {
