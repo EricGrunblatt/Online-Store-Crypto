@@ -116,12 +116,12 @@ export default function ProductPage() {
     };
 
 	let showImages = 
-        <div style={{ width: '40%', margin: '3% 0 0 3%', display: 'grid', gridTemplateColumns: 'repeat(4, 10vw)' }}>
+        <div style={{ width: '40%', margin: '10px 0 0 10px', display: 'grid', gridTemplateColumns: 'repeat(4, 10vw)' }}>
             {itemImages.map((index, indexNum) => (
                 index? 
                     <div key={indexNum} style={{cursor: "pointer", marginBottom: '20px' }}>
                         <img id={indexNum} src={index} alt="" 
-                        onClick={handleImage} title={index.title} width="100px" height="100px" style={{ borderRadius: '10%', border: "black 2px" }} ></img>
+                        onClick={handleImage} title={index.title} width="100px" height="100px" style={{ borderRadius: '10%', border: "black 2px solid" }} ></img>
                     </div>:<div key={indexNum}></div>
             ))}
         </div>;
@@ -141,7 +141,7 @@ export default function ProductPage() {
 				{/* LEFT IMAGES & DESCRIPTION */}
 				<div>
 					{/* THE MAIN IMAGE */}
-					{itemImage0? <img src={itemImage0} width="600px" height="400px" alt="" style={{ borderRadius: '10%' }} ></img>
+					{itemImage0? <img src={itemImage0} width="700px" height="450px" alt="" style={{ borderRadius: '10px' }} ></img>
 						:<img src="https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg" width="600px" height="600px" alt="" style={{ borderRadius: '10%' }} ></img>}
 					{/* THE 8 IMAGES */}
 					{showImages}
@@ -165,7 +165,7 @@ export default function ProductPage() {
                     	Condition: {condition}
 					</div>
 					<div style={{ paddingTop: '30px', textDecoration: 'none', fontFamily: 'Quicksand', fontSize: '20px', color: 'black' }}>
-                    	Seller: <div onClick={() => { handleViewProfile(seller) }} style={{ display: 'inline-block', cursor: 'pointer', color: '#879ED9'}}>{seller}</div>
+                    	Seller: <div onClick={() => { handleViewProfile(seller) }} style={{ display: 'inline-block', cursor: 'pointer', color: '#879ED9'}}><u>{seller}</u></div>
 					</div>
 					
 					<div style={{ paddingTop: '60px', textDecoration: 'none', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '45px', color: 'black', textAlign: 'right' }}>
