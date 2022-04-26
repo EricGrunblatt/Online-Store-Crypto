@@ -1,32 +1,34 @@
 import React, { useState, useEffect } from "react";
-import { Button } from '@mui/material';
+import { Button, Alert } from '@mui/material';
 import axios from 'axios';
 import qs from 'qs';
 import api from "../api"
 import algo from "../images/Algorand.png";
 import { useHistory } from "react-router-dom";
 
-export default function Checkout() {
+export default function Checkout(props) {
     const history = useHistory();
 	const [items, setItems] = useState([]);
 	const [shippingPrices, setShippingPrices] = useState([]);
     const [wallets, setWallets] = useState([]);
+	const [checkoutAlert, setCheckoutAlert] = useState("");
+	const { state } = props.location;
 
 	useEffect(() => {
 		/* GET PRODUCTS BY USER ID */
 		async function fetchData() {
 			try{
-				// getCartProductsForUser
-				const url = 'http://localhost:4000/api/product/getCartProductsForUser';
-				// POST 
-				const options = {
-					method: 'POST',
-					headers: { 'content-type': 'application/x-www-form-urlencoded' },
-					url
-				};
-				axios(options).then(async function(result) {
-					setItems(result.data.products);
-					
+				// // getCartProductsForUser
+				// const url = 'http://localhost:4000/api/product/getCartProductsForUser';
+				// // POST 
+				// const options = {
+				// 	method: 'POST',
+				// 	headers: { 'content-type': 'application/x-www-form-urlencoded' },
+				// 	url
+				// };
+				// axios(options).then(async function(result) {
+
+				setItems(state.reservedProducts).then(async function(result){
 					const unresolvedShippingPrices = result.data.products.map(async(product) => {
 						const data = { '_id': product._id };
 						const res = await api.getShippingPrice(qs.stringify(data));
@@ -34,7 +36,13 @@ export default function Checkout() {
 						// return res.data.shippingPrice;
 					});
 					setShippingPrices(await Promise.all(unresolvedShippingPrices));      
+					setCheckoutAlert(<Alert severity="warning">Unable to add {state.failedToReserve.map((index) => (
+						index.name
+					))}</Alert>);
 				});
+					
+					
+				// });
 			}
 			catch{
 			}
@@ -50,7 +58,7 @@ export default function Checkout() {
                     url
                 };
                 axios(options).then(function(result) {
-                    console.log(result.data.wallets);
+                    // console.log(result.data.wallets);
                     setWallets(result.data.wallets);
                 });
             }
@@ -63,15 +71,18 @@ export default function Checkout() {
     },[]);
 
     let totalPrice = 0;
-    for(let i = 0; i < items.length; i++) {
-        totalPrice += +items[i].price;
-    }
-
-	for(let i = 0; i < shippingPrices.length; i++) {
-        let price = parseFloat(shippingPrices[i]).toFixed(2);
-        shippingPrices[i] = price;
-        totalPrice += +price;
-    }
+	if(items){
+		for(let i = 0; i < items.length; i++) {
+			totalPrice += +items[i].price;
+		}
+	
+		for(let i = 0; i < shippingPrices.length; i++) {
+			let price = parseFloat(shippingPrices[i]).toFixed(2);
+			shippingPrices[i] = price;
+			totalPrice += +price;
+		}
+	}
+    
 
     const handleScrollDown = () => {
         window.scrollTo({
@@ -79,18 +90,21 @@ export default function Checkout() {
             behavior: "smooth"
         });
     }
-
+	
     const handlePlaceOrder = () => {
         if(wallets.length === 0) {
             alert("You must set up a wallet to checkout. You are now being redirected");
             history.push("/wallet");
         }
+		window.open(state.invoice,"","toolbar=no,status=no,menubar=no,location=center,scrollbars=no,height=500,width=600");
     }
 
     return (
         <div className="checkout-page">
+			
+			{checkoutAlert}
             <div className="payment" style={{ margin: '50px 0% 0px 10%', width: '80%', minHeight: '700px', border: 'black 2px solid', borderRadius: '20px' }}>
-                <div className="display-name-payment" style={{ margin: '20px 0% 0px 5%', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '45px', color: 'black' }}>
+				<div className="display-name-payment" style={{ margin: '20px 0% 0px 5%', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '45px', color: 'black' }}>
                     Payment
                 </div>
                 <div style={{ margin: '50px 0% 0px 5%', width: '90%', height: '500px', background: 'black', borderRadius: '20px', textAlign: 'center' }}>

@@ -12,7 +12,6 @@ export default function Cart() {
 	const { store } = useContext(GlobalStoreContext);
 	const [items, setItems] = useState([]);
 	const [shippingPrices, setShippingPrices] = useState([]);
-
     
     useEffect(() => {
 		/* GET PRODUCTS BY USER ID */
@@ -81,6 +80,18 @@ export default function Cart() {
 		store.markCartRemove(event.target.id);
     }
 
+	async function handleCheckout() {
+		api.purchaseFromCart().then(async function(result) {
+			console.log("purchaseFromCart RESPONSE: ", result.data);
+			if(result.data.status === "ERROR") {
+				console.log("purchaseFromCartRes ERROR")
+			}
+			history.push({	
+				pathname: "/checkout",
+				state:  result.data});
+		});
+	}
+
     let cartItems = 
         <div className="order-card" style={{ margin: '0px 0px 20px 0px' }}>
             {/* EACH ITEM CARDS */}
@@ -105,7 +116,7 @@ export default function Cart() {
                 ))}
             </div>
             <div className="go-to-checkout" style={{ justifyContent: 'center', textAlign: 'center', margin: '10px 0px 40px 0px' }}>
-                <Button onClick={() => { history.push("/checkout") }} className="back-to-profile-button" style={{ background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
+                <Button onClick={handleCheckout} className="back-to-profile-button" style={{ background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
                     Checkout
                 </Button>
             </div>
@@ -115,7 +126,7 @@ export default function Cart() {
         cartItems = 
             <div className="cart-empty" style={{ margin: '140px 0px 0px 0px', textAlign: 'center', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '40px', color: 'black' }}>
                 <div>Your orders are empty... Let's begin<br></br>shopping</div>
-                <Button onClick={() => { history.push("/") }} style={{ margin: '100px', background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>Start Shopping</Button>
+                <Button onClick={() => { history.push("/")}} style={{ margin: '100px', background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>Start Shopping</Button>
             </div>
     }
 

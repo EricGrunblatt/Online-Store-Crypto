@@ -41,6 +41,9 @@ export const setTrackingNumber = (payload) => api.post('/product/setTrackingNumb
 export const addWallet = (payload) => api.post('/wallet/addWallet', payload);
 export const removeWallet = (payload) => api.post('/wallet/removeWallet', payload);
 
+// ALL REQUESTS FOR CHECKOUT
+export const purchaseFromCart = () => api.post('/purchase/purchaseFromCartTest');
+
 
 const apis = {
     getLoggedIn,
@@ -66,8 +69,9 @@ const apis = {
     setTrackingNumber,
 
     addWallet,
-    removeWallet
+    removeWallet,
 
+	purchaseFromCart
 }
 
 export default apis
