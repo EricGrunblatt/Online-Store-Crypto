@@ -62,8 +62,10 @@ export default function Listings() {
 						</div>
 						{/* ITEM INFO */}
                         
-						<div style={{position: 'absolute', margin: '3px 0 0 200px'}}>
-							<div onClick={() => { history.push("/product/" + index._id) }} style={{ fontSize: '50px', fontWeight: 'bold', cursor: 'pointer' }}> {index.name}</div>
+						<div style={{position: 'absolute', margin: '15px 0 0 200px'}}>
+							<div onClick={() => { history.push("/product/" + index._id) }} style={{ fontSize: '50px', fontWeight: 'bold', cursor: 'pointer' }}> 
+                                {index.name.length > 14 ? index.name.substring(0,15) + "..." : index.name}
+                            </div>
 							<div style={{ marginTop: '3px', fontSize: '30px' }}>{index.price}&nbsp;Algo</div>
 							<div style={{ marginTop: '3px', fontSize: '20px' }}>Seller:&nbsp;{index.sellerUsername}</div>
 							{index.buyerUsername === undefined || index.buyerUsername === null ? <u onClick={() => { history.push("/editItem/" + index._id) }} style={{ marginTop: '3px', fontSize: '20px', cursor: 'pointer', color: 'red', }}>Edit</u>
@@ -157,7 +159,6 @@ export default function Listings() {
         } else {
             history.push("/listitem");
         }
-        
     }
 	
     return (

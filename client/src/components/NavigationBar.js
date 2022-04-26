@@ -46,7 +46,6 @@ export default function NavigationBar() {
             profilePicture = <AccountCircleRoundedIcon onClick={handleProfileMenuOpen} style={{ cursor: 'pointer', color: 'white', fontSize: '45px' }}></AccountCircleRoundedIcon>; 
         } else {
             let image = auth.user.profileImage;
-            let url = `data:${image.mimetype};base64,${Buffer.from(image.data).toString('base64')}`;
             profilePicture = <img src={image} alt={<AccountCircleRoundedIcon style={{ cursor: 'pointer', color: 'white', fontSize: '45px' }}></AccountCircleRoundedIcon>} onClick={handleProfileMenuOpen} style={{ cursor: 'pointer', width: '45px', height: '45px', border: 'white 1px solid', borderRadius: '50%'}}/>
         }
         navBarLoggedIn = 

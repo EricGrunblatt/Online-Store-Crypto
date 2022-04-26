@@ -12,7 +12,7 @@ export default function Checkout(props) {
 	const [shippingPrices, setShippingPrices] = useState([]);
     const [wallets, setWallets] = useState([]);
 	const [checkoutAlert, setCheckoutAlert] = useState("");
-	const { state } = props.location;
+	const { state } = "";
 
 	useEffect(() => {
 		/* GET PRODUCTS BY USER ID */
@@ -27,7 +27,7 @@ export default function Checkout(props) {
 				// 	url
 				// };
 				// axios(options).then(async function(result) {
-
+				state = props.location;
 				setItems(state.reservedProducts).then(async function(result){
 					const unresolvedShippingPrices = result.data.products.map(async(product) => {
 						const data = { '_id': product._id };
@@ -40,8 +40,6 @@ export default function Checkout(props) {
 						index.name
 					))}</Alert>);
 				});
-					
-					
 				// });
 			}
 			catch{

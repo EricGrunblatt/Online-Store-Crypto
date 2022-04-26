@@ -17,8 +17,7 @@ export default function ViewMyProfile() {
     let reviews = store.userProfile.reviews;
     let profilePic = store.userProfile.profileImage;
     let userImage = "";
-    if(profilePic !== null) {
-        // let url = `data:${profilePic.mimetype};base64,${Buffer.from(profilePic.data).toString('base64')}`;
+    if(profilePic !== "http://localhost:4000/api/image/null") {
         userImage = <img src={profilePic} alt="" style={{ margin: '20px 0px 0px 0px', width: '250px', height: '250px', borderRadius: '50%' }}></img>
     } else {
         userImage = <AccountCircleRoundedIcon style={{ margin: '20px 0px 0px 0px', fontSize: '300px' }} />;
@@ -138,20 +137,22 @@ export default function ViewMyProfile() {
 				{/* EACH ITEM CARDS */}
 				<Grid item container xs >
 					{items.map((index) => (
-						<Grid key={index._id + "myListing"} item xs={5} style={{ margin: '10px auto 10px auto'}}>
+						<Grid key={index._id + store.userProfile.username + "Listing"} item xs={5} style={{ margin: '10px auto 10px auto'}}>
 							<Grid item container xs style={{ margin: '10px auto 10px auto', width: '100%', minHeight: '200px', border: 'black 2px solid', borderRadius: '20px' }}>
 								{/* ITEM IMAGE */}
 								<Grid item xs={3} style={{ margin: '20px'}}>
-									<img onClick={() => { history.push("/product/" + index._id) }} src={`data:${index.image.mimetype};base64,${Buffer.from(index.image.data).toString('base64')}`} alt="" style={{ cursor: 'pointer', width: '200px', height: '200px', borderRadius: '10%' }} ></img>
+									<img onClick={() => { history.push("/product/" + index._id) }} src={index.image} alt="" style={{ cursor: 'pointer', width: '200px', height: '200px', borderRadius: '10%' }} ></img>
 								</Grid>
 								{/* ITEM INFO */}
-								<Grid item xs={5} style={{ margin: '10px auto auto 40px'}}>
-									<div onClick={() => { history.push("/product/" + index._id) }} style={{ cursor: 'pointer', fontSize: '50px', fontWeight: 'bold' }}> {index.name}</div>
-									<div style={{ marginTop: '3px', fontSize: '30px' }}>{index.price}&nbsp;Algo</div>
-									<div style={{ marginTop: '3px', fontSize: '20px' }}>Seller:&nbsp;{index.sellerUsername}</div>
-									<div style={{ marginTop: '3px', fontSize: '20px' }}>Listed:&nbsp;{index.dateListed}</div>
+								<Grid item xs={7} style={{ margin: '23px auto auto 40px'}}>
+									<div onClick={() => { history.push("/product/" + index._id) }} style={{ cursor: 'pointer', fontSize: '50px', fontWeight: 'bold' }}> 
+										{index.name.length > 11 ? index.name.substring(0,12) + "..." : index.name}
+									</div>
+									<div style={{ marginTop: '7px', fontSize: '30px' }}>{index.price}&nbsp;Algo</div>
+									<div style={{ marginTop: '8px', fontSize: '20px' }}>Seller:&nbsp;{index.sellerUsername}</div>
+									<div style={{ marginTop: '8px', fontSize: '20px' }}>Listed:&nbsp;{index.dateListed.substring(0,10)}</div>
 								</Grid>
-							</Grid>	
+							</Grid>		
 						</Grid>
 						
 					))}

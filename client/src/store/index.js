@@ -418,13 +418,11 @@ function GlobalStoreContextProvider(props) {
     }
 
     // GETS PROFILE FROM USERNAME
-    store.getProfile = async function (username) {
-        let json = {
-            username: username
-        }
+    store.getProfile = async function (json) {
         let response = await api.getProfileByUsername(json);
         if(response.data.status === "OK") {
             let profile = response.data;
+            console.log(profile);
             storeReducer({
                 type: GlobalStoreActionType.GET_PROFILE,
                 payload: profile

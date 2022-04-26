@@ -457,22 +457,22 @@ export default function HomeScreen() {
                     </Select>
                 </FormControl>
             </Box>
-            <Box style={{ position: 'absolute', zIndex: 1, margin: '0px 0px 50px 20vw', background: 'white', top: '450px', width: '79%', minHeight: '350px' }}>
+            <Box style={{ position: 'absolute', zIndex: 1, margin: '10px 0px 50px 20vw', background: 'white', top: '450px', width: '79%', minHeight: '350px' }}>
                 <div>
                 {
                     productCard
                 }
                 </div>
-            </Box>
-            <Box style={{ zIndex: 1, whiteSpace: 'nowrap', margin: '10vw 0px 5vw 0vw', justifyContent: 'center', fontSize: '35px', width: '100%' }}>
-                <Pagination
-                    key="pagination"
-                    className="pagination-bar"
-                    currentPage={currentPage}
-                    totalCount={allProducts.length}
-                    pageSize={PageSize}
-                    onPageChange={page => setCurrentPage(page)}
-                />
+                <Box style={{ zIndex: 1, whiteSpace: 'nowrap', margin: '10vw 0px 5vw -12.5vw', justifyContent: 'center', fontSize: '35px', width: '100%' }}>
+                    <Pagination
+                        key="pagination"
+                        className="pagination-bar"
+                        currentPage={currentPage}
+                        totalCount={allProducts.length}
+                        pageSize={PageSize}
+                        onPageChange={page => setCurrentPage(page)}
+                    />
+                </Box>
             </Box>
             <div style={{ cursor: 'pointer', bottom: '25px', left: '25px', position: 'fixed' }}>
                 {isVisible && (

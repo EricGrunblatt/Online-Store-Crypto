@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import axios from 'axios';
 import qs from 'qs';
 import CartDeleteModal from "./CartDeleteModal";
+import Checkout from "./Checkout";
 import { GlobalStoreContext } from '../store'
 import api from "../api"
 
@@ -12,6 +13,8 @@ export default function Cart() {
 	const { store } = useContext(GlobalStoreContext);
 	const [items, setItems] = useState([]);
 	const [shippingPrices, setShippingPrices] = useState([]);
+	let purchaseFromCartRes = [];
+
     
     useEffect(() => {
 		/* GET PRODUCTS BY USER ID */
@@ -83,9 +86,11 @@ export default function Cart() {
 	async function handleCheckout() {
 		api.purchaseFromCart().then(async function(result) {
 			console.log("purchaseFromCart RESPONSE: ", result.data);
+			purchaseFromCartRes = result.data;
 			if(result.data.status === "ERROR") {
 				console.log("purchaseFromCartRes ERROR")
 			}
+			console.log(purchaseFromCartRes);
 			history.push({	
 				pathname: "/checkout",
 				state:  result.data});
@@ -139,6 +144,7 @@ export default function Cart() {
                 {cartItems}
             </div>
             <CartDeleteModal handleDeleteCartItem={handleDeleteCartItem}/>
+			<Checkout purchaseFromCartRes={purchaseFromCartRes}/>
         </div>
     )
 }
