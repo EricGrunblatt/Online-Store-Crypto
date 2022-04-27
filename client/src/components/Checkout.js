@@ -13,6 +13,7 @@ export default function Checkout(props) {
     const [wallets, setWallets] = useState([]);
 	const [checkoutAlert, setCheckoutAlert] = useState(null);
 	const [checkoutInput, setCheckoutInput] = useState(null);
+	const [blur, setBlur] = useState({filter: 'blur(0px)'});
 
 	useEffect(() => {
 		/* GET PRODUCTS FROM CART purchaseFromCart RESPONSE */
@@ -20,7 +21,6 @@ export default function Checkout(props) {
 			try{
 				let theState = props.location.state;
 				if(theState.status === "OK") {
-					console.log("OKAAAAAAAAY");
 					setCheckoutInput(theState);
 					const unresolvedShippingPrices = theState.reservedProducts.map(async(product) => {
 						const data = { '_id': product._id };
@@ -74,7 +74,8 @@ export default function Checkout(props) {
             alert("You must set up a wallet to checkout. You are now being redirected");
             history.push("/wallet");
         }
-		window.open(checkoutInput.invoice,"","toolbar=no,status=no,menubar=no,location=center,scrollbars=no,height=500,width=600");
+		setBlur({filter: 'blur(5px)'});
+		window.open(checkoutInput.invoice,"","toolbar=no,status=no,menubar=no,location=center,scrollbars=no,height=500,width=600,left=400,top=200");
     }
 	
 	// NO PRODUCTS WERE RESERVED
@@ -85,12 +86,10 @@ export default function Checkout(props) {
 	if(!checkoutInput) {
 		noItemToCheckout =  <div className="checkout-error" style={{ margin: '140px 0px 0px 0px', textAlign: 'center', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '40px', color: 'black' }}>
 			<div>Cannot proceed to checkout...</div>
-		<Button onClick={() => { history.push("/cart")}} style={{ margin: '100px', background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>Start Shopping</Button>
+		<Button onClick={() => { history.push("/cart")}} style={{ margin: '100px', background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>Go back to cart</Button>
 	</div>
 	}
 	else{
-		console.log("CHECKOUT INPUT: ", checkoutInput);
-		console.log("SHIPPING PRICES: ", shippingPrices);
 		if(checkoutInput.reservedProducts){
 			for(let i = 0; i < checkoutInput.reservedProducts.length; i++) {
 				totalPrice += +checkoutInput.reservedProducts[i].price;
@@ -102,7 +101,7 @@ export default function Checkout(props) {
 			}
 		}
 
-		haveItemToCheckout = <div><div className="payment" style={{ margin: '50px 0% 50px 10%', width: '80%', minHeight: '700px', border: 'black 2px solid', borderRadius: '20px' }}>
+		haveItemToCheckout = <div style={{...blur}}><div className="payment" style={{ margin: '50px 0% 50px 10%', width: '80%', minHeight: '700px', border: 'black 2px solid', borderRadius: '20px' }}>
 			<div className="display-name-payment" style={{ margin: '20px 0% 0px 5%', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '45px', color: 'black' }}>
 				Payment
 			</div>
