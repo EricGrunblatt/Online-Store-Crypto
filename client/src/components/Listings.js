@@ -61,18 +61,18 @@ export default function Listings() {
 							alt="" width="150px" height="150px" style={{ width: '150px', height: '150px', borderRadius: '10%', cursor: 'pointer' }} ></img>
 						</div>
 						{/* ITEM INFO */}
-						<div style={{position: 'absolute', margin: '15px 0 0 200px'}}>
+						<div style={{position: 'absolute', margin: '15px 0 0 200px', width: '20vw'}}>
 							<div onClick={() => { history.push("/product/" + index._id) }} style={{ fontSize: '50px', fontWeight: 'bold', cursor: 'pointer' }}> 
                                 {index.name.length > 14 ? index.name.substring(0,15) + "..." : index.name}
                             </div>
 							<div style={{ marginTop: '3px', fontSize: '30px' }}>{index.price}&nbsp;Algo</div>
 							<div style={{ marginTop: '3px', fontSize: '20px' }}>Seller:&nbsp;{index.sellerUsername}</div>
-							{index.status === "LISTED" ? <u onClick={() => { history.push("/editItem/" + index._id) }} style={{ marginTop: '3px', fontSize: '20px', cursor: 'pointer', color: 'red', }}>Edit</u>
+							{index.buyerUsername === undefined || index.buyerUsername === null ? <u onClick={() => { history.push("/editItem/" + index._id) }} style={{ marginTop: '3px', fontSize: '20px', cursor: 'pointer', color: 'red', }}>Edit</u>
 								: index.trackingNumber === null || index.trackingNumber === undefined ? 
-                                <div style={{ display: 'flex', marginTop: '3px', fontSize: '20px'}}>
-                                    <TextField id={"tracking" + index._id} placeholder="Tracking Number" style={{ width: '230px' }}></TextField>
+                                <div style={{ display: 'flex', marginTop: '3px', fontSize: '20px', height: '40px'}}>
+                                    <TextField id={"tracking" + index._id} placeholder="Tracking Number" size='small' style={{ width: '230px', marginRight: '5px' }}></TextField>
                                     <Button onClick={() => handleTrackingNumber(index, document.getElementById("tracking" + index._id)) } style={{ background: 'blue', color: 'white', fontSize: '10px' }}>Submit <br></br> Tracking</Button>
-                                    <Button onClick={() => store.markBuyerAddress(index._id) } style={{ marginLeft: '10px', background: 'black', color: 'white', fontSize: '10px' }}>Click For <br></br> Shipping Info</Button>
+                                    <Button onClick={() => store.markBuyerAddress(index._id) } style={{ marginLeft: '5px', background: 'black', color: 'white', fontSize: '10px' }}>Shipping Info</Button>
                                 </div>
                                 : <div style={{ marginTop: '3px', fontSize: '20px' }}>Sold on: {index.dateSold}</div>}
                                 
@@ -119,9 +119,9 @@ export default function Listings() {
 
     let index = 0;
     while(index < sellingItems.length) {
-        if(sellingItems[index].state === "LISTED") {
+        if(sellingItems[index].buyerUsername === null) {
             index++;
-        } else if (sellingItems[index].state !== "LISTED" && sellingItems[index].trackingNumber === null) {
+        } else if (sellingItems[index].buyerUsername !== null && sellingItems[index].trackingNumber === null) {
             let newArray = notShippedItems;
             newArray.push(sellingItems[index]);
             setNotShippedItems(newArray);
