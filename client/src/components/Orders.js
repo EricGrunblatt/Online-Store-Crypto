@@ -101,6 +101,14 @@ export default function Orders() {
         }    
     }
 
+    const handleGetProfile = (seller) => {
+        let json = {
+			username: seller
+		}
+		console.log(json);
+		store.getProfile(json);
+    }
+
     let orders = 
             <div className="order-card" style={{ margin: '0px 0px 20px 0px' }}>
                 {items.map((index) => (
@@ -120,7 +128,7 @@ export default function Orders() {
                                     <div style={{ marginRight: '10px', display: 'inline-block' }}>
                                         Seller:
                                     </div>
-                                    <div onClick={() => { store.getProfile(index.sellerUsername) }} style={{ cursor: 'pointer', display: 'inline-block', color: '#879ED9' }}>
+                                    <div onClick={() => { handleGetProfile(index.sellerUsername) }} style={{ cursor: 'pointer', display: 'inline-block', color: '#879ED9' }}>
                                         <u>{index.sellerUsername}</u>
                                     </div>
                                 </div>
