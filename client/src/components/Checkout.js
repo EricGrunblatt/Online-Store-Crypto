@@ -75,8 +75,8 @@ export default function Checkout(props) {
             history.push("/wallet");
         }
 		setBlur({filter: 'blur(5px)'});
-		window.open(checkoutInput.invoice,"","toolbar=no,status=no,menubar=no,location=center,scrollbars=no,height=500,width=600,left=400,top=200");
-    }
+		window.location.href = checkoutInput.invoice;
+	}
 	
 	// NO PRODUCTS WERE RESERVED
 	let noItemToCheckout = "";

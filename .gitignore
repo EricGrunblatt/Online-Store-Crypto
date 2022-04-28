@@ -14,3 +14,5 @@
 /server/uploads/*
 
 !/server/uploads/placeholder.txt
+
+/search/glove-twitter-25/*
