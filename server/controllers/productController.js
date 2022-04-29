@@ -6,6 +6,7 @@ const constants = require('./constants.json')
 const xml2js= require('xml2js')
 const axios=require("axios")
 const Cart = require('../models/cartModel')
+const { Order, OrderState} = require('../models/orderModel')
 
 const {
 	productImageMiddleware,
@@ -275,14 +276,20 @@ getCartProductsForUser = async (req, res) => {
 				shippingPrice: 1,
 				sellerUsername: 1,
 				imageIds: 1,
-				dateListed: "$createdAt"
+				dateListed: "$createdAt",
+				state: 1,
 			}
 
-			let cartItems = await Cart.find({buyerUsername: user.username})
-
+			let cartItems = await Cart.find({buyerUsername: user.username}).select({productId: 1})
 			let cartProductIds = cartItems.map(cartItem => cartItem.productId)
 
-			let products = await getProducts(cartProductIds, selectOptions)
+			let reservedProducts = await Order.find({
+				buyerUsername: user.username,
+				state: OrderState.PENDING,
+			}).select({productId: 1})
+			let reservedProductIds = reservedProducts.map(reservedProduct => reservedProduct.productId)
+
+			let products = await getProducts([...cartProductIds, ...reservedProductIds], selectOptions)
 			
 			products = await Promise.all(products.map(async (product) => {
 				const image = await getProductFirstImage(product);
