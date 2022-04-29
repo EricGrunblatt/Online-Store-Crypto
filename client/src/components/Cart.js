@@ -1,7 +1,6 @@
 import React, {useState, useEffect, useContext} from "react";
 import Button from '@mui/material/Button';
 import { useHistory } from "react-router-dom";
-import axios from 'axios';
 import qs from 'qs';
 import CartDeleteModal from "./CartDeleteModal";
 import { GlobalStoreContext } from '../store'
@@ -17,15 +16,8 @@ export default function Cart() {
 		/* GET PRODUCTS BY USER ID */
 		async function fetchData() {
 			try{
-				// getCartProductsForUser
-				const url = 'http://localhost:4000/api/product/getCartProductsForUser';
-				// POST 
-				const options = {
-					method: 'POST',
-					headers: { 'content-type': 'application/x-www-form-urlencoded' },
-					url
-				};
-				axios(options).then(async function(result) {
+				// GET CART PRODUCTS FOR USER
+				api.getCartProductsForUser().then(async function(result) {
 					setItems(result.data.products);
 					
 					const unresolvedShippingPrices = result.data.products.map(async(product) => {
@@ -50,26 +42,11 @@ export default function Cart() {
 
 	async function handleDeleteCartItem(productId) {
 		console.log("DELETE HERE", productId);
-		// removeFromCart
-		const url = 'http://localhost:4000/api/purchase/removeFromCart';
-		// POST 
+		// REMOVE FROM CART
 		const data = { '_id': store.cartItemRemove };
-		const options = {
-			method: 'POST',
-			headers: { 'content-type': 'application/x-www-form-urlencoded' },
-			data: qs.stringify(data),
-			url
-		};
-		axios(options).then(function() {
-			// getCartProductsForUser
-			const url = 'http://localhost:4000/api/product/getCartProductsForUser';
-			// POST 
-			const options = {
-				method: 'POST',
-				headers: { 'content-type': 'application/x-www-form-urlencoded' },
-				url
-			};
-			axios(options).then(function(result) {
+		api.removeFromCart(qs.stringify(data)).then(function() {
+			// GET PRODUCTS FOR USER
+			api.getCartProductsForUser().then(function(result) {
 				setItems(result.data.products);
 			});
 		});

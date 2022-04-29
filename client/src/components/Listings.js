@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { GlobalStoreContext } from '../store';
 import { useHistory } from "react-router-dom";
-import axios from 'axios';
 import ListingsDeleteModal from "./ListingsDeleteModal";
 import { TextField, Button } from "@mui/material";
 import TrackingInfoModal from "./TrackingInfoModal";
@@ -19,26 +18,12 @@ export default function Listings() {
     useEffect(() => {
         async function fetchData() {
             try{
-                // getSellingProductsForUser
-                const url = 'http://localhost:4000/api/product/getListingProductsForUser';
-                // POST 
-                const options = {
-                    method: 'POST',
-                    headers: { 'content-type': 'application/x-www-form-urlencoded' },
-                    url
-                };
-                axios(options).then(function(result) {
+				// GET LISTING PRODUCTS FOR USER
+                api.getListingProductsForUser().then(function(result) {
                     setSellingItems(result.data.products);
 
-                    // getWalletForUser
-                    const url = 'http://localhost:4000/api/wallet/getWallets';
-                    // POST 
-                    const options = {
-                        method: 'POST',
-                        headers: { 'content-type': 'application/x-www-form-urlencoded' },
-                        url
-                    };
-                    axios(options).then(function(result) {
+                    //GET WALLET FOR USER
+                    api.getWallets().then(function(result) {
                         setWallets(result.data.wallets);
                     });
                 });
@@ -94,15 +79,7 @@ export default function Listings() {
             let response = await api.setTrackingNumber(json);
             if(response.data.status === "OK") {
                 console.log("Tracking Number Success");
-                // getSellingProductsForUser
-                const url = 'http://localhost:4000/api/product/getListingProductsForUser';
-                // POST 
-                const options = {
-                    method: 'POST',
-                    headers: { 'content-type': 'application/x-www-form-urlencoded' },
-                    url
-                };
-                axios(options).then(function(result) {
+                api.getListingProductsForUser().then(function(result) {
                     setSellingItems(result.data.products);
                 });
             } else if (response.data.status === "ERROR") {

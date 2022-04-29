@@ -1,7 +1,6 @@
 import React from "react";
 import algo from "../images/Algorand.png";
 import { Button, TextField } from '@mui/material';
-import axios from 'axios';
 import { useEffect, useState } from "react";
 import api from '../api';
 
@@ -13,15 +12,8 @@ export default function Wallet() {
     useEffect(() => {
         async function fetchData() {
             try{
-                // getWalletForUser
-                const url = 'http://localhost:4000/api/wallet/getWallets';
-                // POST 
-                const options = {
-                    method: 'POST',
-                    headers: { 'content-type': 'application/x-www-form-urlencoded' },
-                    url
-                };
-                axios(options).then(function(result) {
+                // GET WALLET INFO
+                api.getWallets().then(function(result) {
                     console.log(result.data.wallets);
                     setWallets(result.data.wallets);
                 });
@@ -41,15 +33,8 @@ export default function Wallet() {
         let response = await api.addWallet(json);
         if(response.data.status === "OK") {
             alert("My Wallet successfully added");
-            // getWalletForUser
-            const url = 'http://localhost:4000/api/wallet/getWallets';
-            // POST 
-            const options = {
-                method: 'POST',
-                headers: { 'content-type': 'application/x-www-form-urlencoded' },
-                url
-            };
-            axios(options).then(function(result) {
+			// GET WALLET AFTER ADD IT 
+            api.getWallets().then(function(result) {
                 console.log(result.data.wallets);
                 setWallets(result.data.wallets);
             });
@@ -66,15 +51,8 @@ export default function Wallet() {
         let response = await api.removeWallet(json);
         if(response.data.status === "OK") {
             alert("My Wallet successfully removed");
-            // getWalletForUser
-            const url = 'http://localhost:4000/api/wallet/getWallets';
-            // POST 
-            const options = {
-                method: 'POST',
-                headers: { 'content-type': 'application/x-www-form-urlencoded' },
-                url
-            };
-            axios(options).then(function(result) {
+            // GET WALLET AFTER REMOVE IT
+            api.getWallets().then(function(result) {
                 console.log(result.data.wallets);
                 setWallets(result.data.wallets);
             });

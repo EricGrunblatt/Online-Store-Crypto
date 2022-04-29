@@ -31,7 +31,10 @@ reserveCartProducts = async (username) => {
 				await reservation.save()
 				reservedProductIds.push(productId)
 				await Cart.findOneAndRemove({buyerUsername: username, productId: productId})
-				await Product.findOneAndUpdate({_id: productId}, {state: ProductState.RESERVED})
+				await Product.findOneAndUpdate({_id: productId}, {
+					state: ProductState.RESERVED, 
+					reserverUsername: username,
+				})
 			}
 		} catch (err) {
 			failedToReserveIds.push(productId)

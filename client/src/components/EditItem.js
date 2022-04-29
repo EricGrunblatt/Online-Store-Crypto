@@ -5,7 +5,6 @@ import { FormControl, InputLabel, Button, Dialog, DialogActions, DialogContent, 
 import AddIcon from '@mui/icons-material/Add';
 import { useHistory, generatePath } from "react-router-dom";
 import api from "../api"
-import axios from 'axios';
 import qs from 'qs';
 import ListingsDeleteModal from "./ListingsDeleteModal";
 import { GlobalStoreContext } from '../store'
@@ -51,17 +50,9 @@ export default function EditItem(){
     useEffect(() => {
         async function fetchData() {
             try{
-                // getProduct
-                const url = 'http://localhost:4000/api/product/getProduct';
-                // POST 
+                // GET PRODUCT INFO FOR EDITING
                 const data = { '_id': productId };
-                const options = {
-                    method: 'POST',
-                    headers: { 'content-type': 'application/x-www-form-urlencoded' },
-                    data: qs.stringify(data),
-                    url
-                };
-                axios(options).then(function(result) {
+                api.getProduct(qs.stringify(data)).then(function(result) {
                     // console.log("RESPONSE: ", result.data.product);
                     // SET PRODUCT 
                     setName(result.data.product.name);
