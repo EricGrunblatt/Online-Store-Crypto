@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect, useRef, useContext } from "react";
 import { TextareaAutosize, TextField, Box, Select, MenuItem, Alert } from '@mui/material';
-import { FormControl, InputLabel, Button } from '@mui/material';
+import { FormControl, InputLabel, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useHistory, generatePath } from "react-router-dom";
 import api from "../api"
@@ -32,6 +32,8 @@ export default function EditItem(){
     const [height, setHeight] = useState("");
     const [weight, setWeight] = useState("");
 	const [editItemAlert, setEditItemAlert] = useState("");
+	const [open, setOpen] = useState(false);
+	const [errorMessage, setErrorMessage] = useState("");
 
     const [image0, setImage0] = useState(null);
     const [image1, setImage1] = useState(null);
@@ -406,10 +408,15 @@ export default function EditItem(){
 				const id = response.data.product._id;
 				history.push(generatePath("/product/:id", { id }));
 			} else if (response.data.status === "ERROR") {
-				alert(response.data.errorMessage);
+				setErrorMessage(response.data.errorMessage);
+				setOpen(true);
 			}
 		}
 	}
+	const handleClose = () => {
+		setOpen(false);
+		history.push("/listings");
+	};
 
     return (
         <div className="list-item">
@@ -523,6 +530,21 @@ export default function EditItem(){
 					</div> 
                 </div>
             <ListingsDeleteModal></ListingsDeleteModal>
+			<Dialog open={open} onClose={handleClose} aria-describedby="alert-dialog-description" width='30vw'>
+				<DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
+					Subscribe
+				</DialogTitle>
+				<DialogContent>
+					<DialogContentText id="alert-dialog-description">
+						{errorMessage}
+					</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={handleClose} autoFocus>
+						Close
+					</Button>
+				</DialogActions>
+			</Dialog>
         </div>
     )
 }

@@ -92,6 +92,14 @@ export default function Cart() {
 		});
 	}
 
+	const handleViewProfile = (seller) => {
+		let json = {
+			username: seller
+		}
+		console.log(json);
+		store.getProfile(json);
+	}
+
     let cartItems = 
         <div className="order-card" style={{ margin: '0px 0px 20px 0px' }}>
             {/* EACH ITEM CARDS */}
@@ -99,16 +107,20 @@ export default function Cart() {
                 {items.map((index, i) => (
                     <div key={index._id} style={{ marginBottom: '5%', display: 'grid', gridTemplateColumns: 'repeat(2, 35vw)', width: '95%', height: '200px', border: 'black 2px solid', borderRadius: '20px' }}>
 						{/* ITEM IMAGE */}
-						<div style={{ position: 'absolute', margin: '2% 0 0 2%'}}>
+						<div style={{ position: 'absolute', margin: '25px 0 0 25px'}}>
 							<img onClick={() => { history.push("/product/" + index._id) }} src={index.image} 
 							alt="" width="150px" height="150px" style={{ borderRadius: '10%', cursor: 'pointer' }} ></img>
 						</div>
 						{/* ITEM INFO */}
-						<div style={{position: 'absolute', margin: '0 0 0 15%'}}>
-							<div onClick={() => { history.push("/product/" + index._id) }} style={{ fontSize: '50px', fontWeight: 'bold', cursor: 'pointer' }}> {index.name}</div>
+						<div style={{position: 'absolute', margin: '0 0 0 200px'}}>
+							<div onClick={() => { history.push("/product/" + index._id) }} style={{ fontSize: '50px', fontWeight: 'bold', cursor: 'pointer' }}> 
+								{index.name.length > 14 ? index.name.substring(0,15) + "..." : index.name}
+							</div>
 							<div style={{ marginTop: '2px', fontSize: '30px' }}>{index.price}&nbsp;Algo</div>
 							<div style={{ marginTop: '3px', fontSize: '15px' }}>(Shipping Price: {shippingPrices[i]} Algo)</div>
-							<div style={{ marginTop: '3px', fontSize: '20px' }}>Seller:&nbsp;{index.sellerUsername}</div>
+							<div style={{ marginTop: '3px', fontSize: '20px' }}>Seller:
+								<div onClick={() => { handleViewProfile(index.sellerUsername) }} style={{ margin: '0 0 0 10px', display: 'inline-block', cursor: 'pointer', color: '#879ED9' }}><u>{index.sellerUsername}</u></div>
+							</div>
 							<div id={index._id} onClick={handleDeleteModalOpen} style={{ marginTop: '3px', fontSize: '20px', cursor: 'pointer', color: 'red' }}>Remove</div>
 						</div>
                     </div>
