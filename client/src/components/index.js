@@ -17,6 +17,7 @@ import ViewProfile from './ViewProfile.js';
 import ViewMyProfile from './ViewMyProfile.js';
 import Wallet from './Wallet.js';
 import EditItem from './EditItem.js';
+import ThankyouPage from './ThankyouPage.js';
 
 /*
     This serves as a module so that we can import
@@ -43,4 +44,6 @@ export {
     ViewProfile,
     ViewMyProfile,
     Wallet,
-    EditItem }
+    EditItem,
+	ThankyouPage
+ }

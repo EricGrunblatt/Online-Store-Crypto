@@ -9,6 +9,7 @@ import axios from 'axios';
 import qs from 'qs';
 import { GlobalStoreContext } from '../store'
 import { useContext } from "react";
+import api from "../api";
 
 
 export default function ProductPage() {
@@ -35,18 +36,13 @@ export default function ProductPage() {
     useEffect(() => {
         async function fetchData() {
             try{
-                // getListingProductsForUser
-                const urlGetProduct = 'http://localhost:4000/api/product/getProduct';
-				// getShippingPrice
-				const urlGetShippingPrice = 'http://localhost:4000/api/product/getShippingPrice';
-                // POST 
-				const options = {
-					headers: { 'content-type': 'application/x-www-form-urlencoded' }
-				};
                 const data = qs.stringify({ '_id': productId });
+
+				// getListingProductsForUser
+				const requestProduct = api.getProduct(data);
+				// getShippingPrice
+				const requestShippingPrice = api.getShippingPrice(data);
 				
-				const requestProduct = axios.post(urlGetProduct, data, options);
-				const requestShippingPrice = axios.post(urlGetShippingPrice, data, options);
 				axios.all([requestProduct, requestShippingPrice]).then(axios.spread((...responses) => {
 					const currProduct = responses[0].data.product;
 					const shippingPriceRes = responses[1];
@@ -90,16 +86,9 @@ export default function ProductPage() {
 			setCartAlert(<Alert severity="error">Cannot be shipped to your location! </Alert>);
 		}
 		else {
-			const url = 'http://localhost:4000/api/purchase/addToCart';
 			// POST 
 			const data = { '_id': productId };
-			const options = {
-				method: 'POST',
-				headers: { 'content-type': 'application/x-www-form-urlencoded' },
-				data: qs.stringify(data),
-				url
-			};
-			axios(options).then(function(result){
+			api.addToCart(qs.stringify(data)).then(function(result){
 				if(result.data.status === "OK") {
 					history.push("/cart")
 				}

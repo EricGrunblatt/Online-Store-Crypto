@@ -3,8 +3,8 @@ import StarIcon from '@mui/icons-material/Star';
 import { Button, TextareaAutosize } from '@mui/material';
 import { useHistory } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
-import axios from 'axios';
 import { GlobalStoreContext } from "../store";
+import api from '../api';
 
 
 export default function Orders() {
@@ -16,15 +16,8 @@ export default function Orders() {
     useEffect(() => {
         async function fetchData() {
             try{
-                // getOrderedProductsForUser
-                const url = 'http://localhost:4000/api/product/getOrderedProductsForUser';
-                // POST 
-                const options = {
-                    method: 'POST',
-                    headers: { 'content-type': 'application/x-www-form-urlencoded' },
-                    url
-                };
-                axios(options).then(function(result) {
+				// GET ORDERED PRODUCTS FOR USER
+                api.getOrderedProductsForUser().then(function(result) {
                     setItems(result.data.products);
                 });
             }
@@ -66,15 +59,8 @@ export default function Orders() {
                 productId: productId
             }
             store.writeReview(json).then(() => {
-                // getOrderedProductsForUser
-                const url = 'http://localhost:4000/api/product/getOrderedProductsForUser';
-                // POST 
-                const options = {
-                    method: 'POST',
-                    headers: { 'content-type': 'application/x-www-form-urlencoded' },
-                    url
-                };
-                axios(options).then(function(result) {
+				// GET ORDERED PRODUCTS FOR USER
+                api.getOrderedProductsForUser().then(function(result) {
                     setItems(result.data.products);
                     console.log(result.data.products);
                 });

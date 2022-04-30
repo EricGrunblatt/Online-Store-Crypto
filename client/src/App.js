@@ -16,7 +16,8 @@ import {
     ViewProfile,
     ViewMyProfile,
     Wallet,
-    EditItem
+    EditItem,
+	ThankyouPage
 } from './components'
 /*
     This is our application's top-level component and entry-point
@@ -44,6 +45,7 @@ export default function App() {
                         <Route path="/product/:id" exact component={ProductPage} />
 						<Route path="/viewprofile" exact component={ViewProfile} />
                         <Route path="/myprofile" exact component={ViewMyProfile} />
+						<Route path="/thankyou" exact component={ThankyouPage} />
                     </Switch>   
                 </GlobalStoreContextProvider>
             </AuthContextProvider>

@@ -37,9 +37,15 @@ export const getShippingPrice = (payload) => api.post('/product/getShippingPrice
 export const deleteListing = (payload) => api.post('/product/deleteListingProduct', payload);
 export const setTrackingNumber = (payload) => api.post('/product/setTrackingNumber', payload);
 
+// ALL REQUEST FOR CART
+export const getCartProductsForUser = () => api.post('/product/getCartProductsForUser');
+export const removeFromCart = (payload) => api.post('/purchase/removeFromCart', payload);
+export const addToCart = (payload) => api.post('/purchase/addToCart', payload);
+
 // ALL REQUESTS FOR WALLET
 export const addWallet = (payload) => api.post('/wallet/addWallet', payload);
 export const removeWallet = (payload) => api.post('/wallet/removeWallet', payload);
+export const getWallets = () => api.post('/wallet/getWallets');
 
 // ALL REQUESTS FOR CHECKOUT
 export const purchaseFromCart = () => api.post('/purchase/purchaseFromCartTest');
@@ -68,8 +74,13 @@ const apis = {
     deleteListing,
     setTrackingNumber,
 
+	getCartProductsForUser,
+	removeFromCart,
+	addToCart,
+
     addWallet,
     removeWallet,
+	getWallets,
 
 	purchaseFromCart
 }

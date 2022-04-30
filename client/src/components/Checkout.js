@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Button, Alert } from '@mui/material';
-import axios from 'axios';
 import qs from 'qs';
 import api from "../api"
 import algo from "../images/Algorand.png";
@@ -41,16 +40,8 @@ export default function Checkout(props) {
 		}
         async function fetchWalletData() {
             try {
-                // getWalletForUser
-                const url = 'http://localhost:4000/api/wallet/getWallets';
-                // POST 
-                const options = {
-                    method: 'POST',
-                    headers: { 'content-type': 'application/x-www-form-urlencoded' },
-                    url
-                };
-                axios(options).then(function(result) {
-                    // console.log(result.data.wallets);
+				// GET WALLETS
+                api.getWallets().then(function(result) {
                     setWallets(result.data.wallets);
                 });
             }
@@ -75,8 +66,8 @@ export default function Checkout(props) {
             history.push("/wallet");
         }
 		setBlur({filter: 'blur(5px)'});
-		window.open(checkoutInput.invoice,"","toolbar=no,status=no,menubar=no,location=center,scrollbars=no,height=500,width=600,left=400,top=200");
-    }
+		window.location.href = checkoutInput.invoice;
+	}
 	
 	// NO PRODUCTS WERE RESERVED
 	let noItemToCheckout = "";
