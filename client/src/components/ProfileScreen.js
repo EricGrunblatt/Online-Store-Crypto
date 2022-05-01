@@ -24,6 +24,7 @@ export default function ProfileScreen() {
     const [newPassword, setNewPassword] = useState("");
     const [confirmNewPassword, setConfirmNewPassword] = useState("");
     const [profileImage, setProfileImage] = useState(null);
+    let regexp = /^[0-9\b]+$/;
 
     useEffect(() => {
         try {
@@ -263,7 +264,11 @@ export default function ProfileScreen() {
                                 value={zipcode} 
                                 label='Zip Code'
                                 placeholder="Zip Code" 
-                                onChange={(event) => { setZipcode(event.target.value) }}
+                                onChange={(event) => { 
+                                    if(event.target.value === '' || regexp.test(event.target.value)) { 
+                                        setZipcode(event.target.value) 
+                                    } 
+                                }}
                                 style={{ width: '35vw' }}></TextField>
                         </div>
                     </div>
@@ -299,7 +304,11 @@ export default function ProfileScreen() {
                                 value={phoneNumber} 
                                 label='Phone Number'
                                 placeholder="Phone Number" 
-                                onChange={(event) => { setPhoneNumber(event.target.value) }}
+                                onChange={(event) => { 
+                                    if(event.target.value === '' || regexp.test(event.target.value)) { 
+                                        setPhoneNumber(event.target.value) 
+                                    }
+                                }}
                                 style={{ width: '35vw' }}></TextField>
                         </div>
                         <div className="account-buttons" style={{ margin: '-60px 0px 0px 0px', float: 'right'}}>

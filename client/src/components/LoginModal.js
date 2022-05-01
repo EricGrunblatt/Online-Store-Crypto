@@ -40,6 +40,8 @@ function LoginModal() {
     const [password, setPassword] = useState("");
 
     let isOpen = false;
+    let regexp = /^[0-9\b]+$/;
+    
     if(store.loginModal) {
         isOpen = true;
     }
