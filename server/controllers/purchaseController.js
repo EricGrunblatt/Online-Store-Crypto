@@ -280,9 +280,9 @@ purchaseFromCartTest = async (req, res) => {
 			// TODO: send invoice
 			
 			// FOR TESTING: 
-			const invoice = `http://localhost:4000/api/purchase/purchaseCallbackTest/${thirdPartyOrderId}/${token}`
 			const thirdPartyOrderId = Math.floor(1 + Math.random() * 1000)
 			const token = Math.floor(1 + Math.random() * 1000)
+			const invoice = `http://localhost:4000/api/purchase/purchaseCallbackTest/${thirdPartyOrderId}/${token}`
 			// const token = 123
 			console.log(reservedProductIds)
 			const purchase = new Purchase({
