@@ -66,6 +66,8 @@ router.post('/purchase/removeFromCart', auth.verify, purchaseController.removeFr
 router.post('/purchase/purchaseFromCart', auth.verify, purchaseController.purchaseFromCart)
 // Process Purchase Callbacks
 router.post('/purchase/purchaseCallback', purchaseController.purchaseCallback)
+// Get purchases that are still pending
+router.post('/purchase/getPendingPurchasesForUser', auth.verify, purchaseController.getPendingPurchasesForUser)
 
 // TESTING
 router.post('/purchase/purchaseFromCartTest', auth.verify, purchaseController.purchaseFromCartTest)

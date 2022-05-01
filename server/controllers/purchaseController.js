@@ -3,11 +3,12 @@ const {Product, ProductState} = require('../models/productModel')
 const User = require('../models/userModel')
 const { coingateClient } = require('../handlers/purchaseHandler')
 const { calculatePriceOfReserved, reserveCartProducts } = require('./helpers/purchaseControllerHelper')
-const { getProducts } = require('./helpers/productControllerHelper')
+const { getProducts, getProductFirstImage } = require('./helpers/productControllerHelper')
 const dotenv = require('dotenv')
 const Cart = require('../models/cartModel')
 const {Order, OrderState} = require('../models/orderModel')
 const {Purchase, PurchaseState} = require('../models/purchaseModel')
+const {upload} = require('../handlers/imageHandler')
 
 dotenv.config()
 
@@ -162,8 +163,87 @@ purchaseFromCart = async (req, res) => {
 
 // TODO
 purchaseCallback = async (req, res) => {
-	console.log("purchaseCallback", req.body)
-	
+	const formDataMiddleware = upload.none()
+	formDataMiddleware(req, res, async() => {
+		console.log("purchaseCallback", req.body)
+
+		const {id, 
+			order_id, 
+			status, 
+			pay_amount, 
+			pay_currency, 
+			price_currency, 
+			receive_currency, 
+			receive_amount,
+			created_at,
+			token,
+			underpaid_amount,
+			overpaid_amount,
+			is_refundable,
+		} = req.body
+
+		if (status === 'pending') {
+			console.log("PENDING")
+		}
+		else if (status === 'paid') {
+			console.log("PAID")
+		}
+	})
+}
+
+getPendingPurchasesForUser = async (req, res) => {
+	console.log("getSellingProductsForUser", req.body)
+	const userId = req.userId
+
+	let user = null
+	let purchases = []
+	try {
+		if (!userId) {
+			throw constants.error.didNotGetUserId
+		}
+		else if (! (user = await User.findById(userId))) {
+			json = {status: constants.status.ERROR, errorMessage: constants.purchase.userDoesNotExist}
+		}
+		else {
+			const selectOptions = {
+				productIds: 1,
+				invoice: 1,
+			}
+			purchases = await Purchase.find({buyerusername: user.username, state: PurchaseState.PENDING})
+				.lean()
+				.select(selectOptions)
+			
+			console.log("PURCHASES: ", purchases)
+
+			const productSelectOptions = {
+				_id: 1,
+				name: 1,
+				price: 1,
+				shippingPrice: 1,
+				sellerUsername: 1,
+				imageIds: 1,
+				dateListed: "$createdAt",
+				state: 1,
+			}
+			purchases = await Promise.all(purchases.map(async (purchase) => {
+				const products = await getProducts(purchase.productIds, productSelectOptions)
+				purchase.products = await Promise.all(products.map(async (product) => {
+					const image = await getProductFirstImage(product)
+					product.image = image
+					delete product.imageIds
+					return product
+				}))
+				delete purchase.productIds
+				return purchase
+			}))
+			json = {purchases: constants.status.OK, pendingPurchases: purchases}
+		}
+		console.log("RESPONSE: ", json)
+		res.status(200).send(json)
+	} catch (err) {
+		console.log(err)
+		res.status(500).send(constants.status.FATAL_ERROR)
+	}	
 }
 
 // TODO - Remove when done
@@ -200,6 +280,7 @@ purchaseFromCartTest = async (req, res) => {
 			// TODO: send invoice
 			
 			// FOR TESTING: 
+			const invoice = `http://localhost:4000/api/purchase/purchaseCallbackTest/${thirdPartyOrderId}/${token}`
 			const thirdPartyOrderId = Math.floor(1 + Math.random() * 1000)
 			const token = Math.floor(1 + Math.random() * 1000)
 			// const token = 123
@@ -209,6 +290,7 @@ purchaseFromCartTest = async (req, res) => {
 				thirdPartyOrderId: thirdPartyOrderId,
 				token: token,
 				productIds: reservedProductIds,
+				invoice: invoice,
 			})
 			purchase.save()
 
@@ -241,14 +323,12 @@ purchaseFromCartTest = async (req, res) => {
 				return product;
 			}))
 
-			const invoice = `http://localhost:4000/api/purchase/purchaseCallbackTest/${thirdPartyOrderId}/${token}`
-			
 			json = {
 				status: constants.status.OK, 
 				reservedProducts: reservedProducts, 
 				failedToReserve: failedToReserve,
 				price: price, 
-				invoice: invoice
+				invoice: invoice,
 			}
 		}
 		console.log("RESPONSE: ", json)
@@ -288,7 +368,7 @@ purchaseCallbackTest = async (req, res) => {
 				console.log("ORDER: ", order)
 				const product = await Product.findOneAndUpdate(
 					{_id: productId}, 
-					{state: ProductState.SOLD, buyerUsername: order.buyerUsername}
+					{state: ProductState.SOLD, buyerUsername: order.buyerUsername, dateSold: Date.now()}
 				)
 				console.log("PRODUCT: ", product)
 			}
@@ -308,6 +388,7 @@ module.exports = {
 	removeFromCart,
 	purchaseFromCart,
 	purchaseCallback,
+	getPendingPurchasesForUser,
 
 	purchaseFromCartTest,
 	purchaseCallbackTest,
