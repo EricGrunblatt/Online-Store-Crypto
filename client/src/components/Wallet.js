@@ -62,7 +62,7 @@ export default function Wallet() {
     }
 
     return (
-        <div className="wallet" style={{ margin: '50px 0% 0px 10%', width: '80%', height: '700px', border: 'black 2px solid', borderRadius: '20px' }}>
+        <div className="wallet" style={{ margin: '50px 0% 50px 10%', width: '80%', height: '700px', border: 'black 2px solid', borderRadius: '20px' }}>
             <div className="display-name-wallet" style={{ margin: '20px 0% 0px 5%', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '65px', color: 'black' }}>
                 <u> Wallet </u>
             </div>

@@ -105,10 +105,10 @@ export default function ProductPage() {
     };
 
 	let showImages = 
-        <div style={{ width: '40%', margin: '10px 0 0 10px', display: 'grid', gridTemplateColumns: 'repeat(4, 10vw)' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(100px, 1fr))' }}>
             {itemImages.map((index, indexNum) => (
                 index? 
-                    <div key={indexNum} style={{cursor: "pointer", marginBottom: '20px' }}>
+                    <div key={indexNum} style={{cursor: "pointer", margin: '10px' }}>
                         <img id={indexNum} src={index} alt="" 
                         onClick={handleImage} title={index.title} width="100px" height="100px" style={{ borderRadius: '10%', border: "black 2px solid" }} ></img>
                     </div>:<div key={indexNum}></div>
@@ -126,12 +126,12 @@ export default function ProductPage() {
 
     return (
 		<Box style={{ position: 'absolute', marginLeft: '10%', marginRight: '10%', marginTop: '60px', width: '79%', minHeight: '450px'}}>
-			<div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 40vw)' }}>
+			<div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 0.5fr))' }}>
 				{/* LEFT IMAGES & DESCRIPTION */}
 				<div>
 					{/* THE MAIN IMAGE */}
-					{itemImage0? <img src={itemImage0} width="700px" height="450px" alt="" style={{ borderRadius: '10px' }} ></img>
-						:<img src="https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg" width="600px" height="600px" alt="" style={{ borderRadius: '10%' }} ></img>}
+					{itemImage0? <img src={itemImage0} width="450px" height="450px" alt="" style={{ borderRadius: '10px' }} ></img>
+						:<img src="https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg" width="450px" height="450px" alt="" style={{ borderRadius: '10%' }} ></img>}
 					{/* THE 8 IMAGES */}
 					{showImages}
 					{/* DESCRIPTION */}

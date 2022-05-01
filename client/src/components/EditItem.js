@@ -334,11 +334,12 @@ export default function EditItem(){
 
     /* POST EDIT ITEM */
     const handleEditItem = async function() {
-		var categoryTxt = categoryTxts[category - 1]
+		var categoryTxt = categoryTxts[category - 1];
+		let priceLimit = 59874.9224 * 25.315;
 		if(!name || !description || !condition || !categoryTxt || !price || !length || !width || !height ||!weight) {
 			setEditItemAlert(<Alert severity="error">Missing requeired field!</Alert>);
 		}
-		else if(+price > 25.315) {
+		else if(+price > priceLimit) {
 			setEditItemAlert(<Alert severity="error">The price cannot exceed 25.315 BTC</Alert>);
 		}
 		else if(+weight > 70) {

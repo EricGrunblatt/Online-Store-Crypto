@@ -261,12 +261,13 @@ export default function ListItem(){
     const handleListItem = async function() {
         var categoryTxts = ["Clothing", "Electronics", "Fashion", "Furniture", "Hardware",
         "Home & Garden", "Music", "Office Supplies", "Other", "Photography & Video", "Sports Equipment", "Toys", "Video Games"]
-        var categoryTxt = categoryTxts[category - 1]
+        var categoryTxt = categoryTxts[category - 1];
+		let priceLimit = 59874.9224 * 25.315;
         var formData = new FormData();
 		if(!name || !description || !condition || !categoryTxt || !price || !length || !width || !height ||!weight) {
 			setListItemAlert(<Alert severity="error">Missing requeired field!</Alert>);
 		}
-		else if(+price > 25.315) {
+		else if(+price > priceLimit) {
 			setListItemAlert(<Alert severity="error">The price cannot exceed 25.315 BTC</Alert>);
 		}
 		else if(+weight > 70) {

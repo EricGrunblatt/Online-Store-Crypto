@@ -37,17 +37,17 @@ export default function Listings() {
 	function showListCards(items) {
 		return <div className="display-listings">
 			{/* EACH ITEM CARDS */}
-			<div style={{ margin: '3% 0 3% 7%', display: 'grid', gridTemplateColumns: 'repeat(2, 35vw)' }}>
+			<div style={{ margin: '3% 7%', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 0.5fr))' }}>
 				{items.map((index) => (
-					<div style={{ marginBottom: '5%', display: 'grid', gridTemplateColumns: 'repeat(2, 35vw)', width: '95%', height: '200px', border: 'black 2px solid', borderRadius: '20px' }}>
+					<div style={{ padding: '25px', margin: '5px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', minHeight: '100px', border: 'black 2px solid', borderRadius: '20px' }}>
 						{/* ITEM IMAGE */}
-						<div style={{ position: 'absolute', margin: '25px 0 0 25px'}}>
+						<div style={{ position: 'absolute' }}>
 							<img onClick={() => { history.push("/product/" + index._id) }} src={index.image} 
 							alt="" width="150px" height="150px" style={{ width: '150px', height: '150px', borderRadius: '10%', cursor: 'pointer' }} ></img>
 						</div>
 						{/* ITEM INFO */}
-						<div style={{position: 'absolute', margin: '15px 0 0 200px', width: '20vw'}}>
-							<div onClick={() => { history.push("/product/" + index._id) }} style={{ fontSize: '50px', fontWeight: 'bold', cursor: 'pointer' }}> 
+						<div style={ {marginLeft: '200px' }}>
+							<div onClick={() => { history.push("/product/" + index._id) }} style={{ fontSize: '30px', fontWeight: 'bold', cursor: 'pointer' }}> 
                                 {index.name.length > 14 ? index.name.substring(0,15) + "..." : index.name}
                             </div>
 							<div style={{ marginTop: '3px', fontSize: '30px' }}>{index.price}&nbsp;Algo</div>
