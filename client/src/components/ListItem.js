@@ -51,212 +51,69 @@ export default function ListItem(){
         setCondition(event.target.value);
     }
 
-    // BOX0
-    let box0 = "";
-
-    const onImageChange0 = (event) => {
-        if (event.target.files && event.target.files[0]) {
+    // BOXES TO GET THE IMAGE FILES
+	let boxes = []
+	let images = [image0, image1, image2, image3, image4, image5, image6, image7];
+	let imageStr = ['image0', 'image1', 'image2', 'image3', 'image4', 'image5', 'image6', 'image7'];
+	let setImages = [setImage0, setImage1, setImage2, setImage3, setImage4, setImage5, setImage6, setImage7]
+	let onImageChangeStr = ["onImageChange0", "onImageChange1", "onImageChange2", "onImageChange3", "onImageChange4", "onImageChange5", "onImageChange6", "onImageChange7"];
+	let onImageChanges = {
+		onImageChange0: function(event) {
+			if (event.target.files && event.target.files[0]) {
             setImage0(URL.createObjectURL(event.target.files[0]));
-        }
-    }
-    if(!image0) {
-        box0 = 
-        <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px dashed', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
-            <label for='image0' style={{ cursor: 'pointer' }}>
-                <AddIcon></AddIcon>
-            </label>
-            <input type='file' name='image0' id='image0' onChange={onImageChange0} style={{ display: 'none', visibility: 'none' }}></input>
-        </div>
-    } else {
-        box0 = 
-        <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
-            <label for='image0' style={{ cursor: 'pointer' }}>
-                <img src={image0} alt="preview image0" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
-            </label>
-            <input type='file' name='image0' id='image0' onChange={onImageChange0} style={{ display: 'none', visibility: 'none' }}></input>
-        </div>
-    }
-
-    // BOX1
-    let box1 = "";
-        
-    const onImageChange1 = (event) => {
-        if (event.target.files && event.target.files[0]) {
+        }},
+		onImageChange1: function(event) {
+			if (event.target.files && event.target.files[0]) {
             setImage1(URL.createObjectURL(event.target.files[0]));
-        }
-    }
-    if(!image1) {
-        box1 = 
-        <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px dashed', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
-            <label for='image1' style={{ cursor: 'pointer' }}>
-                <AddIcon></AddIcon>
-            </label>
-            <input type='file' name='image1' id='image1' onChange={onImageChange1} style={{ display: 'none', visibility: 'none' }}></input>
-        </div>
-    } else {
-        box1 = 
-        <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
-            <label for='image1' style={{ cursor: 'pointer' }}>
-                <img src={image1} alt="preview image1" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
-            </label>
-            <input type='file' name='image1' id='image1' onChange={onImageChange1} style={{ display: 'none', visibility: 'none' }}></input>
-        </div>
-    }
-
-    // BOX2
-    let box2 = "";
-    
-    const onImageChange2 = (event) => {
-        if (event.target.files && event.target.files[0]) {
+        }},
+		onImageChange2: function(event) {
+			if (event.target.files && event.target.files[0]) {
             setImage2(URL.createObjectURL(event.target.files[0]));
-        }
-    }
-    if(!image2) {
-        box2 = 
-        <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px dashed', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
-            <label for='image2' style={{ cursor: 'pointer' }}>
-                <AddIcon></AddIcon>
-            </label>
-            <input type='file' name='image2' id='image2' onChange={onImageChange2} style={{ display: 'none', visibility: 'none' }}></input>
-        </div>
-    } else {
-        box2 = 
-        <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
-            <label for='image2' style={{ cursor: 'pointer' }}>
-                <img src={image2} alt="preview image2" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
-            </label>
-            <input type='file' name='image2' id='image2' onChange={onImageChange2} style={{ display: 'none', visibility: 'none' }}></input>
-        </div>
-    }
-
-    // BOX3
-    let box3 = "";
-    
-    const onImageChange3 = (event) => {
-        if (event.target.files && event.target.files[0]) {
+        }},
+		onImageChange3: function(event) {
+			if (event.target.files && event.target.files[0]) {
             setImage3(URL.createObjectURL(event.target.files[0]));
-        }
-    }
-    if(!image3) {
-        box3 = 
-        <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px dashed', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
-            <label for='image3' style={{ cursor: 'pointer' }}>
-                <AddIcon></AddIcon>
-            </label>
-            <input type='file' name='image3' id='image3' onChange={onImageChange3} style={{ display: 'none', visibility: 'none' }}></input>
-        </div>
-    } else {
-        box3 = 
-        <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
-            <label for='image3' style={{ cursor: 'pointer' }}>
-                <img src={image3} alt="preview image3" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
-            </label>
-            <input type='file' name='image3' id='image3' onChange={onImageChange3} style={{ display: 'none', visibility: 'none' }}></input>
-        </div>
-    }
-
-    // BOX4
-    let box4 = "";
-    
-    const onImageChange4 = (event) => {
-        if (event.target.files && event.target.files[0]) {
+        }},
+		onImageChange4: function(event) {
+			if (event.target.files && event.target.files[0]) {
             setImage4(URL.createObjectURL(event.target.files[0]));
-        }
-    }
-    if(!image4) {
-        box4 = 
-        <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px dashed', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
-            <label for='image4' style={{ cursor: 'pointer' }}>
-                <AddIcon></AddIcon>
-            </label>
-            <input type='file' name='image4' id='image4' onChange={onImageChange4} style={{ display: 'none', visibility: 'none' }}></input>
-        </div>
-    } else {
-        box4 = 
-        <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
-            <label for='image4' style={{ cursor: 'pointer' }}>
-                <img src={image4} alt="preview image4" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
-            </label>
-            <input type='file' name='image4' id='image4' onChange={onImageChange4} style={{ display: 'none', visibility: 'none' }}></input>
-        </div>
-    }
-
-    // BOX5
-    let box5 = "";
-    
-    const onImageChange5 = (event) => {
-        if (event.target.files && event.target.files[0]) {
+        }},
+		onImageChange5: function(event) {
+			if (event.target.files && event.target.files[0]) {
             setImage5(URL.createObjectURL(event.target.files[0]));
-        }
-    }
-    if(!image5) {
-        box5 = 
-        <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px dashed', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
-            <label for='image5' style={{ cursor: 'pointer' }}>
-                <AddIcon></AddIcon>
-            </label>
-            <input type='file' name='image5' id='image5' onChange={onImageChange5} style={{ display: 'none', visibility: 'none' }}></input>
-        </div>
-    } else {
-        box5 = 
-        <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
-            <label for='image5' style={{ cursor: 'pointer' }}>
-                <img src={image5} alt="preview image5" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
-            </label>
-            <input type='file' name='image5' id='image5' onChange={onImageChange5} style={{ display: 'none', visibility: 'none' }}></input>
-        </div>
-    }
-
-   // BOX6
-   let box6 = "";
-    
-   const onImageChange6 = (event) => {
-       if (event.target.files && event.target.files[0]) {
-           setImage6(URL.createObjectURL(event.target.files[0]));
-       }
-   }
-   if(!image6) {
-       box6 = 
-       <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px dashed', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
-           <label for='image6' style={{ cursor: 'pointer' }}>
-               <AddIcon></AddIcon>
-           </label>
-           <input type='file' name='image6' id='image6' onChange={onImageChange6} style={{ display: 'none', visibility: 'none' }}></input>
-       </div>
-   } else {
-       box6 = 
-       <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
-            <label for='image6' style={{ cursor: 'pointer' }}>
-                <img src={image6} alt="preview image6" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
-            </label>
-            <input type='file' name='image6' id='image6' onChange={onImageChange6} style={{ display: 'none', visibility: 'none' }}></input>
-        </div>
-   }
-    // BOX7
-    let box7 = "";
-    
-    const onImageChange7 = (event) => {
-        if (event.target.files && event.target.files[0]) {
+        }},
+		onImageChange6: function(event) {
+			if (event.target.files && event.target.files[0]) {
+            setImage6(URL.createObjectURL(event.target.files[0]));
+        }},
+		onImageChange7: function(event) {
+			if (event.target.files && event.target.files[0]) {
             setImage7(URL.createObjectURL(event.target.files[0]));
-        }
-    }
-    if(!image7) {
-        box7 = 
-        <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px dashed', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
-            <label for='image7' style={{ cursor: 'pointer' }}>
-                <AddIcon></AddIcon>
-            </label>
-            <input type='file' name='image7' id='image7' onChange={onImageChange7} style={{ display: 'none', visibility: 'none' }}></input>
-        </div>
-    } else {
-        box7 = 
-        <div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
-            <label for='image7' style={{ cursor: 'pointer' }}>
-                <img src={image7} alt="preview image7" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
-            </label>
-            <input type='file' name='image7' id='image7' onChange={onImageChange7} style={{ display: 'none', visibility: 'none' }}></input>
-        </div>
-    }
+        }},
+	};
+
+	for (let i = 0; i < 8; i++) {
+		if(!images[i]) {
+			boxes[i] = 
+				<label for={imageStr[i]} style={{ cursor: 'pointer' }}>
+					<div style={{ display: 'flex', width: '17vw', height: '17vw', border: 'black 1px dashed', borderRadius: '10px', alignItems: 'center', justifyContent: 'center' }}>
+						<AddIcon></AddIcon>
+						<input type='file' name={imageStr[i]} id={imageStr[i]} onChange={onImageChanges[onImageChangeStr[i]]} style={{ display: 'none', visibility: 'none' }}></input>
+					</div>
+				</label>
+		} else {
+			boxes[i] = 
+				<div>
+					<div style={{ display: 'flex', width: '17vw', height: '17vw', alignItems: 'center', justifyContent: 'center' }}>
+						<label for={imageStr[i]} style={{ cursor: 'pointer' }}>
+							<img src={images[i]} alt="preview image" style={{ width: '17vw', height: '17vw', border: 'black 1px solid', borderRadius: '10px'}}/>
+							<input type='file' name={imageStr[i]} id={imageStr[i]} onChange={onImageChanges[onImageChangeStr[i]]} style={{ display: 'none', visibility: 'none' }}></input>
+						</label>
+					</div>
+					<Button onClick={() => {setImages[i](null)}} style={{color: 'black', fontFamily: 'Quicksand', fontSize: '10px', width: '17vw' }}>Remove this image</Button>
+				</div>
+		}
+	}
 
     const handleListItem = async function() {
         var categoryTxts = ["Clothing", "Electronics", "Fashion", "Furniture", "Hardware",
@@ -368,14 +225,7 @@ export default function ListItem(){
                     <div style={{ margin: '10px 0% 0px 0%', display: 'inline-block', fontFamily: 'Quicksand', fontWeight: 'bold', color: '#808080', fontSize: '25px' }}>Photos (1-8):</div>
                 </div>
                 <div className="photo-container" style={{ margin: '40px 0px 0px 5vw', display: 'grid', gridTemplateColumns: 'repeat(4, 20vw)', gridTemplateRows: 'minmax(20vw, auto) repeat(2, 20vw)', justifyContent: 'center', alignContent: 'center'}}>
-                    {box0}
-                    {box1}
-                    {box2}
-                    {box3}
-                    {box4}
-                    {box5}
-                    {box6}
-                    {box7}
+                    {boxes}
                 </div>
                 <div className="condition" style={{ margin: '-20vw 0px 0px 10%'}}>
                     <div style={{ margin: '10px 0% 0px 0%', display: 'inline-block', fontFamily: 'Quicksand', fontWeight: 'bold', color: '#808080', fontSize: '25px' }}>Condition:</div>
