@@ -368,7 +368,7 @@ purchaseCallbackTest = async (req, res) => {
 				console.log("ORDER: ", order)
 				const product = await Product.findOneAndUpdate(
 					{_id: productId}, 
-					{state: ProductState.SOLD, buyerUsername: order.buyerUsername}
+					{state: ProductState.SOLD, buyerUsername: order.buyerUsername, dateSold: Date.now()}
 				)
 				console.log("PRODUCT: ", product)
 			}
