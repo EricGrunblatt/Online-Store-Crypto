@@ -3,7 +3,7 @@ const {Product, ProductState} = require('../models/productModel')
 const User = require('../models/userModel')
 const { coingateClient } = require('../handlers/purchaseHandler')
 const { calculatePriceOfReserved, reserveCartProducts } = require('./helpers/purchaseControllerHelper')
-const { getProducts } = require('./helpers/productControllerHelper')
+const { getProducts, getProductFirstImage } = require('./helpers/productControllerHelper')
 const dotenv = require('dotenv')
 const Cart = require('../models/cartModel')
 const {Order, OrderState} = require('../models/orderModel')
@@ -206,10 +206,36 @@ getPendingPurchasesForUser = async (req, res) => {
 		}
 		else {
 			const selectOptions = {
-				productIds,
-				invoiceUrl,
+				productIds: 1,
+				invoice: 1,
 			}
-			purchases = await Purchase.find({buyerusername: user.username, state: PurchaseState.PENDING}, select({selectOptions}))
+			purchases = await Purchase.find({buyerusername: user.username, state: PurchaseState.PENDING})
+				.lean()
+				.select(selectOptions)
+			
+			console.log("PURCHASES: ", purchases)
+
+			const productSelectOptions = {
+				_id: 1,
+				name: 1,
+				price: 1,
+				shippingPrice: 1,
+				sellerUsername: 1,
+				imageIds: 1,
+				dateListed: "$createdAt",
+				state: 1,
+			}
+			purchases = await Promise.all(purchases.map(async (purchase) => {
+				const products = await getProducts(purchase.productIds, productSelectOptions)
+				purchase.products = await Promise.all(products.map(async (product) => {
+					const image = await getProductFirstImage(product)
+					product.image = image
+					delete product.imageIds
+					return product
+				}))
+				delete purchase.productIds
+				return purchase
+			}))
 			json = {purchases: constants.status.OK, pendingPurchases: purchases}
 		}
 		console.log("RESPONSE: ", json)
