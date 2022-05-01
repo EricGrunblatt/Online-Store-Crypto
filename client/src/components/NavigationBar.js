@@ -63,6 +63,7 @@ export default function NavigationBar() {
     function handleLogout() {
         handleMenuClose();
         auth.logoutUser();
+        store.initialLoad();
     }
 
     function handleProfile() {
