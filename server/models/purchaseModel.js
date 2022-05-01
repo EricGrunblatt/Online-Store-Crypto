@@ -14,6 +14,7 @@ const PurchaseSchema = new Schema(
 		thirdPartyOrderId:	{type: String, required: true},
 		token:				{type: String, required: true},
 		productIds:			{type: [ObjectId], required: true},
+		invoice:			{type: String, required: true},
 		state:				{type: String, default: PurchaseState.PENDING},
 	},
 	{ timestamps: true },

@@ -8,6 +8,7 @@ const dotenv = require('dotenv')
 const Cart = require('../models/cartModel')
 const {Order, OrderState} = require('../models/orderModel')
 const {Purchase, PurchaseState} = require('../models/purchaseModel')
+const {upload} = require('../handlers/imageHandler')
 
 dotenv.config()
 
@@ -162,8 +163,61 @@ purchaseFromCart = async (req, res) => {
 
 // TODO
 purchaseCallback = async (req, res) => {
-	console.log("purchaseCallback", req.body)
-	
+	const formDataMiddleware = upload.none()
+	formDataMiddleware(req, res, async() => {
+		console.log("purchaseCallback", req.body)
+
+		const {id, 
+			order_id, 
+			status, 
+			pay_amount, 
+			pay_currency, 
+			price_currency, 
+			receive_currency, 
+			receive_amount,
+			created_at,
+			token,
+			underpaid_amount,
+			overpaid_amount,
+			is_refundable,
+		} = req.body
+
+		if (status === 'pending') {
+			console.log("PENDING")
+		}
+		else if (status === 'paid') {
+			console.log("PAID")
+		}
+	})
+}
+
+getPendingPurchasesForUser = async (req, res) => {
+	console.log("getSellingProductsForUser", req.body)
+	const userId = req.userId
+
+	let user = null
+	let purchases = []
+	try {
+		if (!userId) {
+			throw constants.error.didNotGetUserId
+		}
+		else if (! (user = await User.findById(userId))) {
+			json = {status: constants.status.ERROR, errorMessage: constants.purchase.userDoesNotExist}
+		}
+		else {
+			const selectOptions = {
+				productIds,
+				invoiceUrl,
+			}
+			purchases = await Purchase.find({buyerusername: user.username, state: PurchaseState.PENDING}, select({selectOptions}))
+			json = {purchases: constants.status.OK, pendingPurchases: purchases}
+		}
+		console.log("RESPONSE: ", json)
+		res.status(200).send(json)
+	} catch (err) {
+		console.log(err)
+		res.status(500).send(constants.status.FATAL_ERROR)
+	}	
 }
 
 // TODO - Remove when done
@@ -200,6 +254,7 @@ purchaseFromCartTest = async (req, res) => {
 			// TODO: send invoice
 			
 			// FOR TESTING: 
+			const invoice = `http://localhost:4000/api/purchase/purchaseCallbackTest/${thirdPartyOrderId}/${token}`
 			const thirdPartyOrderId = Math.floor(1 + Math.random() * 1000)
 			const token = Math.floor(1 + Math.random() * 1000)
 			// const token = 123
@@ -209,6 +264,7 @@ purchaseFromCartTest = async (req, res) => {
 				thirdPartyOrderId: thirdPartyOrderId,
 				token: token,
 				productIds: reservedProductIds,
+				invoice: invoice,
 			})
 			purchase.save()
 
@@ -241,14 +297,12 @@ purchaseFromCartTest = async (req, res) => {
 				return product;
 			}))
 
-			const invoice = `http://localhost:4000/api/purchase/purchaseCallbackTest/${thirdPartyOrderId}/${token}`
-			
 			json = {
 				status: constants.status.OK, 
 				reservedProducts: reservedProducts, 
 				failedToReserve: failedToReserve,
 				price: price, 
-				invoice: invoice
+				invoice: invoice,
 			}
 		}
 		console.log("RESPONSE: ", json)
@@ -308,6 +362,7 @@ module.exports = {
 	removeFromCart,
 	purchaseFromCart,
 	purchaseCallback,
+	getPendingPurchasesForUser,
 
 	purchaseFromCartTest,
 	purchaseCallbackTest,
