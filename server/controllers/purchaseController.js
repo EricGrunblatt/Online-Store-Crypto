@@ -167,7 +167,8 @@ purchaseCallback = async (req, res) => {
 	formDataMiddleware(req, res, async() => {
 		console.log("purchaseCallback", req.body)
 
-		const {id, 
+		const {
+			id, 
 			order_id, 
 			status, 
 			pay_amount, 
@@ -208,6 +209,7 @@ getPendingPurchasesForUser = async (req, res) => {
 			const selectOptions = {
 				productIds: 1,
 				invoice: 1,
+				price: 1,
 			}
 			purchases = await Purchase.find({buyerusername: user.username, state: PurchaseState.PENDING})
 				.lean()
@@ -291,6 +293,7 @@ purchaseFromCartTest = async (req, res) => {
 				token: token,
 				productIds: reservedProductIds,
 				invoice: invoice,
+				price: price,
 			})
 			purchase.save()
 
