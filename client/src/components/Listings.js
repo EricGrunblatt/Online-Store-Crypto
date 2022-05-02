@@ -80,6 +80,8 @@ export default function Listings() {
             if(response.data.status === "OK") {
                 console.log("Tracking Number Success");
                 api.getListingProductsForUser().then(function(result) {
+                    setNotShippedItems([]);
+                    setSoldItems([]);
                     setSellingItems(result.data.products);
                 });
             } else if (response.data.status === "ERROR") {

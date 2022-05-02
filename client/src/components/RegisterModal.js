@@ -51,6 +51,7 @@ function RegisterModal() {
     const [zipcode, setZipcode] = useState("");
 
     let isOpen = false;
+    let regexp = /^[0-9\b]+$/;
 
     if(store.registerModal) {
         isOpen = true;
@@ -197,7 +198,11 @@ function RegisterModal() {
                     id="zipcode"
                     label="Zip Code"  
                     value={zipcode} 
-                    onChange={(event) => { setZipcode(event.target.value) }}
+                    onChange={(event) => { 
+                        if(event.target.value === '' || regexp.test(event.target.value)) { 
+                            setZipcode(event.target.value) 
+                        }
+                    }}
                     style={{ display: 'flex', float: 'right', margin: '15px 0px 0px 0px', width: '242.5px' }}></TextField>
                 <TextField 
                     required
@@ -205,7 +210,11 @@ function RegisterModal() {
                     id="phoneNumber"
                     label="Phone Number"  
                     value={phoneNumber} 
-                    onChange={(event) => { setPhoneNumber(event.target.value) }}
+                    onChange={(event) => { 
+                        if(event.target.value === '' || regexp.test(event.target.value)) { 
+                            setPhoneNumber(event.target.value) 
+                        } 
+                    }}
                     style={{ margin: '15px 0px 0px 0px', float: 'left', width: '500px' }}></TextField>
                 <Button onClick={handleBack} style={{ margin: '15px 20px 0px 0px', color: 'white', background: 'black', width: '150px', height: '40px', fontSize: '8px', borderRadius: '10px' }}><h1>Back</h1></Button>
                 <Button onClick={(event) => { handleRegister(event) }} style={{ cursor: 'pointer', margin: '15px 0px 0px 0px', color: 'white', background: 'black', width: '150px', height: '40px', fontSize: '8px', borderRadius: '10px' }}><h1>Register</h1></Button>
