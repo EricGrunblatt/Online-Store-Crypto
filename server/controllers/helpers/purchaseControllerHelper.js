@@ -43,7 +43,27 @@ reserveCartProducts = async (username) => {
 	return {reservedProductIds, failedToReserveIds}
 }
 
+unreserveProducts = async (username, reservedProductIds) => {
+	await Promise.all(reservedProductIds.map(async (productId) => {
+		try {
+			await Order.findOneAndRemove({buyerUsername: username, productId: productId})
+			const cartItem = new Cart({
+				buyerUsername: username,
+				productId: productId,
+			})
+			await cartItem.save()
+			await Product.findOneAndUpdate({_id: productId}, {
+				state: ProductState.LISTED, 
+				reserverUsername: null,
+			})
+		} catch (err) {
+			console.log(`FAILED TO UNRESERVE PRODUCTID ${productId} FOR USERNAME ${username}`)
+		}
+	}))
+}
+
 module.exports = {
 	calculatePriceOfReserved,
-	reserveCartProducts
+	reserveCartProducts,
+	unreserveProducts,
 }

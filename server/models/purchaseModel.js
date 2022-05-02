@@ -15,7 +15,7 @@ const PurchaseSchema = new Schema(
 		token:				{type: String, required: true},
 		productIds:			{type: [ObjectId], required: true},
 		invoice:			{type: String, required: true},
-		price:			{type: number, required: true},
+		price:				{type: Number, required: true},
 		state:				{type: String, default: PurchaseState.PENDING},
 	},
 	{ timestamps: true },

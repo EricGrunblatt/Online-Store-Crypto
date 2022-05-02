@@ -1,8 +1,8 @@
 const constants = require('./constants.json')
 const {Product, ProductState} = require('../models/productModel')
 const User = require('../models/userModel')
-const { coingateClient } = require('../handlers/purchaseHandler')
-const { calculatePriceOfReserved, reserveCartProducts } = require('./helpers/purchaseControllerHelper')
+const { createPurchase } = require('../handlers/purchaseHandler')
+const { calculatePriceOfReserved, reserveCartProducts, unreserveProducts } = require('./helpers/purchaseControllerHelper')
 const { getProducts, getProductFirstImage } = require('./helpers/productControllerHelper')
 const dotenv = require('dotenv')
 const Cart = require('../models/cartModel')
@@ -104,14 +104,18 @@ removeFromCart = async (req, res) => {
 
 //TODO
 purchaseFromCart = async (req, res) => {
-	console.log("purchaseFromCart", req.body)
+	console.log("purchaseFromCartTest", req.body)
 	const userId = req.userId
 	
 	let json = {}
 	let user = null
-	let cartItems = null
-	let reservedProductIds = []
-	let failedToReserveIds = []
+	let reservedProducts = []
+	let failedToReserve = []
+	let purchase = null
+	let price_amount = 0
+	const price_currency = 'USD'
+	const receive_currency = 'BTC'
+	const invoice = null
 	try {
 		if (!userId) {
 			throw constants.error.didNotGetUserId
@@ -120,40 +124,63 @@ purchaseFromCart = async (req, res) => {
 			json = {status: constants.status.ERROR, errorMessage: constants.purchase.userDoesNotExist}
 		}
 		else if (! (cartItems = await Cart.find({buyerUsername: user.username}))) {
-			json = {status: constants.status.ERROR, errorMessage: constants.purchase.cartIsEmpty}
-		}
-		else if (cartItems.length === 0) {
-			json = {status: constants.status.ERROR, errorMessage: constants.purchase.cartIsEmpty}
+			json = {status: constants.status.ERROR, errorMessage: constants.purchase.couldNotGetCartItems}
 		}
 		else if (! ({reservedProductIds, failedToReserveIds} = await reserveCartProducts(user.username))) {
 			json = {status: constants.status.ERROR, errorMessage: constants.purchase.failedToReserveCartProducts}
 		}
+		else if (reservedProductIds.length === 0) {
+			json = {status: constants.status.ERROR, errorMessage: constants.purchase.noProductsWereReserved}
+		}
+		else if (0 >= (price_amount = await calculatePriceOfReserved(user.username))) {
+			json = {status: constants.status.ERROR, errorMessage: constants.purchase.failedToCalculatePrice}
+		}
+		else if (! (purchase = await createPurchase(user, price_amount, price_currency, receive_currency))) {
+			console.log(`INVOICE CREATION FAILED; UNRESERVING ITEMS: ${reservedProductIds}`)
+			await unreserveProducts(user.username, reservedProductIds)
+			json = {status: constants.status.ERROR, errorMessage: constants.purchase.failedToCreateInvoice}
+		}
 		else {
 
-			// TODO: Mark shopping cart items as "reserved"
-
-			const price_amount = await calculatePriceOfReserved(user.username)
-
-			// TODO: Check price is not over 25 BTC
-
-			const price_currency = 'BTC'
-			const receive_currency = 'BTC'
-
-			const invoice = {
-				price_amount: price_amount,
-				price_currency: price_currency,
-				receive_currency: receive_currency,
+			const selectOptions = {
+				_id: 1,
+				name: 1,
+				price: 1,
+				shippingPrice: 1,
+				sellerUsername: 1,
+				imageIds: 1,
+				dateListed: "$createdAt"
 			}
 
-			console.log("SENDING TO COINGATE: ", invoice)
+			reservedProducts = await getProducts(reservedProductIds, selectOptions)
+			failedToReserve = await getProducts(failedToReserveIds, selectOptions)
 
-			const order = await coingateClient.createOrder(invoice)
-			json = order
-			console.log("REDIRECT: ", json)
-			res.redirect(order.payment_url)
+			await Promise.all(reservedProducts.map(async (product) => {
+				const image = await getProductFirstImage(product);
+				product.image = image
+				delete product.imageIds
+
+				return product;
+			}))
+
+			await Promise.all(failedToReserve.map(async (product) => {
+				const image = await getProductFirstImage(product);
+				product.image = image
+				delete product.imageIds
+
+				return product;
+			}))
+
+			json = {
+				status: constants.status.OK, 
+				reservedProducts: reservedProducts, 
+				failedToReserve: failedToReserve,
+				price: price_amount, 
+				invoice: purchase.invoice,
+			}
 		}
-		// console.log("RESPONSE: ", json)
-		// res.status(200).json(json)
+		console.log("RESPONSE: ", json)
+		res.status(200).json(json)
 	} catch (err) {
 		console.log(err)
 		// console.log(err.response.response.data)
