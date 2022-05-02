@@ -125,12 +125,12 @@ export default function ProductPage() {
 	}
 
     return (
-		<Box style={{ position: 'absolute', marginLeft: '10%', marginRight: '10%', marginTop: '60px', width: '79%', minHeight: '450px'}}>
+		<Box style={{ position: 'absolute', marginLeft: '10%', marginRight: '10%', marginTop: '60px', width: '79%', minHeight: '450px' }}>
 			<div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 40vw)' }}>
 				{/* LEFT IMAGES & DESCRIPTION */}
 				<div>
 					{/* THE MAIN IMAGE */}
-					{itemImage0? <img src={itemImage0} width="700px" height="450px" alt="" style={{ borderRadius: '10px' }} ></img>
+					{itemImage0? <img src={itemImage0} width="700vw" height="450px" alt="" style={{ borderRadius: '10px' }} ></img>
 						:<img src="https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg" width="600px" height="600px" alt="" style={{ borderRadius: '10%' }} ></img>}
 					{/* THE 8 IMAGES */}
 					{showImages}
