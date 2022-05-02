@@ -91,7 +91,7 @@ export default function Cart() {
 						{/* ITEM INFO */}
 						<div style={{position: 'absolute', margin: '0 0 0 200px'}}>
 							<div onClick={() => { history.push("/product/" + index._id) }} style={{ fontSize: '50px', fontWeight: 'bold', cursor: 'pointer' }}> 
-								{index.name.length > 14 ? index.name.substring(0,15) + "..." : index.name}
+							{index.name.length > 10 ? index.name.substring(0,11) + "..." : index.name}
 							</div>
 							<div style={{ marginTop: '2px', fontSize: '30px' }}>{index.price}&nbsp;Algo</div>
 							<div style={{ marginTop: '3px', fontSize: '15px' }}>(Shipping Price: {shippingPrices[i]} Algo)</div>

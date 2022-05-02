@@ -18,7 +18,7 @@ export default function HomeProduct(props) {
                 <img src={image} alt="" style={{ width: width, height: width, borderRadius: '10px'}}></img>
             </div>
             <div onClick={() => {history.push("/product")}} className="home-product-information" style={{ cursor: 'pointer', margin: '0px 0px 0px 20px', width: width, height: height, color: 'black', background: '#E1E1E1', border: 'grey 1px solid', borderRadius: '10px', boxShadow: '0px 2px 5px 2px rgba(0, 0, 0, 0.2)' }}>
-                <div className="product-name" style={{ margin: '0px 5px 20px 5px', fontFamily: 'Quicksand', fontSize: '25px'}}>
+                <div className="product-name" style={{ margin: '0px 5px 20px 5px', fontFamily: 'Quicksand', fontSize: '25px', height: "70px", overflowY: 'scroll'}}>
                     {product.name}
                 </div>
                 <div className="product-price" style={{ marginBottom: '50px', fontFamily: 'Quicksand', fontSize: '20px' }}>

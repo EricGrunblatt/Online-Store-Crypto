@@ -48,7 +48,7 @@ export default function Listings() {
 						{/* ITEM INFO */}
 						<div style={{position: 'absolute', margin: '15px 0 0 200px', width: '20vw'}}>
 							<div onClick={() => { history.push("/product/" + index._id) }} style={{ fontSize: '50px', fontWeight: 'bold', cursor: 'pointer' }}> 
-                                {index.name.length > 14 ? index.name.substring(0,15) + "..." : index.name}
+                                {index.name.length > 10 ? index.name.substring(0,11) + "..." : index.name}
                             </div>
 							<div style={{ marginTop: '3px', fontSize: '30px' }}>{index.price}&nbsp;Algo</div>
 							<div style={{ marginTop: '3px', fontSize: '20px' }}>Seller:&nbsp;{index.sellerUsername}</div>
