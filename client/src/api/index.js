@@ -41,6 +41,7 @@ export const setTrackingNumber = (payload) => api.post('/product/setTrackingNumb
 export const getCartProductsForUser = () => api.post('/product/getCartProductsForUser');
 export const removeFromCart = (payload) => api.post('/purchase/removeFromCart', payload);
 export const addToCart = (payload) => api.post('/purchase/addToCart', payload);
+export const getPendingPurchasesForUser = () => api.post('/purchase/getPendingPurchasesForUser');
 
 // ALL REQUESTS FOR WALLET
 export const addWallet = (payload) => api.post('/wallet/addWallet', payload);
@@ -77,6 +78,7 @@ const apis = {
 	getCartProductsForUser,
 	removeFromCart,
 	addToCart,
+	getPendingPurchasesForUser,
 
     addWallet,
     removeWallet,
