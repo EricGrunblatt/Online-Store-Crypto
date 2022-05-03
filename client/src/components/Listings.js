@@ -46,9 +46,10 @@ export default function Listings() {
 							alt="" width="150px" height="150px" style={{ width: '150px', height: '150px', borderRadius: '10%', cursor: 'pointer' }} ></img>
 						</div>
 						{/* ITEM INFO */}
-						<div style={ {marginLeft: '200px' }}>
-							<div onClick={() => { history.push("/product/" + index._id) }} style={{ fontSize: '30px', fontWeight: 'bold', cursor: 'pointer' }}> 
-                                {index.name.length > 14 ? index.name.substring(0,15) + "..." : index.name}
+						{/* <div style={{position: 'absolute', margin: '15px 0 0 200px', width: '20vw'}}> */}
+						<div style={{marginLeft: '200px'}}>
+							<div onClick={() => { history.push("/product/" + index._id) }} style={{ fontSize: '50px', fontWeight: 'bold', cursor: 'pointer' }}> 
+                                {index.name.length > 10 ? index.name.substring(0,11) + "..." : index.name}
                             </div>
 							<div style={{ marginTop: '3px', fontSize: '30px' }}>{index.price}&nbsp;Algo</div>
 							<div style={{ marginTop: '3px', fontSize: '20px' }}>Seller:&nbsp;{index.sellerUsername}</div>

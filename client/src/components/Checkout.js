@@ -130,7 +130,7 @@ export default function Checkout(props) {
 						<div className="right-of-photo" style={{ padding: '0px 50px 0px 0px', display: 'inline-block', float: 'right' }}>
 							<div className="product-data" style={{margin: '15px 0vw 0vw 15px', width: '40vw', height: '220px', border: 'white 1px solid' }}>
 								<div className="product-name">
-									<div style={{ position: 'absolute', float: 'left', fontSize: '50px', fontWeight: 'bold' }}>{index.name}</div>
+									<div style={{ position: 'absolute', float: 'left', fontSize: '50px', fontWeight: 'bold' }}>{index.name.length > 10 ? index.name.substring(0,16) + "..." : index.name}</div>
 									<div style={{ float: 'right', fontSize: '40px', margin: '8px 20px 0px 0px' }}>{index.price} Algo</div>
 								</div>
 								<div className="seller-name" style={{ marginTop: '70px', display: 'flex', color: '#808080', fontSize: '30px' }}>

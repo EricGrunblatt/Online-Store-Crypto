@@ -82,6 +82,21 @@ export default function Cart() {
 		});
 	}
 
+	async function handlePendingCheckout(event) {
+		const data = {
+			status:"OK", 
+			reservedProducts: pendingPurchases[event.target.id].products,
+			failedToReserve: [],
+			price: pendingPurchases[event.target.id].price,
+			invoice: pendingPurchases[event.target.id].invoice
+		};
+		console.log(data);
+		history.push({	
+			pathname: "/checkout",
+			state:  data});
+	}
+
+
 	const handleViewProfile = (seller) => {
 		let json = {
 			username: seller
@@ -102,9 +117,10 @@ export default function Cart() {
 							alt="" width="150px" height="150px" style={{ borderRadius: '10%', cursor: 'pointer' }} ></img>
 						</div>
 						{/* ITEM INFO */}
-						<div style={{marginLeft: '200px'}}>
-							<div onClick={() => { history.push("/product/" + index._id) }} style={{ fontSize: '30px', fontWeight: 'bold', cursor: 'pointer' }}> 
-								{index.name.length > 14 ? index.name.substring(0,15) + "..." : index.name}
+						{/* <div style={{position: 'absolute', margin: '0 0 0 200px'}}> */}
+						<div style={{ marginLeft: '200px' }}>
+							<div onClick={() => { history.push("/product/" + index._id) }} style={{ fontSize: '50px', fontWeight: 'bold', cursor: 'pointer' }}> 
+							{index.name.length > 10 ? index.name.substring(0,11) + "..." : index.name}
 							</div>
 							<div style={{ marginTop: '2px', fontSize: '30px' }}>{index.price}&nbsp;Algo</div>
 							<div style={{ marginTop: '3px', fontSize: '15px' }}>(Shipping Price: {shippingPrices[i]} Algo)</div>
@@ -133,94 +149,35 @@ export default function Cart() {
     }
 
 	let pending = ""
-	let totalPrice = 0
 	// IF THERE IS ANY PENING PURCHASES
 	if(pendingPurchases.length > 0) {
-		for(let i = 0; i < pendingPurchases.length; i++) {
-			totalPrice += +pendingPurchases[i].price;
-		}
-		// for(let i = 0; i < pendingShipping.length; i++) {
-		// 	let price = parseFloat(pendingShipping[i]).toFixed(2);
-		// 	pendingShipping[i] = price;
-		// 	totalPrice += +price;
-		// }
 		pending = 
-		<div>
-			{pendingPurchases.map((p) => (
-				<div className="list-items-order" style={{ margin: '0px 20px 80px 20px', border: 'black 2px solid', borderRadius: '10px' }}>
-					{p.products.map((index, i) => (
-						<div key={index._id} className="order-outer" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, 1fr)', fontFamily: 'Quicksand' }}>
-							<div className="order-photo" style={{ display: 'inline-block', float: 'left', margin: '15px 0px 15px 15px' }}>
-								<img src={index.image} 
-								alt="" width="150px" height="150px" style={{ borderRadius: '10px', cursor: 'pointer', border: 'black 2px solid', borderRadius: '10px' }} ></img>
-							</div>
-							<div className="right-of-photo" style={{ padding: '0px 50px 0px 0px', display: 'inline-block', float: 'right' }}>
-								<div className="product-data" style={{margin: '15px 0vw 0vw 15px', border: 'white 1px solid' }}>
-									<div className="product-name">
-										<div style={{ position: 'absolute', float: 'left', fontSize: '30px', fontWeight: 'bold' }}>{index.name}</div>
-										<div style={{ float: 'right', fontSize: '40px', margin: '8px 20px 0px 0px' }}>{index.price} Algo</div>
-									</div>
-									<div className="seller-name" style={{ marginTop: '70px', display: 'flex', color: '#808080', fontSize: '20px' }}>
-										<div style={{ float: 'left', fontWeight: 'bold' }}>Seller:</div>
-										<div style={{ marginLeft: '20px' }}>
-											{index.sellerUsername}
-										</div>   
-									</div>
-									{/* <div className="order-date" style={{ marginTop: '10px', color: '#808080', fontSize: '20px' }}>
-										<div style={{ marginRight: '10px', display: 'inline-block', fontWeight: 'bold' }}>
-											Shipping Price:
-										</div>
-										<div style={{ margin: '-5px 20px 0px 0px', float: 'right', color: 'black', fontSize: '20px' }}>
-											{pendingShipping[i]} Algo
-										</div>
-									</div> */}
-									<div className="price-divider-line">
-										<hr style={{ width: '40vw', float: 'right', margin: '10px 0vw 0px 0px' }}></hr>
+		<div style={{ margin: '3% 7%', display: 'grid', alignContent: 'center', justifyContent: 'center', gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 0.5fr))' }}>
+			{pendingPurchases.map((p, i) => (
+				<div style={{ border: 'black 2px solid', borderRadius: '20px', margin: '5px' }}>
+					<div key={i} className="order-card" style={{ justifyContent: 'center', marginBottom: '20px', margin: '5px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 0.3fr))', minHeight: '100px' }}>
+						{/* EACH ITEM CARDS */}
+						{p.products.map((index, j) => (
+							<div key={index._id} className="order-card" style={{ margin: '10px', padding: '5px', justifyContent: 'center', border: 'black 1px solid', borderRadius: '20px' }}>
+								<div>
+									<img onClick={() => { history.push("/product/" + index._id) }} src={index.image} 
+									alt="" width="120px" height="120px" style={{ borderRadius: '10%', cursor: 'pointer' }} ></img>
+									<div onClick={() => { history.push("/product/" + index._id) }} style={{ textAlign: 'right', fontSize: '30px', fontWeight: 'bold', cursor: 'pointer' }}> 
+									{index.name.length > 10 ? index.name.substring(0,6) + "..." : index.name}
 									</div>
 								</div>
 							</div>
-						</div>
-					))}
-					<Button onClick={() => { window.location.href = p.invoice }} style={{ margin: '100px', background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>Keep Purchasing</Button>
+						))}
+					</div>
+					<div className="go-to-checkout" style={{ display: 'grid' }}>
+						<div style={{ textAlign: 'center', fontSize: '20px', marginRight: '5px' }}>Total Price: {p.price} Algo</div>
+						<Button id={i} onClick={handlePendingCheckout} className="back-to-profile-button" style={{ margin: '5px auto', background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
+							Keep Purchasing
+						</Button>
+					</div>
 				</div>
 			))}
-		</div>
-		// <div>
-		// 	{pendingPurchases.map((p) => (
-		// 		<div className="order-card" style={{ marginBottom: '20px' }}>
-		// 		{/* EACH ITEM CARDS */}
-		// 		<div style={{ margin: '3% 7%', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 0.5fr))' }}>
-		// 			{p.products.map((index, i) => (
-		// 				<div key={index._id} style={{ padding: '25px', margin: '5px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', minHeight: '100px', border: 'black 2px solid', borderRadius: '20px' }}>
-		// 					{/* ITEM IMAGE */}
-		// 					<div style={{ position: 'absolute'}}>
-		// 						<img onClick={() => { history.push("/product/" + index._id) }} src={index.image} 
-		// 						alt="" width="150px" height="150px" style={{ borderRadius: '10%', cursor: 'pointer' }} ></img>
-		// 					</div>
-		// 					{/* ITEM INFO */}
-		// 					<div style={{marginLeft: '200px'}}>
-		// 						<div onClick={() => { history.push("/product/" + index._id) }} style={{ fontSize: '30px', fontWeight: 'bold', cursor: 'pointer' }}> 
-		// 							{index.name.length > 14 ? index.name.substring(0,15) + "..." : index.name}
-		// 						</div>
-		// 						<div style={{ marginTop: '2px', fontSize: '30px' }}>{index.price}&nbsp;Algo</div>
-		// 						<div style={{ marginTop: '3px', fontSize: '15px' }}>(Shipping Price: {shippingPrices[i]} Algo)</div>
-		// 						<div style={{ marginTop: '3px', fontSize: '20px' }}>Seller:
-		// 							<div onClick={() => { handleViewProfile(index.sellerUsername) }} style={{ margin: '0 0 0 10px', display: 'inline-block', cursor: 'pointer', color: '#879ED9' }}><u>{index.sellerUsername}</u></div>
-		// 						</div>
-		// 						</div>
-		// 				</div>
-						
-		// 			))}
-		// 		</div>
-		// 		<div className="go-to-checkout" style={{ justifyContent: 'center', textAlign: 'center', margin: '10px 0px 40px 0px' }}>
-		// 			<Button onClick={() => {window.location.href = p.invoice;}} className="back-to-profile-button" style={{ background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
-		// 				Keep Purchasing
-		// 			</Button>
-		// 		</div>
-		// 	</div>
-		// 	))}
-			
-		// </div>;
+		</div>;
 	}
 	
 

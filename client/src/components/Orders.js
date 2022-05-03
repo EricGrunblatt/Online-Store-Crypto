@@ -105,7 +105,7 @@ export default function Orders() {
                         <div className="right-of-photo" style={{ zIndex: 0, position: 'absolute', display: 'inline-block', float: 'left' }}>
                             <div className="product-data" style={{margin: '10px 0vw 0vw 10px' }}>
                                 <div className="product-name" style={{ fontSize: '30px' }}>
-                                    {index.name}
+                                {index.name.length > 10 ? index.name.substring(0,11) + "..." : index.name}
                                 </div>
                                 <div className="product-price" style={{ marginTop: '10px', fontSize: '20px' }}>
                                     Price: {index.price} Algo
