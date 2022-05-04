@@ -97,6 +97,7 @@ export default function ViewMyProfile() {
 		return ratingStar
 	}
 
+	var optionsForDate = { year: 'numeric', month: 'long', day: 'numeric' };
     return (
 		<div>
 			{/* TOP PROFILE & REVIEWS */}
@@ -112,7 +113,7 @@ export default function ViewMyProfile() {
 					</div>
 				</Grid>
 				{/* RIGHT REVIEWS */}
-            	<Grid item xs={6} style={{ overflowY: 'scroll', margin: '50px 0px 0px 70px', width: '90%', height: '600px', border: 'black 2px solid', borderRadius: '20px' }}>
+            	<Grid item xs={6} style={{ overflowY: 'auto', margin: '50px 0px 0px 70px', width: '90%', height: '600px', border: 'black 2px solid', borderRadius: '20px' }}>
 					<div style={{ margin: '20px 0% 0px 5%', fontFamily: 'Quicksand', fontSize: '35px', color: 'black'  }}><u>Reviews</u></div>
 					{reviews.map((index) => (
 						<Grid key={index.stars + "_" + index.comment + "_myProfile"} item container xs style={{ margin: '15px auto 15px auto', width: '90%', height: '150px', border: 'black 2px solid', borderRadius: '20px' }}>
@@ -130,17 +131,17 @@ export default function ViewMyProfile() {
 				</Grid>
 			</Grid>
 			{/* LISTED ITEMS */}
-			<div style={{ overflowY: 'scroll', margin: '50px 0% 50px 10%', width: '80%', height: '700px', border: 'black 2px solid', borderRadius: '20px' }}>
+			<div style={{ overflowY: 'auto', margin: '50px 0% 50px 10%', width: '80%', height: '700px', border: 'black 2px solid', borderRadius: '20px' }}>
 				<div style={{ margin: '50px 0% 0px 5%', fontFamily: 'Quicksand', fontWeight: 'bold', fontSize: '50px' }}>
 					<u>My Listings</u>
 				</div>
 				{/* EACH ITEM CARDS */}
 				<div style={{ margin: '3% 7%', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 0.5fr))' }}>
 					{items.map((index) => (
-						<div key={index._id + "myListing"} style={{ padding: '25px', margin: '5px', display: 'flex', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', minHeight: '200px', border: 'black 2px solid', borderRadius: '20px' }}>
+						<div key={index._id + "myListing"} style={{ padding: '25px', margin: '5px', display: 'flex', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', minHeight: '100px', border: 'black 2px solid', borderRadius: '20px' }}>
 							{/* ITEM IMAGE */}
 							<div>
-								<img onClick={() => { history.push("/product/" + index._id) }} src={index.image} alt="" style={{ cursor: 'pointer', width: '200px', height: '200px', borderRadius: '10%' }} ></img>
+								<img onClick={() => { history.push("/product/" + index._id) }} src={index.image} alt="" style={{ cursor: 'pointer', width: '150px', height: '150px', borderRadius: '10%' }} ></img>
 							</div>
 							{/* ITEM INFO */}
 							<div>
@@ -149,7 +150,7 @@ export default function ViewMyProfile() {
 								</div>
 								<div style={{ marginTop: '7px', fontSize: '30px' }}>{index.price}&nbsp;Algo</div>
 								<div style={{ marginTop: '8px', fontSize: '20px' }}>Seller:&nbsp;{index.sellerUsername}</div>
-								<div style={{ marginTop: '8px', fontSize: '20px' }}>Listed:&nbsp;{index.dateListed.substring(0,10)}</div>
+								<div style={{ marginTop: '8px', fontSize: '20px' }}>Listed:&nbsp;{new Date(index.dateListed).toLocaleDateString([], optionsForDate)}</div>
 							</div>
 						</div>
 						

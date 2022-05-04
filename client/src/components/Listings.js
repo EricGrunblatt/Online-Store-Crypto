@@ -35,6 +35,7 @@ export default function Listings() {
     },[]);
 
 	function showListCards(items) {
+		var optionsForDate = { year: 'numeric', month: 'long', day: 'numeric' };
 		return <div className="display-listings">
 			{/* EACH ITEM CARDS */}
 			<div style={{ margin: '3% 7%', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 0.5fr))' }}>
@@ -46,21 +47,24 @@ export default function Listings() {
 							alt="" width="150px" height="150px" style={{ width: '150px', height: '150px', borderRadius: '10%', cursor: 'pointer' }} ></img>
 						</div>
 						{/* ITEM INFO */}
-						{/* <div style={{position: 'absolute', margin: '15px 0 0 200px', width: '20vw'}}> */}
 						<div style={{marginLeft: '200px'}}>
 							<div onClick={() => { history.push("/product/" + index._id) }} style={{ fontSize: '50px', fontWeight: 'bold', cursor: 'pointer' }}> 
                                 {index.name.length > 10 ? index.name.substring(0,11) + "..." : index.name}
                             </div>
 							<div style={{ marginTop: '3px', fontSize: '30px' }}>{index.price}&nbsp;Algo</div>
-							<div style={{ marginTop: '3px', fontSize: '20px' }}>Seller:&nbsp;{index.sellerUsername}</div>
-							{index.buyerUsername === undefined || index.buyerUsername === null ? <u onClick={() => { history.push("/editItem/" + index._id) }} style={{ marginTop: '3px', fontSize: '20px', cursor: 'pointer', color: 'red', }}>Edit</u>
+							{/* <div style={{ marginTop: '3px', fontSize: '20px' }}>Seller:&nbsp;{index.sellerUsername}</div> */}
+							{index.buyerUsername === undefined || index.buyerUsername === null ? 
+								<div>
+									<div style={{ marginTop: '3px', fontSize: '20px' }}>Listed on: {new Date(index.dateListed).toLocaleDateString([], optionsForDate)}</div>
+									<u onClick={() => { history.push("/editItem/" + index._id) }} style={{ marginTop: '3px', fontSize: '20px', cursor: 'pointer', color: 'red', }}>Edit</u>
+								</div>
 								: index.trackingNumber === null || index.trackingNumber === undefined ? 
                                 <div style={{ display: 'flex', marginTop: '3px', fontSize: '20px', height: '40px'}}>
                                     <TextField id={"tracking" + index._id} placeholder="Tracking Number" size='small' style={{ width: '230px', marginRight: '5px' }}></TextField>
                                     <Button onClick={() => handleTrackingNumber(index, document.getElementById("tracking" + index._id)) } style={{ background: 'blue', color: 'white', fontSize: '10px' }}>Submit <br></br> Tracking</Button>
                                     <Button onClick={() => store.markBuyerAddress(index._id) } style={{ marginLeft: '5px', background: 'black', color: 'white', fontSize: '10px' }}>Shipping Info</Button>
                                 </div>
-                                : <div style={{ marginTop: '3px', fontSize: '20px' }}>Sold on: {index.dateSold}</div>}
+                                : <div style={{ marginTop: '3px', fontSize: '20px' }}>Sold on: {new Date(index.dateSold).toLocaleDateString([], optionsForDate)}</div>}
                                 
 						</div> 
 					</div>	
@@ -148,7 +152,7 @@ export default function Listings() {
                 </div>
                 {sellingItemsCards}
                 <div style={{ textAlign: 'center' }}>
-                    <Button onClick={() => { handleGoToListItem() }} style={{ margin: '100px', background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
+                    <Button onClick={() => { handleGoToListItem() }} style={{ margin: '50px', background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
                         List Item
                     </Button>
                 </div>
