@@ -376,6 +376,18 @@ export default function HomeScreen() {
         handleFilter(json);
     }
 
+    const handleNewItemHover = (id) => {
+        let item = document.getElementById(id);
+        let border = "white 2px solid";
+        item.style.border = border;
+    }
+
+    const handleNewItemLeave = (id) => {
+        let item = document.getElementById(id);
+        let border = "black 2px solid";
+        item.style.border = border;
+    }
+
     return (
         <Box className="homescreen" style={{ maxWidth: '99vw' }}>
             <div className="homescreen-category-bar" style={{ padding: '10px 0px 10px 10px'}}>
@@ -395,8 +407,10 @@ export default function HomeScreen() {
                     </Button>
                     <div style={{ position: 'absolute', display: 'flex', margin: '0px 0vw 0px -8.5vw', left: '20vw', width: '70vw' }}>
                         {newItems.map((index) => (
-                            <div key={index._id + "newItem"} onClick={() => {history.push("/product/"+index._id)}} style={{ cursor: 'pointer', display: 'inline-block', margin: '-20px 10vw 0px 10vw' }}>
-                                <img src={index.image} alt="" style={{ width: '100px', height: '100px', border: 'black 1px solid', borderRadius: '10px' }}></img>
+                            <div key={index._id + "newItem"} onClick={() => {history.push("/product/"+index._id)}} style={{ cursor: 'pointer', display: 'inline-block', margin: '-20px 10vw 0px 10vw' }}
+                                onMouseEnter={e => { handleNewItemHover(index._id + "newItem") }}
+                                onMouseLeave={e => { handleNewItemLeave(index._id + "newItem") }}>
+                                <img id={index._id + "newItem"} src={index.image} alt="" style={{ width: '100px', height: '100px', border: 'black 2px solid', borderRadius: '10px' }}></img>
                             </div>
                         ))}    
                     </div>
