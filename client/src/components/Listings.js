@@ -40,14 +40,15 @@ export default function Listings() {
 			{/* EACH ITEM CARDS */}
 			<div style={{ margin: '3% 7%', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 0.5fr))' }}>
 				{items.map((index) => (
-					<div style={{ padding: '25px', margin: '5px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', minHeight: '100px', border: 'black 2px solid', borderRadius: '20px' }}>
+					<div style={{ padding: '15px', margin: '5px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', minHeight: '100px', border: 'black 2px solid', borderRadius: '20px' }}>
 						{/* ITEM IMAGE */}
 						<div style={{ position: 'absolute' }}>
 							<img onClick={() => { history.push("/product/" + index._id) }} src={index.image} 
 							alt="" width="150px" height="150px" style={{ width: '150px', height: '150px', borderRadius: '10%', cursor: 'pointer' }} ></img>
 						</div>
 						{/* ITEM INFO */}
-						<div style={{marginLeft: '200px'}}>
+						{/* <div style={{position: 'absolute', margin: '15px 0 0 200px', width: '20vw'}}> */}
+						<div style={{marginLeft: '200px', marginTop: '-5px'}}>
 							<div onClick={() => { history.push("/product/" + index._id) }} style={{ fontSize: '50px', fontWeight: 'bold', cursor: 'pointer' }}> 
                                 {index.name.length > 10 ? index.name.substring(0,11) + "..." : index.name}
                             </div>
