@@ -6,6 +6,7 @@
   "scripts": {
     "start": "nodemon index.js",
     "dev": "set ENVIRONMENT=development&& nodemon index.js",
+    "dev_linux": "ENVIRONMENT=development nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
