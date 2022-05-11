@@ -133,7 +133,9 @@ purchaseFromCart = async (req, res) => {
 			json = {status: constants.status.ERROR, errorMessage: constants.purchase.noProductsWereReserved}
 		}
 		else if (0 >= (price_amount = await calculatePriceOfReserved(user.username))) {
-			json = {status: constants.status.ERROR, errorMessage: constants.purchase.failedToCalculatePrice}
+            console.log(`INVALID PRICE AMOUNT; UNRESERVING ITEMS: ${reservedProductIds}`)
+			await unreserveProducts(user.username, reservedProductIds)
+            json = {status: constants.status.ERROR, errorMessage: constants.purchase.failedToCalculatePrice}
 		}
 		else if (! (purchase = await createPurchase(user, price_amount, price_currency, receive_currency))) {
 			console.log(`INVOICE CREATION FAILED; UNRESERVING ITEMS: ${reservedProductIds}`)
@@ -190,32 +192,33 @@ purchaseFromCart = async (req, res) => {
 
 // TODO
 purchaseCallback = async (req, res) => {
+    console.log("CALLING PURCHASE CALLBACK")
 	const formDataMiddleware = upload.none()
 	formDataMiddleware(req, res, async() => {
 		console.log("purchaseCallback", req.body)
 
-		const {
-			id, 
-			order_id, 
-			status, 
-			pay_amount, 
-			pay_currency, 
-			price_currency, 
-			receive_currency, 
-			receive_amount,
-			created_at,
-			token,
-			underpaid_amount,
-			overpaid_amount,
-			is_refundable,
-		} = req.body
+        const status = req.body.status
 
-		if (status === 'pending') {
-			console.log("PENDING")
-		}
-		else if (status === 'paid') {
-			console.log("PAID")
-		}
+        try {
+           if (status === 'pending') {
+                console.log("PENDING")
+            }
+            else if (status === 'paid') {
+                console.log("COMPLETE PURCHASE")
+                await handlePurchaseCallbackPaidStatus(req)
+            }
+            else if (status === 'canceled' || status === 'expired' || status === 'invalid') {
+                console.log("CANCEL PURCHASE")
+                await handlePurchaseCallbackCanceledStatus(req)
+            }
+            else {
+                console.log(`RECEIVED ABNORMAL STATUS: ${status}`)
+            }
+            res.status(200).send({status: constants.status.OK})
+        } catch (error) {
+            console.log(error)
+            res.status(200).send(constants.status.FATAL_ERROR)
+        }
 	})
 }
 
