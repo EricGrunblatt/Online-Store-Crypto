@@ -69,7 +69,7 @@ export default function Wallet() {
             <div style={{ margin: '50px 0% 0px 5%', width: '90%', height: '500px', background: 'black', borderRadius: '20px', textAlign: 'center' }}>
                 <div>
                     {wallets.length > 0 ? 
-                        <div style={{ color: 'white', height: '40px', paddingTop: '35px', fontSize: '25px', fontFamily: 'Quicksand' }}>Account ID: {wallets[0]._id}</div>:
+                        <div style={{ color: 'white', height: '40px', paddingTop: '35px', fontSize: '25px', fontFamily: 'Quicksand' }}>Wallet Address: {wallets[0].address}</div>:
                         <TextField 
                             value={accountAddress}
                             onChange={(event) => { setAccountAddress(event.target.value) }}
