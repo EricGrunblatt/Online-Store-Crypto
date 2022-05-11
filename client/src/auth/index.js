@@ -114,8 +114,8 @@ function AuthContextProvider(props) {
             }
             else if (response.data.status === "ERROR") {
                 return setAuth({
-                    errorMessage: response.body.errorMessage
-                }) 
+                    errorMessage: response.data.errorMessage
+                })
             }
             else {
                 alert("ERROR: response.status=200, but response.body.status not recognized")
