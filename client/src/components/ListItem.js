@@ -279,19 +279,19 @@ export default function ListItem(){
         var categoryTxts = ["Clothing", "Electronics", "Fashion", "Furniture", "Hardware",
         "Home & Garden", "Music", "Office Supplies", "Other", "Photography & Video", "Sports Equipment", "Toys", "Video Games"]
         var categoryTxt = categoryTxts[category - 1];
-		let priceLimit = 59874.9224 * 25.315;
+		let priceLimit = 59874.9224 * 100000.315;
         var formData = new FormData();
 		if(!name || !description || !condition || !categoryTxt || !price || !length || !width || !height ||!weight) {
-			setListItemAlert(<Alert severity="error">Missing requeired field!</Alert>);
+			setListItemAlert(<Alert severity="error">Missing required field!</Alert>);
 		}
 		else if(+price > priceLimit) {
-			setListItemAlert(<Alert severity="error">The price cannot exceed 25.315 BTC</Alert>);
+			setListItemAlert(<Alert severity="error">The price cannot exceed 100,000 Algo</Alert>);
 		}
 		else if(+weight > 70) {
-			setListItemAlert(<Alert severity="error">The package weight cannot exceed 70 pounds.</Alert>);
+			setListItemAlert(<Alert severity="error">The package weight cannot exceed 70 pounds</Alert>);
 		}
 		else if(+length > 21 || +width > 21 || +height > 21) {
-			setListItemAlert(<Alert severity="error">The package package is too large to be mailed.</Alert>);
+			setListItemAlert(<Alert severity="error">The package package is too large to be mailed</Alert>);
 		}
 		else {
 			formData.append("name", name);
