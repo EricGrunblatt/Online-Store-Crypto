@@ -99,9 +99,9 @@ export default function Orders() {
     let orders = 
             <div className="order-card" style={{ margin: '0px 0px 20px 0px' }}>
                 {items.map((index) => (
-                    <div key={index._id} className="order-outer" style={{ margin: '20px 0vw 0px 1.25vw', width: '75.5vw', minWidth: '800px', height: '160px', border: 'black 2px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>
-                        <div className="order-photo" style={{ display: 'inline-block', float: 'left', margin: '10px 0px 10px 10px', width: '140px', height: '140px', border: 'black 1px solid', borderRadius: '10px' }}>
-                            <img src={index.image} alt="" style={{ width: '150px', height: '150px'}}></img>
+                    <div key={index._id} className="order-outer" style={{ margin: '20px 0vw 0px 1.25vw', width: '75.5vw', minWidth: '800px', height: '170px', border: 'black 2px solid', borderRadius: '10px', fontFamily: 'Quicksand' }}>
+                        <div className="order-photo" style={{ display: 'inline-block', float: 'left', margin: '10px 0px 10px 10px' }}>
+                            <img src={index.image} alt="" style={{ width: '150px', height: '150px', border: 'black 1px solid', borderRadius: '10px' }}></img>
                         </div>
                         <div className="right-of-photo" style={{ zIndex: 0, position: 'absolute', display: 'inline-block', float: 'left' }}>
                             <div className="product-data" style={{margin: '10px 0vw 0vw 10px' }}>
