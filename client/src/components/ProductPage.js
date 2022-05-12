@@ -1,7 +1,5 @@
 import React, {useEffect, useState} from "react";
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import { Alert } from '@mui/material';
+import { Box, Button, Alert } from '@mui/material';
 import LoginModal from './LoginModal';
 import RegisterModal from './RegisterModal';
 import { useHistory } from "react-router-dom";
@@ -46,7 +44,6 @@ export default function ProductPage() {
 				axios.all([requestProduct, requestShippingPrice]).then(axios.spread((...responses) => {
 					const currProduct = responses[0].data.product;
 					const shippingPriceRes = responses[1];
-					// console.log("PRICE: ", shippingPrice.data.status);
 					if(shippingPriceRes.data.status === "ERROR") {
 						setCost(currProduct.price);
 					}
@@ -55,7 +52,6 @@ export default function ProductPage() {
 						let price = parseFloat(shippingPriceRes.data.shippingPrice).toFixed(2);
 						setShippingPrice(price);
 						setShippingService(shippingPriceRes.data.shippingService);
-						// setShippingAlert("(shipping included)");
 					}
 					
 					setProductName(currProduct.name);
@@ -130,7 +126,7 @@ export default function ProductPage() {
 				{/* LEFT IMAGES & DESCRIPTION */}
 				<div>
 					{/* THE MAIN IMAGE */}
-					{itemImage0? <img src={itemImage0} width="700vw" height="450px" alt="" style={{ borderRadius: '10px' }} ></img>
+					{itemImage0? <img src={itemImage0} width="600vw" height="450px" alt="" style={{ borderRadius: '10px' }} ></img>
 						:<img src="https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg" width="600px" height="600px" alt="" style={{ borderRadius: '10%' }} ></img>}
 					{/* THE 8 IMAGES */}
 					{showImages}
