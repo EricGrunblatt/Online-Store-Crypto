@@ -1,7 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import { useHistory } from 'react-router-dom'
 import api from '../api'
-import { Alert, AlertTitle } from '@mui/material';
 
 const AuthContext = createContext();
 
@@ -68,9 +67,7 @@ function AuthContextProvider(props) {
         try {
             const response = await api.getLoggedIn();
             if (response.status !== 200) {
-				registerloginAlert = <Alert severity="error">
-					<AlertTitle>{"ERROR: response.status=200, but response.body.status not recognized"}</AlertTitle>
-				</Alert>
+				alert("ERROR: response.status=200, but response.body.status not recognized");
             }
             else if (response.data.status === "OK") {
                 authReducer({
@@ -91,14 +88,10 @@ function AuthContextProvider(props) {
                 });
             }
             else {
-				registerloginAlert = <Alert severity="error">
-					<AlertTitle>{"ERROR: response.status=200, but response.body.status not recognized"}</AlertTitle>
-				</Alert>
+				alert("ERROR: response.status=200, but response.body.status not recognized");
             }
         } catch (err) {
-			registerloginAlert = <Alert severity="error">
-				<AlertTitle>{"ERROR: something went really wrong"}</AlertTitle>
-			</Alert>
+            alert("ERROR: something went really wrong");
         }
     }
 
@@ -107,9 +100,7 @@ function AuthContextProvider(props) {
             console.log("user is now registering");
             const response = await api.registerUser(userData);  
             if (response.status !== 200) {
-				registerloginAlert = <Alert severity="error">
-					<AlertTitle>{"ERROR: received response.status=" + response.status}</AlertTitle>
-				</Alert>
+                alert("ERROR: received response.status=" + response.status)
             }
             else if (response.data.status === "OK") {
                 authReducer({
@@ -118,9 +109,7 @@ function AuthContextProvider(props) {
                         user: response.data.user
                     }
                 })
-				registerloginAlert = <Alert severity="success">
-					<AlertTitle>{"Successfully Registered"}</AlertTitle>
-				</Alert>
+                // alert("Successfully Registered");
                 store.initalLoad();
                 history.push("/");
             }
@@ -130,15 +119,11 @@ function AuthContextProvider(props) {
                 })
             }
             else {
-				registerloginAlert = <Alert severity="error">
-					<AlertTitle>{"ERROR: response.status=200, but response.body.status not recognized"}</AlertTitle>
-				</Alert>
+                alert("ERROR: response.status=200, but response.body.status not recognized");
             }
             
         } catch (err) {
-			registerloginAlert = <Alert severity="error">
-					<AlertTitle>{"ERROR: something went really wrong"}</AlertTitle>
-				</Alert>
+            alert("ERROR: something went really wrong");
         }
     }
 
@@ -146,9 +131,7 @@ function AuthContextProvider(props) {
         try {
             const response = await api.loginUser(userData);
             if (response.status !== 200) {
-				registerloginAlert = <Alert severity="error">
-					<AlertTitle>{"ERROR: received response.status=" + response.status}</AlertTitle>
-				</Alert>
+                alert("ERROR: received response.status=" + response.status)
             }
             else if (response.data.status === "OK") {
                 authReducer({
@@ -167,14 +150,10 @@ function AuthContextProvider(props) {
                 })
             }
             else {
-				registerloginAlert = <Alert severity="error">
-					<AlertTitle>{"ERROR: response.status=200, but response.body.status not recognized"}</AlertTitle>
-				</Alert>
+                alert("ERROR: response.status=200, but response.body.status not recognized")
             }
         } catch (err) {
-			registerloginAlert = <Alert severity="error">
-				<AlertTitle>{"ERROR: something went really wrong"}</AlertTitle>
-			</Alert>
+            alert("ERROR: something went really wrong")
         }
     }
 
