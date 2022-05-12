@@ -3,6 +3,7 @@ import { GlobalStoreContext } from '../store'
 import { Box, Modal, Button, TextField, Alert } from '@mui/material';
 import AuthContext from '../auth'
 import AccountErrorModal from './AccountErrorModal'
+import NumberFormat from 'react-number-format';
 
 
 /*
@@ -200,7 +201,7 @@ function RegisterModal() {
                         }
                     }}
                     style={{ display: 'flex', float: 'right', margin: '15px 0px 0px 0px', width: '242.5px' }}></TextField>
-                <TextField 
+                {/* <TextField 
                     required
                     name="phoneNumber"
                     id="phoneNumber"
@@ -211,7 +212,16 @@ function RegisterModal() {
                             setPhoneNumber(event.target.value) 
                         } 
                     }}
-                    style={{ margin: '15px 0px 0px 0px', float: 'left', width: '500px' }}></TextField>
+                    style={{ margin: '15px 0px 0px 0px', float: 'left', width: '500px' }}></TextField> */}
+				<NumberFormat format="+1 (###) ###-####" mask="_" 
+					required
+					placeHolder=" Phone Number*"
+					name="phoneNumber"
+					id="phoneNumber"
+					label="Phone Number"  
+					value={phoneNumber} 
+					onChange={(event) => { setPhoneNumber(event.target.value) }}
+					style={{ marginTop: '15px', float: 'left', width: '495px', height: '45px', borderRadius: '3px' }}/>
 					{registerAlert}
                 <Button onClick={handleBack} style={{ margin: '15px 20px 0px 0px', color: 'white', background: 'black', width: '150px', height: '40px', fontSize: '8px', borderRadius: '10px' }}><h1>Back</h1></Button>
                 <Button onClick={(event) => { handleRegister(event) }} style={{ cursor: 'pointer', margin: '15px 0px 0px 0px', color: 'white', background: 'black', width: '150px', height: '40px', fontSize: '8px', borderRadius: '10px' }}><h1>Register</h1></Button>
