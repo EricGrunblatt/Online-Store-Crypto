@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect } from "react";
 import { useHistory } from 'react-router-dom'
 import api from '../api'
+import { Alert, AlertTitle } from '@mui/material';
 
 const AuthContext = createContext();
 
@@ -62,11 +63,14 @@ function AuthContextProvider(props) {
         }
     }
 
+	let registerloginAlert = "";
     auth.getLoggedIn = async function () {
         try {
             const response = await api.getLoggedIn();
             if (response.status !== 200) {
-                alert("ERROR: received response.status=" + response.status)
+				registerloginAlert = <Alert severity="error">
+					<AlertTitle>{"ERROR: response.status=200, but response.body.status not recognized"}</AlertTitle>
+				</Alert>
             }
             else if (response.data.status === "OK") {
                 authReducer({
@@ -87,10 +91,14 @@ function AuthContextProvider(props) {
                 });
             }
             else {
-                alert("ERROR: response.status=200, but response.body.status not recognized")
+				registerloginAlert = <Alert severity="error">
+					<AlertTitle>{"ERROR: response.status=200, but response.body.status not recognized"}</AlertTitle>
+				</Alert>
             }
         } catch (err) {
-            //alert("ERROR: something went really wrong");
+			registerloginAlert = <Alert severity="error">
+				<AlertTitle>{"ERROR: something went really wrong"}</AlertTitle>
+			</Alert>
         }
     }
 
@@ -99,7 +107,9 @@ function AuthContextProvider(props) {
             console.log("user is now registering");
             const response = await api.registerUser(userData);  
             if (response.status !== 200) {
-                alert("ERROR: received response.status=" + response.status)
+				registerloginAlert = <Alert severity="error">
+					<AlertTitle>{"ERROR: received response.status=" + response.status}</AlertTitle>
+				</Alert>
             }
             else if (response.data.status === "OK") {
                 authReducer({
@@ -108,7 +118,9 @@ function AuthContextProvider(props) {
                         user: response.data.user
                     }
                 })
-                alert("Successfully Registered");
+				registerloginAlert = <Alert severity="success">
+					<AlertTitle>{"Successfully Registered"}</AlertTitle>
+				</Alert>
                 store.initalLoad();
                 history.push("/");
             }
@@ -118,11 +130,15 @@ function AuthContextProvider(props) {
                 })
             }
             else {
-                alert("ERROR: response.status=200, but response.body.status not recognized")
+				registerloginAlert = <Alert severity="error">
+					<AlertTitle>{"ERROR: response.status=200, but response.body.status not recognized"}</AlertTitle>
+				</Alert>
             }
             
         } catch (err) {
-            //alert("ERROR: something went really wrong");
+			registerloginAlert = <Alert severity="error">
+					<AlertTitle>{"ERROR: something went really wrong"}</AlertTitle>
+				</Alert>
         }
     }
 
@@ -130,7 +146,9 @@ function AuthContextProvider(props) {
         try {
             const response = await api.loginUser(userData);
             if (response.status !== 200) {
-                alert("ERROR: received response.status=" + response.status)
+				registerloginAlert = <Alert severity="error">
+					<AlertTitle>{"ERROR: received response.status=" + response.status}</AlertTitle>
+				</Alert>
             }
             else if (response.data.status === "OK") {
                 authReducer({
@@ -149,10 +167,14 @@ function AuthContextProvider(props) {
                 })
             }
             else {
-                alert("ERROR: response.status=200, but response.body.status not recognized")
+				registerloginAlert = <Alert severity="error">
+					<AlertTitle>{"ERROR: response.status=200, but response.body.status not recognized"}</AlertTitle>
+				</Alert>
             }
         } catch (err) {
-            alert("ERROR: something went really wrong")
+			registerloginAlert = <Alert severity="error">
+				<AlertTitle>{"ERROR: something went really wrong"}</AlertTitle>
+			</Alert>
         }
     }
 
@@ -176,7 +198,9 @@ function AuthContextProvider(props) {
             auth, setErrorMessage
         }}>
             {props.children}
+			{registerloginAlert}
         </AuthContext.Provider>
+		
     );
 }
 
