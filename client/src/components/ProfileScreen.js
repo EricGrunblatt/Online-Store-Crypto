@@ -311,18 +311,25 @@ export default function ProfileScreen() {
                                 }}
                                 style={{ width: '35vw' }}></TextField>
                         </div>
-                        <div className="account-buttons" style={{ margin: '-60px 0px 0px 0px', float: 'right'}}>
+                        {/* <div className="account-buttons" style={{ margin: '-60px 0px 0px 0px', float: 'right'}}>
                             <Button onClick={() => { handleBackToOriginal() }} style={{ margin: '100px 4vw 0px 0px', width: '15vw', height: '40px', border: 'black 1px solid', borderRadius: '10px', color: 'black' }}>Cancel</Button>
                             <Button onClick={() => { handleChangeInfo() }} style={{ margin: '100px 0px 0px 0px', width: '15vw', height: '40px', border: 'black 1px solid', borderRadius: '10px', color: 'black' }}>Save</Button>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>
-            <div className="back-to-profile" style={{ justifyContent: 'center', textAlign: 'center', margin: '-10px 0px 50px 0px' }}>
+            {/* <div className="back-to-profile" style={{ justifyContent: 'center', textAlign: 'center', margin: '-10px 0px 50px 0px' }}>
                 <Button className="back-to-profile-button" onClick={() => { history.push("/myprofile") }} style={{ background: 'black', color: 'white', width: '30vw', height: '50px', borderRadius: '10px', fontFamily: 'Quicksand', fontSize: '20px', fontWeight: 'bold' }}>
                     Back to My Profile
                 </Button>
-            </div>
+            </div> */}
+			<div className="account-buttons" style={{ textAlign: 'center' }}>
+				{/* <Button onClick={() => { handleBackToOriginal() }} style={{ margin: '100px 4vw 0px 0px', width: '15vw', height: '40px', border: 'black 1px solid', borderRadius: '10px', color: 'black' }}>Cancel</Button> */}
+				{/* <Button onClick={() => { handleChangeInfo() }} style={{ margin: '100px 0px 0px 0px', width: '15vw', height: '40px', border: 'black 1px solid', borderRadius: '10px', color: 'black' }}>Save</Button> */}
+				<Button onClick={() => { history.push("/myprofile") }} style={{ cursor: 'pointer', margin: '-10px 10px 10px 10px', color: 'white', background: 'black', width: '150px', height: '40px', fontSize: '8px', borderRadius: '10px' }}><h1>Cancel</h1></Button>
+                <Button onClick={() => { handleChangeInfo() }} style={{ cursor: 'pointer', margin: '-10px 10px 10px 10px', color: 'white', background: 'black', width: '150px', height: '40px', fontSize: '8px', borderRadius: '10px' }}><h1>Save</h1></Button>
+            			
+			</div>
         </div>
     )
 }
