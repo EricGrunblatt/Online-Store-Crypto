@@ -15,6 +15,9 @@ createPurchase = async (user, price_amount, price_currency, receive_currency) =>
 			productIds: reservedProductIds,
 			price: price_amount,
 		})
+
+        console.log(`CALLBACK URL: ${process.env.COINGATE_CALLBACK_URL}`)
+
 		const invoice = await coingateClient.createOrder({
 			order_id: purchase._id,
 			price_amount: price_amount,
@@ -22,7 +25,7 @@ createPurchase = async (user, price_amount, price_currency, receive_currency) =>
 			receive_currency: receive_currency,
 			title: `Cryptorium OrderId#${purchase._id}`,
 			description: "TEMP DESCRIPTION",
-			callback_url: "https://cryptorium.requestcatcher.com/",
+			callback_url: process.env.COINGATE_CALLBACK_URL,
 			cancel_url: "https://www.yahoo.com",
 			success_url: "https://www.google.com",
 			purchaser_email: user.email,
