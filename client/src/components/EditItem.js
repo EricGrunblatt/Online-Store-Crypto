@@ -362,39 +362,59 @@ export default function EditItem(){
 			formData.append("boxHeight", height);
 			formData.append("boxWeight", weight);
 
-			const element0 = document.getElementById('image0')
-			const file0 = element0.files[0]
+			// const element0 = document.getElementById('image0')
+			// const file0 = element0.files[0]
 
-			const element1 = document.getElementById('image1')
-			const file1 = element1.files[0]
+			// const element1 = document.getElementById('image1')
+			// const file1 = element1.files[0]
 
-			const element2 = document.getElementById('image2')
-			const file2 = element2.files[0]
+			// const element2 = document.getElementById('image2')
+			// const file2 = element2.files[0]
 
-			const element3 = document.getElementById('image3')
-			const file3 = element3.files[0]
+			// const element3 = document.getElementById('image3')
+			// const file3 = element3.files[0]
 
-			const element4 = document.getElementById('image4')
-			const file4 = element4.files[0]
+			// const element4 = document.getElementById('image4')
+			// const file4 = element4.files[0]
 
-			const element5 = document.getElementById('image5')
-			const file5 = element5.files[0]
+			// const element5 = document.getElementById('image5')
+			// const file5 = element5.files[0]
 
-			const element6 = document.getElementById('image6')
-			const file6 = element6.files[0]
+			// const element6 = document.getElementById('image6')
+			// const file6 = element6.files[0]
 
-			const element7 = document.getElementById('image7')
-			const file7 = element7.files[0]
+			// const element7 = document.getElementById('image7')
+			// const file7 = element7.files[0]
 
-			// HTML file input, chosen by user
-			formData.append("image0", file0);
-			formData.append("image1", file1);
-			formData.append("image2", file2);
-			formData.append("image3", file3);
-			formData.append("image4", file4);
-			formData.append("image5", file5);
-			formData.append("image6", file6);
-			formData.append("image7", file7);
+			// // HTML file input, chosen by user
+			// formData.append("image0", file0);
+			// formData.append("image1", file1);
+			// formData.append("image2", file2);
+			// formData.append("image3", file3);
+			// formData.append("image4", file4);
+			// formData.append("image5", file5);
+			// formData.append("image6", file6);
+			// formData.append("image7", file7);
+
+			let index = 0;
+			for(let i = 0; i < 8; i++) {
+				let str = "image" + i
+				const element = document.getElementById(str)
+				const file = element.files[0]
+				if(file !== undefined) {
+					formData.append("image" + index, file);
+					index++;
+				}
+			}
+			for(let i = 0; i < 8; i++) {
+				let str = "image" + i
+				const element = document.getElementById(str)
+				const file = element.files[0]
+				if(file === undefined) {
+					formData.append("image" + index, file);
+					index++;
+				}
+			}
 
 			const response = await api.updateListingProduct(formData);
 			if(response.data.status === "OK") {
