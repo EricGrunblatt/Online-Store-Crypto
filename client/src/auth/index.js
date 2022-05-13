@@ -62,11 +62,12 @@ function AuthContextProvider(props) {
         }
     }
 
+	let registerloginAlert = "";
     auth.getLoggedIn = async function () {
         try {
             const response = await api.getLoggedIn();
             if (response.status !== 200) {
-                alert("ERROR: received response.status=" + response.status)
+				alert("ERROR: response.status=200, but response.body.status not recognized");
             }
             else if (response.data.status === "OK") {
                 authReducer({
@@ -87,10 +88,10 @@ function AuthContextProvider(props) {
                 });
             }
             else {
-                alert("ERROR: response.status=200, but response.body.status not recognized")
+				alert("ERROR: response.status=200, but response.body.status not recognized");
             }
         } catch (err) {
-            //alert("ERROR: something went really wrong");
+            alert("ERROR: something went really wrong");
         }
     }
 
@@ -108,7 +109,7 @@ function AuthContextProvider(props) {
                         user: response.data.user
                     }
                 })
-                alert("Successfully Registered");
+                // alert("Successfully Registered");
                 store.initalLoad();
                 history.push("/");
             }
@@ -118,11 +119,11 @@ function AuthContextProvider(props) {
                 })
             }
             else {
-                alert("ERROR: response.status=200, but response.body.status not recognized")
+                alert("ERROR: response.status=200, but response.body.status not recognized");
             }
             
         } catch (err) {
-            //alert("ERROR: something went really wrong");
+            alert("ERROR: something went really wrong");
         }
     }
 
@@ -176,7 +177,9 @@ function AuthContextProvider(props) {
             auth, setErrorMessage
         }}>
             {props.children}
+			{registerloginAlert}
         </AuthContext.Provider>
+		
     );
 }
 

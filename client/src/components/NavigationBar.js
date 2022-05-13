@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import logo from "../images/CryptoriumLogo.png";
 import ShoppingCartRoundedIcon from '@mui/icons-material/ShoppingCartRounded';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
-import { MenuItem, Menu, AppBar, Toolbar, Box } from '@mui/material';
+import { MenuItem, Menu, AppBar, Toolbar, Box, Button } from '@mui/material';
 import AuthContext from '../auth';
 
 
@@ -43,14 +43,16 @@ export default function NavigationBar() {
     else {
         let profilePicture = "";
         if(auth.user.profileImage === null || auth.user.profileImage === undefined || auth.user.profileImage === "http://localhost:4000/api/image/null") {
-            profilePicture = <AccountCircleRoundedIcon onClick={handleProfileMenuOpen} style={{ cursor: 'pointer', color: 'white', fontSize: '45px' }}></AccountCircleRoundedIcon>; 
+            profilePicture = <AccountCircleRoundedIcon onClick={handleProfileMenuOpen} style={{ cursor: 'pointer', color: 'white', fontSize: '45px', padding: '10px' }}></AccountCircleRoundedIcon>; 
         } else {
             let image = auth.user.profileImage;
-            profilePicture = <img src={image} alt={<AccountCircleRoundedIcon style={{ cursor: 'pointer', color: 'white', fontSize: '45px' }}></AccountCircleRoundedIcon>} onClick={handleProfileMenuOpen} style={{ cursor: 'pointer', width: '45px', height: '45px', border: 'white 1px solid', borderRadius: '50%'}}/>
+            profilePicture = <img src={image} alt={<AccountCircleRoundedIcon style={{ cursor: 'pointer', color: 'white', fontSize: '45px', padding: '10px' }}></AccountCircleRoundedIcon>} onClick={handleProfileMenuOpen} style={{ cursor: 'pointer', width: '45px', height: '45px', border: 'white 1px solid', borderRadius: '50%'}}/>
         }
         navBarLoggedIn = 
         <Box style={{ display: 'flex', float: 'right', margin: '60px 1vw 0px 7vw' }}>
-            <ShoppingCartRoundedIcon onClick={() => { history.push("/cart") }} style={{ cursor: 'pointer', fontSize: '45px', marginRight: '5vw' }}></ShoppingCartRoundedIcon>
+			{/* ADDED LIST ITEM BUTTON */}
+			<Button onClick={() => { history.push("/listitem") }} style={{ cursor: 'pointer', fontWeight: 'bold', fontSize: '10px', marginRight: '5vw', color: 'white', border: 'white 2px solid', borderRadius: '10px' }} >SELL ITEM</Button>
+            <ShoppingCartRoundedIcon onClick={() => { history.push("/cart") }} style={{ cursor: 'pointer', fontSize: '45px', marginRight: '5vw', padding: '10px' }}></ShoppingCartRoundedIcon>
             {profilePicture}
         </Box>   
     }
@@ -150,7 +152,7 @@ export default function NavigationBar() {
                         </div>
                     </div>
                     <TextField className="search-bar" 
-                            sx={{ width: '65vw', bgcolor:'white' }}
+                            sx={{ width: '60vw', bgcolor:'white' }}
                             style={{ margin: '70px 0px 0px 0px', float: 'right', borderRadius: '10px' }}
                             placeholder="Search..."
                             onKeyPress={(event) => {
@@ -161,11 +163,7 @@ export default function NavigationBar() {
                     {navBarLoggedIn}
                 </Toolbar>
             </AppBar>
-            {
-                loggedInMenu
-            }
-            
+            {loggedInMenu}
         </Box>
-        
     )
 }

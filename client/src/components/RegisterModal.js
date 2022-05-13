@@ -1,19 +1,13 @@
 import { useContext, useState } from "react";
 import { GlobalStoreContext } from '../store'
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
+import { Box, Modal, Button, TextField, Alert } from '@mui/material';
 import AuthContext from '../auth'
 import AccountErrorModal from './AccountErrorModal'
+import NumberFormat from 'react-number-format';
 
 
 /*
-    This modal is shown when the user asks to delete a list. Note 
-    that before this is shown a list has to be marked for deletion,
-    which means its id has to be known so that we can retrieve its
-    information and display its name in this modal. If the user presses
-    confirm, it will be deleted.
+    This modal is shown when the user register.
     
     @author Eric Grunblatt
 */
@@ -49,6 +43,7 @@ function RegisterModal() {
     const [city, setCity] = useState("");
     const [state, setState] = useState("");
     const [zipcode, setZipcode] = useState("");
+	const [registerAlert, setRegisterAlert] = useState("");
 
     let isOpen = false;
     let regexp = /^[0-9\b]+$/;
@@ -65,26 +60,28 @@ function RegisterModal() {
     }
 
     const handleRegister = (event) => {
-        store.setCloseRegisterModal();
         event.preventDefault();
-        console.log("registering");
-        if(password === confirm) {
-            auth.registerUser({
-                firstName: first,
-                lastName: last,
-                email: email,
-                username: username,
-                password: password,
-                addressFirstLine: addressFirst,
-                addressSecondLine: addressSecond,
-                phoneNumber: phoneNumber,
-                city: city,
-                state: state,
-                zipcode: zipcode
-            }, store);
+		if(password && first && last && email && username && addressFirst && city && state && zipcode && phoneNumber) {
+			if(password === confirm) {
+				store.setCloseRegisterModal();
+				auth.registerUser({
+					firstName: first,
+					lastName: last,
+					email: email,
+					username: username,
+					password: password,
+					addressFirstLine: addressFirst,
+					addressSecondLine: addressSecond,
+					phoneNumber: phoneNumber,
+					city: city,
+					state: state,
+					zipcode: zipcode
+				}, store);
+			}
+			setRegisterAlert(<Alert severity="error">Passwords must match</Alert>);
         }
         else {
-            alert("Passwords must match");
+			setRegisterAlert(<Alert severity="error">Please fill out all required fields</Alert>);
         }
     }
 
@@ -204,7 +201,7 @@ function RegisterModal() {
                         }
                     }}
                     style={{ display: 'flex', float: 'right', margin: '15px 0px 0px 0px', width: '242.5px' }}></TextField>
-                <TextField 
+                {/* <TextField 
                     required
                     name="phoneNumber"
                     id="phoneNumber"
@@ -215,7 +212,17 @@ function RegisterModal() {
                             setPhoneNumber(event.target.value) 
                         } 
                     }}
-                    style={{ margin: '15px 0px 0px 0px', float: 'left', width: '500px' }}></TextField>
+                    style={{ margin: '15px 0px 0px 0px', float: 'left', width: '500px' }}></TextField> */}
+				<NumberFormat format="+1 (###) ###-####" mask="_" 
+					required
+					placeHolder=" Phone Number*"
+					name="phoneNumber"
+					id="phoneNumber"
+					label="Phone Number"  
+					value={phoneNumber} 
+					onChange={(event) => { setPhoneNumber(event.target.value) }}
+					style={{ marginTop: '15px', float: 'left', width: '495px', height: '45px', borderRadius: '3px' }}/>
+					{registerAlert}
                 <Button onClick={handleBack} style={{ margin: '15px 20px 0px 0px', color: 'white', background: 'black', width: '150px', height: '40px', fontSize: '8px', borderRadius: '10px' }}><h1>Back</h1></Button>
                 <Button onClick={(event) => { handleRegister(event) }} style={{ cursor: 'pointer', margin: '15px 0px 0px 0px', color: 'white', background: 'black', width: '150px', height: '40px', fontSize: '8px', borderRadius: '10px' }}><h1>Register</h1></Button>
             </Box>
@@ -243,7 +250,6 @@ function RegisterModal() {
                     <Box component="form" onSubmit={handleRegister} noValidate>
                         {list}
                     </Box>
-                    
                 </Box>
             </Modal>
             <AccountErrorModal />
