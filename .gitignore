@@ -14,3 +14,6 @@
 /server/uploads/*
 
 !/server/uploads/placeholder.txt
+
+#ignore search model
+*.gz 
