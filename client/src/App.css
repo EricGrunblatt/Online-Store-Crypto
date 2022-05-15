@@ -1,3 +1,5 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css');
+
 :root {
     /* 
           THIS IS THE COLOR SCHEME OF CRYPTORIUM
@@ -45,4 +47,107 @@
     height: 15%;
     background-color: black;
     color: white;
+  }
+
+
+  #search {
+	-webkit-box-align: center;
+			align-items: center;
+	background:#FFBD59;
+	border-radius: 10px;
+	display: -webkit-box;
+	display: flex;
+	-webkit-box-pack: justify;
+			justify-content: space-between;
+	margin: 70px 0px 0px 0px;
+	padding: 0.5em 0.5em 0.5em 1em;
+	-webkit-transition: all 0.5s;
+	transition: all 0.5s;
+	width: 60vw;
+	float:right;
+	border-radius: 10px;
+  }
+  
+  #search:hover, #search:focus {
+	background: #dfa503;
+  }
+  #search button,
+  #search input {
+	-webkit-appearance: none;
+	   -moz-appearance: none;
+			appearance: none;
+	background: transparent;
+	border: 0;
+	color: inherit;
+	font: inherit;
+	outline: 0;
+  }
+  #search button {
+	cursor: pointer;
+	padding: 0 0.25em;
+  }
+  #search input {
+	-webkit-box-flex: 1;
+			flex: 1;
+  }
+  #search input::-webkit-input-placeholder {
+	color: #fff;
+  }
+  #search input::-moz-placeholder {
+	color: #fff;
+  }
+  #search input:-ms-input-placeholder {
+	color: #fff;
+  }
+  #search input::-ms-input-placeholder {
+	color: #fff;
+  }
+  #search input::placeholder {
+	color: #fff;
+  }
+  #search .spinner {
+	-webkit-animation: spinner 1s infinite linear;
+			animation: spinner 1s infinite linear;
+	display: none;
+	padding: 0 0.25em;
+  }
+  
+  #search.loading button {
+	display: none;
+  }
+  #search.loading .spinner {
+	display: block;
+  }
+  
+  @-webkit-keyframes spinner {
+	0% {
+	  -webkit-transform: rotate(0deg);
+			  transform: rotate(0deg);
+	}
+	100% {
+	  -webkit-transform: rotate(360deg);
+			  transform: rotate(360deg);
+	}
+  }
+  
+  @keyframes spinner {
+	0% {
+	  -webkit-transform: rotate(0deg);
+			  transform: rotate(0deg);
+	}
+	100% {
+	  -webkit-transform: rotate(360deg);
+			  transform: rotate(360deg);
+	}
+  }
+  
+  @keyframes spinner {
+	0% {
+	  -webkit-transform: rotate(0deg);
+			  transform: rotate(0deg);
+	}
+	100% {
+	  -webkit-transform: rotate(360deg);
+			  transform: rotate(360deg);
+	}
   }

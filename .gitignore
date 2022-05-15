@@ -16,3 +16,6 @@
 !/server/uploads/placeholder.txt
 
 /server/.env
+
+#ignore search model
+*.gz 
