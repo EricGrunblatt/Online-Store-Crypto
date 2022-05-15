@@ -4,11 +4,19 @@ const ObjectId = Schema.Types.ObjectId
 
 const ImageSchema = new Schema(
 	{
-		data: {type: Buffer, required: true},
-		contentType: {type: String, required: true},
+		mimetype: {type: String, required: true},
+		extension: {type: String, required: true},
 		description: {type: String, default: ""}
 	},
 	{ timestamps: true },
 )
 
-module.exports = mongoose.model('Image', ImageSchema)
+const Image = mongoose.model('Image', ImageSchema)
+
+Image.on('index', error => {
+	if (error) {
+		console.log(error)
+	}
+})
+
+module.exports = Image

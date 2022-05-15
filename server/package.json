@@ -6,6 +6,7 @@
   "scripts": {
     "start": "nodemon index.js",
     "dev": "set ENVIRONMENT=development&& nodemon index.js",
+    "dev_linux": "ENVIRONMENT=development nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -21,6 +22,7 @@
     "express": "^4.17.3",
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^8.5.1",
+    "mime-types": "^2.1.35",
     "mongoose": "^6.2.4",
     "multer": "^1.4.4",
     "nodemon": "^2.0.15",

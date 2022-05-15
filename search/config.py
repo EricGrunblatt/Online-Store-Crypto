@@ -17,7 +17,7 @@ gensim.downloader.BASE_DIR="./"
 MODEL=gensim.downloader.load('glove-twitter-25')
 
 TASK = "production" #sample, production
-THRESHOLD=0.4
+THRESHOLD=0.5
 # # for testing data processing and feature generation
 SAMPLE_SIZE = 1000
 

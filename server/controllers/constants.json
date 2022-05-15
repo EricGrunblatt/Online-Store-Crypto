@@ -40,7 +40,6 @@
 		"reviewSpecifiedButNotFound": "REVIEW SPECIFIED BUT NOT FOUND",
 		"failedToGetImages": "FAILED TO GET IMAGES",
 		"failedToGetShippingPrice":"FAILED TO GET SHIPPING PRICE",
-		"failToGetSearchApi":"FAILED TO GET SEARCH API ",
 		"productIsNotSold": "PRODUCT HAS NOT SOLD",
 		"buyerUsernameIsNull": "BUYER USERNAME IS NULL",
 		"trackingNumberIsAlreadySet": "TRACKING NUMBER IS ALREADY SET"
@@ -52,7 +51,13 @@
 		"cartDoesNotIncludeProduct": "CART DOES NOT INCLUDE PRODUCT",
 		"cartAlreadyIncludesProduct": "CART ALREADY INCLUDES PRODUCT",
 		"userOwnsThisItem": "USER OWNS THIS ITEM",
-		"cartIsEmpty": "CART IS EMPTY"
+		"cartIsEmpty": "CART IS EMPTY",
+		"cartItemDoesNotExist": "CART ITEM DOES NOT EXIST",
+		"couldNotGetCartItems": "COULD NOT GET CART ITEMS",
+		"failedToReserveCartProducts": "FAILED TO RESERVE CART PRODUCTS",
+		"noProductsWereReserved": "NO PRODUCTS WERE RESERVED", 
+		"productIsSold": "PRODUCT IS SOLD",
+		"failedToCalculatePrice": "FAILED TO CALCULATE PRICE"
 	},
 	"review":{
 		"missingRequiredField": "MISSING REQUIRED FIELD",

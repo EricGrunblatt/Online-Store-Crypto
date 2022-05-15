@@ -1,11 +1,12 @@
-const { upload, createAndSaveImage } = require("../handlers/imageHandler")
-const { Product, ProductState } = require("../models/productModel")
+const { upload } = require("../handlers/imageHandler")
+const {Product, ProductState} = require("../models/productModel")
 const User = require('../models/userModel')
 const Review = require('../models/reviewModel')
 const constants = require('./constants.json')
 const xml2js = require('xml2js')
 const axios = require("axios")
-const {ObjectId} = require('mongodb');
+const Cart = require('../models/cartModel')
+const { Order, OrderState} = require('../models/orderModel')
 
 const {
 	productImageMiddleware,
@@ -16,9 +17,9 @@ const {
 } = require('./helpers/productControllerHelper')
 
 getCatalog = async (req, res) => {
-	console.log("getCatalog2", req.body)
+	console.log("getCatalog", req.body)
 	const { search, categories, conditions, minPrice, maxPrice, sortBy } = req.body
-
+		
 	products = await Product.find().lean();
 	product_titles = products.map(product => product.name);
 	product_ids = products.map(product => product._id.toString());
@@ -414,11 +415,21 @@ getCartProductsForUser = async (req, res) => {
 				shippingPrice: 1,
 				sellerUsername: 1,
 				imageIds: 1,
-				dateListed: "$createdAt"
+				dateListed: "$createdAt",
+				state: 1,
 			}
 
-			let products = await getProducts(user.cartProductIds, selectOptions)
+			let cartItems = await Cart.find({buyerUsername: user.username}).select({productId: 1})
+			let cartProductIds = cartItems.map(cartItem => cartItem.productId)
 
+			let reservedProducts = await Order.find({
+				buyerUsername: user.username,
+				state: OrderState.PENDING,
+			}).select({productId: 1})
+			let reservedProductIds = reservedProducts.map(reservedProduct => reservedProduct.productId)
+
+			let products = await getProducts([...cartProductIds, ...reservedProductIds], selectOptions)
+			
 			products = await Promise.all(products.map(async (product) => {
 				const image = await getProductFirstImage(product);
 				product.image = image
